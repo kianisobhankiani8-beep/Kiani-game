@@ -1,0 +1,804 @@
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070312">
+<title>KIANI GAMES</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* اگر فایل فونت Sobhan را کنار این فایل بگذاری، خودکار استفاده می‌شود */
+@font-face{font-family:'Sobhan';src:url('Sobhan.woff2') format('woff2'),url('Sobhan.ttf') format('truetype');font-display:swap}
+:root{--bg:#0b0d14;--panel:rgba(255,255,255,.05);--line:rgba(255,255,255,.09);--text:#fff;--muted:#8a90a6;
+--blue:#3b82f6;--cyan:#22d3ee;--violet:#8b5cf6;--green:#22c55e;--red:#ef4444;--gold:#fbbf24;
+--font:'Sobhan','Vazirmatn',Tahoma,sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;font-variant-numeric:lining-nums}
+.num{direction:ltr;unicode-bidi:isolate;font-feature-settings:"lnum";letter-spacing:.3px}
+svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* animated background */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg i{position:absolute;width:320px;height:320px;border-radius:50%;filter:blur(90px);opacity:.28;animation:drift 18s ease-in-out infinite alternate}
+.bg i:nth-child(1){background:var(--blue);top:-80px;right:-60px}
+.bg i:nth-child(2){background:var(--violet);bottom:10%;left:-100px;animation-duration:23s}
+.bg i:nth-child(3){background:var(--cyan);top:45%;right:-120px;width:240px;height:240px;animation-duration:27s;opacity:.16}
+@keyframes drift{to{transform:translate(40px,-50px) scale(1.2)}}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{transform:translateY(-6px)}}
+@keyframes shine{to{background-position:-200% 0}}
+
+/* auth */
+#authScreen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.auth-box{position:relative;z-index:1;width:100%;max-width:380px;padding:38px 24px;text-align:center;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(20px);border-radius:28px;animation:fade .5s ease}
+.auth-logo{width:78px;height:78px;margin:0 auto 18px;border-radius:24px;background:linear-gradient(135deg,var(--blue),var(--violet));display:grid;place-items:center;font-size:38px;box-shadow:0 12px 40px rgba(59,130,246,.45);animation:float 4s ease-in-out infinite}
+.field{margin-bottom:12px;text-align:right}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+.field input{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:16px;color:#fff;padding:15px;outline:none;text-align:center;transition:.2s;font-family:var(--font);font-size:15px}
+.field input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.25)}
+.btn{width:100%;border:none;border-radius:16px;padding:15px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;transition:.2s;background:linear-gradient(135deg,var(--blue),var(--violet));font-family:var(--font)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:#cfd5ea}
+
+/* app */
+#app{position:relative;z-index:1;display:none;flex-direction:column;padding:18px 15px 110px;max-width:500px;margin:0 auto;width:100%}
+.view{display:none}.view.active{display:block;animation:fade .35s ease}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.user{display:flex;align-items:center;gap:11px}
+.avatar{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:grid;place-items:center;font-weight:900;font-size:18px;color:#06101f}
+.user small{display:block;color:var(--muted);font-size:12px}.user b{font-size:15px}
+.icons{display:flex;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:13px;background:var(--panel);border:1px solid var(--line);color:#fff;font-size:18px;display:grid;place-items:center;cursor:pointer}
+
+/* balance */
+.balance-card{position:relative;overflow:hidden;border-radius:28px;padding:24px;margin-bottom:16px;background:linear-gradient(135deg,rgba(59,130,246,.28),rgba(139,92,246,.2) 60%,rgba(34,211,238,.14));border:1px solid var(--line);backdrop-filter:blur(18px)}
+.balance-card::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.09) 50%,transparent 65%);background-size:250% 100%;animation:shine 6s linear infinite}
+.balance-card .lbl{color:#b9c2e0;font-size:13px}
+.balance-card .amount{font-size:44px;font-weight:900;direction:ltr;margin:6px 0 2px;display:flex;align-items:baseline;gap:6px;justify-content:flex-end}
+.balance-card .amount small{font-size:18px;color:var(--cyan)}
+.toman{color:#b9c2e0;font-size:13px}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}
+.act{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px 6px;text-align:center;cursor:pointer;color:#fff;font-family:var(--font);font-size:12px;font-weight:700;transition:.2s}
+.act:active{transform:scale(.94)}
+.act .ico{width:42px;height:42px;border-radius:14px;margin:0 auto 8px;display:grid;place-items:center;font-size:20px}
+.act.buy .ico{background:rgba(59,130,246,.2);color:var(--blue)}
+.act.sell .ico{background:rgba(239,68,68,.18);color:var(--red)}
+.act.gift .ico{background:rgba(251,191,36,.18);color:var(--gold)}
+
+/* games */
+.sec{display:flex;justify-content:space-between;align-items:center;margin:0 2px 12px;font-weight:900;font-size:16px}
+.sec span{font-size:12px;color:var(--muted);font-weight:500}
+.hero{display:flex;align-items:center;gap:16px;padding:20px;border-radius:26px;margin-bottom:12px;text-decoration:none;color:#fff;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(251,191,36,.22),rgba(239,68,68,.14));border:1px solid rgba(251,191,36,.3);transition:.2s}
+.hero:active{transform:scale(.98)}
+.hero .gfx{width:92px;height:92px;flex:none}
+.hero b{font-size:20px;display:block;margin-bottom:4px}.hero p{margin:0 0 10px;color:#d7cfae;font-size:12px;line-height:1.7}
+.play{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:12px;background:var(--gold);color:#241a00;font-weight:900;font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.gcard{display:block;padding:16px;border-radius:24px;text-decoration:none;color:#fff;background:var(--panel);border:1px solid var(--line);transition:.2s;position:relative;overflow:hidden}
+.gcard:active{transform:scale(.97)}
+.gcard .gfx{width:64px;height:64px;margin-bottom:10px}
+.gcard b{display:block;font-size:15px;margin-bottom:3px}.gcard small{color:var(--muted);font-size:11.5px;line-height:1.6;display:block}
+.gcard.red{background:linear-gradient(160deg,rgba(239,68,68,.18),var(--panel))}
+.gcard.blue{background:linear-gradient(160deg,rgba(59,130,246,.2),var(--panel))}
+.ticker{overflow:hidden;border-radius:16px;background:var(--panel);border:1px solid var(--line);margin-bottom:22px;padding:11px 0;white-space:nowrap;direction:ltr}
+.ticker div{display:inline-block;animation:marq 26s linear infinite;color:var(--muted);font-size:12px}
+.ticker em{font-style:normal;color:var(--cyan);margin:0 18px}
+@keyframes marq{to{transform:translateX(-50%)}}
+.spin{animation:spin 9s linear infinite;transform-origin:center}
+
+/* forms */
+.card{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:26px;padding:20px;margin-bottom:14px}
+.card h3{margin:0 0 18px;font-size:18px;font-weight:900;display:flex;align-items:center;gap:8px}
+.card h3::before{content:"";width:4px;height:18px;background:linear-gradient(var(--blue),var(--violet));border-radius:4px}
+.pay-card{background:linear-gradient(135deg,#1b2447,#2a1b4d);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px;cursor:pointer}
+.pay-card .cn{font-size:21px;font-weight:700;letter-spacing:1.5px;margin:10px 0;direction:ltr;text-align:center}
+.chips{display:flex;gap:8px;margin:-4px 0 14px;flex-wrap:wrap}
+.chip{flex:1;min-width:60px;padding:9px 0;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer}
+.chip:active{background:var(--blue)}
+.summary{display:flex;justify-content:space-between;padding:14px;background:rgba(0,0,0,.3);border-radius:14px;margin-bottom:14px}
+
+/* history */
+.tx{display:flex;align-items:center;gap:12px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:20px;margin-bottom:10px}
+.tx .ti{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:18px;flex:none}
+.tx .ti.in{background:rgba(34,197,94,.16);color:var(--green)}.tx .ti.out{background:rgba(239,68,68,.16);color:var(--red)}
+.tx .tt{flex:1}.tx .tt b{display:block;font-size:14px}.tx .tt small{color:var(--muted);font-size:11.5px}
+.tx .ta{text-align:left}.tx .ta b{font-size:14px;display:block}
+.badge{font-size:10.5px;padding:2px 8px;border-radius:8px;display:inline-block;margin-top:3px}
+.badge.pending{background:rgba(251,191,36,.18);color:var(--gold)}.badge.approved{background:rgba(34,197,94,.18);color:var(--green)}.badge.rejected{background:rgba(239,68,68,.18);color:var(--red)}
+.empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px}
+
+/* nav */
+.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;max-width:476px;margin:0 auto;background:rgba(20,23,35,.82);backdrop-filter:blur(20px);border:1px solid var(--line);border-radius:26px;display:flex;justify-content:space-around;padding:10px 6px;z-index:100;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.nav-btn{background:none;border:none;color:var(--muted);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;font-family:var(--font);font-weight:700;padding:6px 14px;border-radius:16px;transition:.25s}
+.nav-btn svg{font-size:21px}
+.nav-btn.active{color:#fff;background:rgba(59,130,246,.22)}.nav-btn.active svg{color:var(--cyan)}
+
+/* modals */
+.overlay{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.75);backdrop-filter:blur(6px)}
+.overlay.show{display:flex;animation:fade .2s ease}
+.modal{width:100%;max-width:380px;background:#12151f;border:1px solid var(--line);border-radius:26px;padding:24px;text-align:center}
+.modal h3{margin:0 0 14px;font-size:19px}.modal p{color:var(--muted);font-size:13.5px;line-height:1.9;margin:0 0 14px}
+.modal .kv{display:flex;justify-content:space-between;padding:12px;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:8px}
+.okring{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;font-size:30px;background:rgba(34,197,94,.16);color:var(--green)}
+.order-id{display:inline-block;padding:10px 20px;border:1px dashed var(--blue);color:var(--blue);border-radius:12px;font-weight:900;font-size:16px;cursor:pointer;margin-bottom:14px}
+.tg-btn{display:inline-block;padding:11px 24px;border-radius:14px;background:#2aabee;color:#fff;font-weight:900;font-size:15px;cursor:pointer;margin-bottom:14px}
+#adminPanel{position:fixed;inset:0;z-index:3000;display:none;background:var(--bg);padding:20px;overflow-y:auto}
+.admin-order{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.admin-order .line{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid var(--line)}
+.acts{display:flex;gap:10px;margin-top:14px}.acts .btn{padding:12px;font-size:14px}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-30px);z-index:4000;opacity:0;padding:12px 20px;border-radius:14px;font-weight:700;font-size:14px;transition:.3s;background:#161a28;border:1px solid var(--blue);color:#fff;max-width:90%;text-align:center}
+.toast.err{border-color:var(--red)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.gtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.gtop h2{margin:0;font-size:18px;font-weight:900}
+.balchip{padding:9px 14px;border-radius:13px;background:var(--panel);border:1px solid var(--line);font-weight:900;font-size:14px;color:var(--cyan)}
+.hero,.gcard{cursor:pointer}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.field select{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:14px;color:#fff;padding:13px;outline:none;text-align:center;font-family:var(--font);font-size:16px}
+.btn.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#241a00}.btn.green{background:linear-gradient(135deg,#22c55e,#15803d)}.btn:disabled{opacity:.45}
+.info{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:12px}
+.res{min-height:54px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;text-align:center;border-radius:16px;margin-bottom:14px;background:var(--panel);border:1px solid var(--line)}
+.res.win{color:var(--green);border-color:rgba(34,197,94,.5);animation:pop .4s}.res.lose{color:var(--red);border-color:rgba(239,68,68,.4)}
+.note{font-size:11.5px;color:var(--muted);line-height:1.9;text-align:center;margin-top:6px}
+
+.wstage{position:relative;width:min(310px,82vw);aspect-ratio:1;margin:16px auto 28px}
+.wglow{position:absolute;inset:-22px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.38),rgba(139,92,246,.16) 55%,transparent 70%);animation:wpulse 3s ease-in-out infinite}
+.wstage.spin .wglow{animation-duration:.55s}
+@keyframes wpulse{50%{transform:scale(1.09);opacity:.55}}
+.wrim{position:absolute;inset:15px;border-radius:50%;box-shadow:0 0 0 5px #20170a,0 0 0 7px var(--gold),0 14px 40px rgba(0,0,0,.6),inset 0 0 30px rgba(0,0,0,.6)}
+#w_wheel{width:100%;height:100%;display:block;border-radius:50%;transition:transform 5s cubic-bezier(.15,.75,.12,1)}
+.wbulbs{position:absolute;inset:0;pointer-events:none}
+.wbulbs i{position:absolute;width:8px;height:8px;margin:-4px;border-radius:50%;background:var(--gold);box-shadow:0 0 9px var(--gold);animation:wb 1.2s infinite}
+.wbulbs i:nth-child(odd){animation-delay:.6s}
+@keyframes wb{50%{opacity:.2;box-shadow:none}}
+.wstage.spin .wbulbs i{animation-duration:.22s}
+.wptr{position:absolute;top:-4px;left:50%;width:30px;height:40px;margin-left:-15px;z-index:4;background:linear-gradient(var(--gold),#d97706);clip-path:polygon(50% 100%,0 0,100% 0);filter:drop-shadow(0 4px 6px #000);transform-origin:50% 8%}
+.wstage.spin .wptr{animation:wtick .11s linear infinite}
+@keyframes wtick{50%{transform:rotate(-15deg)}}
+.whub{position:absolute;top:50%;left:50%;width:62px;height:62px;margin:-31px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2a3358,#0f1220);border:3px solid var(--gold);z-index:3;display:grid;place-items:center;color:var(--gold);font-size:28px;box-shadow:0 0 22px rgba(251,191,36,.5);animation:whub 2.4s ease-in-out infinite}
+@keyframes whub{50%{box-shadow:0 0 34px rgba(251,191,36,.85)}}
+.wfx{position:absolute;inset:-30px;width:calc(100% + 60px);height:calc(100% + 60px);pointer-events:none;z-index:5}
+.tbl{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:14px;font-size:11.5px;text-align:center}.tbl div{padding:7px 0;border-radius:10px;background:rgba(255,255,255,.05)}
+
+
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.cell{aspect-ratio:1;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.07);display:grid;place-items:center;font-size:30px;cursor:pointer;transition:.2s;color:#fff}
+.cell:active{transform:scale(.92)}.cell.safe{background:rgba(34,211,238,.18);border-color:var(--cyan);color:var(--cyan);animation:pop .35s}
+.cell.bomb{background:rgba(239,68,68,.25);border-color:var(--red);color:var(--red);animation:pop .35s}.cell.dim{opacity:.45}
+.cell.off{pointer-events:none}.mrow{display:flex;gap:10px}.mrow>div{flex:1}
+
+
+#p_cv{display:block;width:100%;border-radius:22px;background:rgba(255,255,255,.03);border:1px solid var(--line);margin-bottom:14px}
+
+
+/* ===== NEW THEME: lime / teal on black, bento layout ===== */
+:root{--bg:#070312;--blue:#22e4ff;--cyan:#2ee6c5;--violet:#19c29a;--line:rgba(255,255,255,.08)}
+body{background:#070312}
+.bg i{opacity:.2}
+.auth-logo{box-shadow:0 12px 40px rgba(34,228,255,.35)}.auth-logo svg{stroke:#0a1200!important}
+.btn{color:#0a1200}.btn.ghost{color:#dfe6cc}.btn[style*="ef4444"]{color:#fff}
+.field input:focus{box-shadow:0 0 0 3px rgba(34,228,255,.22)}
+.avatar{border-radius:16px;color:#0a1200}
+.balance-card{border:none;border-radius:32px;padding:26px;background:linear-gradient(135deg,#d6ff55,#9ff03a 55%,#2ee6c5);color:#0a1200;box-shadow:0 18px 50px rgba(34,228,255,.22)}
+.balance-card::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;border:34px solid rgba(255,255,255,.22);left:-60px;top:-70px;animation:wpulse 5s ease-in-out infinite}
+.balance-card .lbl,.balance-card .toman{color:rgba(10,18,0,.65);font-weight:700}
+.balance-card .amount{font-size:50px;color:#0a1200}.balance-card .amount small{color:rgba(10,18,0,.6)}
+.actions{gap:10px}
+.act{display:flex;align-items:center;gap:12px;text-align:right;padding:12px 14px;border-radius:22px;font-size:14px}
+.act .ico{margin:0;width:40px;height:40px}
+.act.buy .ico{background:rgba(34,228,255,.18);color:var(--blue)}
+.pay-card{background:linear-gradient(135deg,#17240a,#0b2a22)}
+.nav-btn.active{background:rgba(34,228,255,.16);color:#fff}.nav-btn.active svg{color:var(--blue)}
+.bottom-nav{border-radius:30px}
+.balchip{color:var(--blue)}
+.ticker em{color:var(--blue)}
+/* bento */
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.tile{position:relative;overflow:hidden;border-radius:28px;padding:18px;cursor:pointer;border:1px solid var(--line);transition:transform .25s;min-height:168px;display:flex;flex-direction:column;justify-content:space-between;animation:fade .5s ease both}
+.tile:nth-child(2){animation-delay:.08s}.tile:nth-child(3){animation-delay:.16s}.tile:nth-child(4){animation-delay:.24s}
+.tile:active{transform:scale(.97)}
+.tile::before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;filter:blur(50px);opacity:.35;top:-50px;left:-40px;background:var(--tc);animation:wpulse 4s ease-in-out infinite}
+.tile>*{position:relative}
+.tile.big{grid-column:span 2;flex-direction:row;align-items:center;gap:16px;min-height:150px}
+.tile .tg{width:68px;height:68px;flex:none}.tile.big .tg{width:108px;height:108px}
+.tile b{display:block;font-size:17px;margin-bottom:4px;font-weight:900}.tile small{color:#b3b9a6;font-size:12px;line-height:1.7;display:block}
+.rtp{display:inline-block;margin-top:10px;font-size:11px;font-weight:800;padding:4px 11px;border-radius:999px;background:rgba(0,0,0,.4);border:1px solid var(--line)}
+.t-wheel{--tc:#fbbf24;background:linear-gradient(135deg,rgba(251,191,36,.18),rgba(255,255,255,.03))}
+.t-cups{--tc:#2ee6c5;background:linear-gradient(160deg,rgba(46,230,197,.18),rgba(255,255,255,.03))}
+.t-mines{--tc:#ff5d73;background:linear-gradient(160deg,rgba(255,93,115,.18),rgba(255,255,255,.03))}
+.t-plinko{--tc:#22e4ff;background:linear-gradient(135deg,rgba(34,228,255,.15),rgba(255,255,255,.03))}
+.cb1,.cb2,.cb3{animation:cupbob 1.8s ease-in-out infinite;transform-box:fill-box}.cb2{animation-delay:.3s}.cb3{animation-delay:.6s}
+@keyframes cupbob{50%{transform:translateY(-7px)}}
+/* cups game */
+.cstage{position:relative;width:min(330px,90vw);height:190px;margin:14px auto 24px}
+.cupwrap{position:absolute;top:0;left:0;width:33.333%;height:100%;transition:transform .38s cubic-bezier(.5,0,.3,1)}
+.cball{position:absolute;bottom:22px;left:50%;width:28px;height:28px;margin-left:-14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#22e4ff 45%,#0e7490);box-shadow:0 0 16px rgba(34,228,255,.7);display:none;z-index:1}
+.cupwrap.has .cball{display:block}.cupwrap.has.won .cball{animation:pop .5s ease both}
+.cup{position:absolute;left:8%;right:8%;bottom:14px;height:112px;background:none;border:0;padding:0;z-index:2;cursor:pointer;transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.cupwrap.up .cup{transform:translateY(-72px) rotate(-7deg)}
+.cb{position:absolute;inset:0;clip-path:polygon(14% 0,86% 0,100% 100%,0 100%);background:repeating-linear-gradient(0deg,transparent 0 18px,rgba(0,0,0,.14) 18px 22px),linear-gradient(90deg,#0f766e,#2ee6c5 40%,#0f766e)}
+.cr{position:absolute;top:-6px;left:14%;right:14%;height:14px;border-radius:50%;background:#8ff7e3}
+.ctable{position:absolute;left:-4%;right:-4%;bottom:0;height:22px;border-radius:50%;background:radial-gradient(ellipse,rgba(34,228,255,.28),transparent 70%)}
+.wbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-radius:26px;margin-bottom:18px;background:linear-gradient(135deg,#d6ff55,#9ff03a 55%,#2ee6c5);color:#0a1200;box-shadow:0 14px 40px rgba(34,228,255,.18)}
+.wbar .lbl{font-size:12px;font-weight:700;opacity:.65}.wbar .amount{font-size:34px;font-weight:900;direction:ltr;display:flex;gap:5px;align-items:baseline}.wbar .amount small{font-size:15px;opacity:.6}.wbar .toman{font-size:11.5px;opacity:.65;font-weight:700}
+.wacts{display:flex;flex-direction:column;gap:7px}.wacts button{border:0;border-radius:13px;padding:9px 18px;font:900 13px var(--font);cursor:pointer;background:#0a1200;color:#22e4ff}.wacts button+button{background:rgba(10,18,0,.12);color:#0a1200}
+.seg{display:flex;gap:6px;background:rgba(0,0,0,.3);padding:4px;border-radius:14px}.seg button{flex:1;border:0;background:none;color:#cfd5ea;font:700 13px var(--font);padding:10px 4px;border-radius:11px;cursor:pointer;transition:.2s}.seg button.on{background:var(--blue);color:#0a1200}.seg b{display:block;font-size:11px;opacity:.8}
+#k_cv{display:block;width:100%;border-radius:22px;background:rgba(255,255,255,.03);border:1px solid var(--line);margin-bottom:10px}
+.khist{display:flex;gap:6px;margin-bottom:14px;direction:ltr;overflow:hidden;min-height:26px}.khist span{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;background:rgba(255,255,255,.06)}
+.t-crash{--tc:#ff9f43;background:linear-gradient(135deg,rgba(255,159,67,.2),rgba(255,255,255,.03))}
+
+/* ===== NEON ARCADE THEME ===== */
+:root{--bg:#070312;--blue:#ff2e93;--cyan:#22e4ff;--violet:#7c3aed;--gold:#ffc83d;--line:rgba(255,255,255,.1)}
+body{background:#070312}
+.bg{perspective:520px;background:radial-gradient(ellipse at 50% -10%,#3b0f7a 0%,transparent 62%),radial-gradient(ellipse at 100% 100%,rgba(255,46,147,.25),transparent 55%)}
+.bg i{opacity:.22}
+.bg::after{content:"";position:absolute;left:-60%;right:-60%;bottom:-8%;height:55%;transform:rotateX(63deg);transform-origin:bottom;opacity:.5;background:repeating-linear-gradient(90deg,rgba(255,46,147,.55) 0 1px,transparent 1px 64px),repeating-linear-gradient(0deg,rgba(34,228,255,.5) 0 1px,transparent 1px 64px);animation:gridm 2.6s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 75%);mask-image:linear-gradient(transparent,#000 75%)}
+@keyframes gridm{to{background-position:0 0,0 64px}}
+@keyframes glowp{50%{box-shadow:0 8px 40px rgba(255,170,30,.75)}}
+@keyframes sweep{to{background-position:-250% 0}}
+.auth-box{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.15);box-shadow:0 30px 90px rgba(124,58,237,.45)}
+.auth-box h2{font-size:30px;letter-spacing:3px;background:linear-gradient(90deg,#ff7ab8,#22e4ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.auth-logo{background:linear-gradient(135deg,#ff2e93,#7c3aed);box-shadow:0 12px 44px rgba(255,46,147,.6)}.auth-logo svg{stroke:#fff!important}
+.btn{background:linear-gradient(135deg,#ff2e93,#7c3aed);color:#fff;box-shadow:0 8px 26px rgba(255,46,147,.35)}
+.btn.ghost{background:rgba(255,255,255,.05);color:#e9defc;box-shadow:none}
+.btn.gold{background:linear-gradient(135deg,#ffd84d,#ff9f1a);color:#2a1500;box-shadow:0 8px 26px rgba(255,170,30,.45)}.btn.gold:not(:disabled){animation:glowp 2.4s ease-in-out infinite}
+.btn.green{background:linear-gradient(135deg,#22e4ff,#0e9f8e);color:#04201e}
+.field input:focus{border-color:#ff2e93;box-shadow:0 0 0 3px rgba(255,46,147,.25)}
+.avatar{background:linear-gradient(135deg,#ff2e93,#22e4ff);color:#fff;box-shadow:0 0 22px rgba(255,46,147,.5)}
+.icon-btn{background:rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.wbar{position:relative;overflow:hidden;padding:20px 22px;border-radius:30px;background:linear-gradient(135deg,#ff2e93,#7c3aed 58%,#22e4ff);color:#fff;box-shadow:0 22px 56px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.4)}
+.wbar::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.14);right:-70px;top:-90px}
+.wbar::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.22) 50%,transparent 65%);background-size:250% 100%;animation:sweep 5s linear infinite}
+.wbar>*{position:relative;z-index:1}.wbar .lbl{opacity:.85;letter-spacing:1px}.wbar .amount{font-size:42px;text-shadow:0 3px 16px rgba(0,0,0,.35)}.wbar .toman{opacity:.85}
+.wacts button{background:#fff;color:#4c1d95;box-shadow:0 6px 18px rgba(0,0,0,.25)}.wacts button+button{background:rgba(0,0,0,.3);color:#fff;box-shadow:none}
+.sec{font-size:19px}.sec span{background:rgba(255,46,147,.16);color:#ff8cc4;padding:4px 12px;border-radius:999px;font-weight:800}
+.bento .tile{min-height:190px;border:1px solid transparent;background:linear-gradient(160deg,#1c0f40,#0d0624) padding-box,linear-gradient(135deg,var(--tc),rgba(255,255,255,.04) 65%) border-box;box-shadow:0 16px 40px rgba(0,0,0,.45),0 0 28px color-mix(in srgb,var(--tc) 22%,transparent)}
+.tile.big{min-height:160px}.tile::before{opacity:.5}
+.tile::after{content:"بازی ◂";position:absolute;bottom:14px;left:16px;font-size:11.5px;font-weight:900;padding:6px 14px;border-radius:999px;background:var(--tc);color:#12071f;box-shadow:0 0 20px var(--tc)}
+.tile .tg:not(.spin){animation:float 3.6s ease-in-out infinite}.tile .tg{filter:drop-shadow(0 0 14px var(--tc))}.tile.big .tg{width:118px;height:118px}.tile b{font-size:19px}.tile small{color:#cbbcf5}
+.rtp{background:rgba(255,255,255,.07)!important;color:var(--tc);border:1px solid var(--tc)!important}
+.t-wheel,.t-cups,.t-mines,.t-plinko{background:none}
+.bottom-nav{background:rgba(20,8,44,.8);border:1px solid rgba(255,255,255,.13);box-shadow:0 14px 44px rgba(0,0,0,.65),0 0 34px rgba(124,58,237,.3)}
+.nav-btn.active{background:linear-gradient(135deg,rgba(255,46,147,.32),rgba(124,58,237,.32));box-shadow:0 0 22px rgba(255,46,147,.35)}.nav-btn.active svg{color:#ff8cc4}
+.ticker{background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.4)}
+.card{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.015));box-shadow:0 12px 44px rgba(0,0,0,.4)}.card h3::before{background:linear-gradient(#ff2e93,#7c3aed)}
+.res{background:linear-gradient(90deg,rgba(255,255,255,.03),rgba(124,58,237,.22),rgba(255,255,255,.03));border-color:rgba(255,46,147,.25);font-size:17px}
+.seg{background:rgba(0,0,0,.4);border:1px solid var(--line)}.seg button.on{background:linear-gradient(135deg,#ff2e93,#7c3aed);color:#fff;box-shadow:0 0 18px rgba(255,46,147,.55)}
+.chip:active{background:#7c3aed}
+.balchip{color:#ffd84d;background:rgba(255,200,61,.1);border-color:rgba(255,200,61,.35)}
+#p_cv,#k_cv{background:radial-gradient(circle at 50% 0,rgba(124,58,237,.4),rgba(10,4,25,.85));border:1px solid rgba(255,46,147,.35);box-shadow:0 0 34px rgba(124,58,237,.3)}
+.cb{background:repeating-linear-gradient(0deg,transparent 0 18px,rgba(0,0,0,.18) 18px 22px),linear-gradient(90deg,#5b21b6,#ff2e93 45%,#5b21b6)}.cr{background:#ffb3d9}
+.cell{background:rgba(255,255,255,.06)}.cell.bomb{box-shadow:0 0 20px rgba(239,68,68,.5)}.cell.safe{box-shadow:0 0 20px rgba(34,228,255,.45)}
+.modal,#adminPanel{background:#140a2d}.toast{background:#1a0d3a;border-color:#ff2e93}
+.cup svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 10px 10px rgba(0,0,0,.55))}
+.cball{background:radial-gradient(circle at 35% 30%,#fff,#ffd84d 40%,#b45309);box-shadow:0 0 20px rgba(255,200,61,.85)}
+.ctable{height:26px;background:radial-gradient(ellipse,rgba(255,46,147,.5),rgba(124,58,237,.18) 60%,transparent 72%)}
+.cstage::before{content:"";position:absolute;left:5%;right:5%;top:-10px;bottom:0;background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.13),transparent 72%);pointer-events:none}
+.t-slots{--tc:#34d399}
+.slot{display:flex;gap:10px;justify-content:center;padding:16px;margin:10px 0 18px;border-radius:26px;border:2px solid transparent;background:linear-gradient(#1c0f40,#0d0624) padding-box,linear-gradient(135deg,#ffc83d,#ff2e93,#7c3aed) border-box;box-shadow:0 0 40px rgba(255,46,147,.3);position:relative;direction:ltr}
+.slot::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:2px;background:linear-gradient(90deg,transparent,#ffc83d,transparent);opacity:.55;pointer-events:none}
+.reel{flex:1;max-width:96px;height:104px;border-radius:18px;background:linear-gradient(#0a0418,#1d0f42 50%,#0a0418);border:1px solid var(--line);display:grid;place-items:center;font-size:54px;overflow:hidden;box-shadow:inset 0 0 20px rgba(0,0,0,.7)}
+.reel.spin span{filter:blur(2.5px);animation:rblur .12s linear infinite}
+@keyframes rblur{50%{transform:translateY(12px)}}
+.slot.win{animation:glowp .6s 3}
+.ptab{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;font-size:13px;text-align:center}.ptab div{padding:8px 0;border-radius:10px;background:rgba(255,255,255,.05)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="cg" x1="0" x2="1"><stop offset="0" stop-color="#4c1d95"/><stop offset=".35" stop-color="#ff2e93"/><stop offset=".55" stop-color="#ff7ab8"/><stop offset="1" stop-color="#5b21b6"/></linearGradient><radialGradient id="cg2"><stop offset="0" stop-color="#ffe3f1"/><stop offset="1" stop-color="#ff7ab8"/></radialGradient></defs></svg>
+<div class="bg"><i></i><i></i><i></i></div>
+
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo"><svg viewBox="0 0 24 24" style="stroke:#fff"><rect x="3" y="3" width="18" height="18" rx="5"/><g style="fill:#fff;stroke:none"><circle cx="8" cy="8" r="1.4"/><circle cx="16" cy="8" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="8" cy="16" r="1.4"/><circle cx="16" cy="16" r="1.4"/></g></svg></div>
+    <h2 style="margin:0 0 8px;font-weight:900">KIANI GAMES</h2>
+    <p style="color:var(--muted);margin:0 0 24px;font-size:13.5px">ورود یا ساخت حساب جدید</p>
+    <div class="field"><input type="text" id="authUser" placeholder="نام کاربری" maxlength="24" autocomplete="username"></div>
+    <div class="field"><input type="password" id="authPass" placeholder="رمز عبور (حداقل 6 کاراکتر)" autocomplete="current-password"></div>
+    <button class="btn" id="btnLogin" style="margin-top:8px">ورود به بازی‌ها</button>
+    <button class="btn ghost" id="btnRegister" style="margin-top:10px">ساخت حساب (50 توکن هدیه)</button>
+  </div>
+</div>
+
+<div id="app">
+  <div class="header">
+    <div class="user"><div class="avatar" id="avatar">K</div><div><small>خوش آمدید</small><b id="helloUser">-</b></div></div>
+    <div class="icons">
+      <button class="icon-btn" id="btnAdmin" aria-label="admin"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <button class="icon-btn" id="btnLogout" aria-label="logout"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <section class="view active" id="view-home">
+    <div class="wbar"><div><div class="lbl">کیف پول</div><div class="amount"><span class="num" id="balAmount">0</span><small>T</small></div><div class="toman">≈ <span class="num" id="balToman">0</span> تومان</div></div><div class="wacts"><button data-go="buy">+ شارژ</button><button data-go="sell">برداشت</button></div></div>
+    <div class="sec">بازی‌ها<span>6 بازی فعال</span></div>
+    <div class="bento">
+      <div class="tile big t-wheel" data-go="wheel" role="button">
+        <svg class="tg spin" viewBox="0 0 100 100" style="stroke:none"><circle cx="50" cy="50" r="46" fill="#1b1305" stroke="#fbbf24" stroke-width="3"/><path d="M50 50L50 6A44 44 0 0 1 88 28z" fill="#fbbf24"/><path d="M50 50L88 28A44 44 0 0 1 88 72z" fill="#ef4444"/><path d="M50 50L88 72A44 44 0 0 1 50 94z" fill="#22c55e"/><path d="M50 50L50 94A44 44 0 0 1 12 72z" fill="#2ee6c5"/><path d="M50 50L12 72A44 44 0 0 1 12 28z" fill="#8b5cf6"/><path d="M50 50L12 28A44 44 0 0 1 50 6z" fill="#ef4444"/><circle cx="50" cy="50" r="9" fill="#12151f" stroke="#fbbf24" stroke-width="2"/></svg>
+        <div><b>گردونه شانس</b><small>بچرخان و تا 5 برابر شرطت جایزه بگیر</small><span class="rtp num">RTP 85%</span></div>
+      </div>
+      <div class="tile t-cups" data-go="cups" role="button">
+        <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><g class="cb1"><path d="M5 20h15l-2 30H7z" fill="#2ee6c5"/></g><g class="cb2"><path d="M24 20h15l-2 30H26z" fill="#22e4ff"/></g><g class="cb3"><path d="M43 20h15l-2 30H45z" fill="#2ee6c5"/></g><circle cx="31.5" cy="55" r="3.5" fill="#fff"/></svg>
+        <div><b>توپ زیر لیوان</b><small>1 یا 2 توپ، با ضریب متفاوت</small><span class="rtp num">1.25x - 2.5x</span></div>
+      </div>
+      <div class="tile t-mines" data-go="mines" role="button">
+        <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="4" y="4" width="26" height="26" rx="7" fill="#2ee6c5"><animate attributeName="opacity" values=".9;.35;.9" dur="2.4s" repeatCount="indefinite"/></rect><rect x="34" y="4" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="4" y="34" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="34" y="34" width="26" height="26" rx="7" fill="#ff5d73"><animate attributeName="opacity" values="1;.5;1" dur="1.6s" repeatCount="indefinite"/></rect><circle cx="47" cy="47" r="5" fill="#12151f"/></svg>
+        <div><b>بازی انفجار</b><small>الماس بردار، بمب نه</small><span class="rtp num">RTP 85%</span></div>
+      </div>
+      <div class="tile big t-plinko" data-go="plinko" role="button">
+        <svg class="tg" viewBox="0 0 64 64" style="stroke:none" fill="#fff"><circle cx="32" cy="12" r="3" opacity=".4"/><circle cx="22" cy="26" r="3" opacity=".4"/><circle cx="42" cy="26" r="3" opacity=".4"/><circle cx="12" cy="40" r="3" opacity=".4"/><circle cx="32" cy="40" r="3" opacity=".4"/><circle cx="52" cy="40" r="3" opacity=".4"/><circle r="5" fill="#22e4ff"><animateMotion dur="2.6s" repeatCount="indefinite" path="M32 2 L32 12 L22 26 L32 40 L32 58"/></circle></svg>
+        <div><b>بازی پلینکو</b><small>ریسک و تعداد توپ را خودت انتخاب کن</small><span class="rtp num">تا 23x</span></div>
+      </div>
+      <div class="tile big t-crash" data-go="crash" role="button">
+        <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><path d="M4 58C24 56 40 44 54 12" fill="none" stroke="#ff9f43" stroke-width="5" stroke-linecap="round"/><circle r="6" fill="#ffd25a"><animateMotion dur="2.2s" repeatCount="indefinite" path="M4 58C24 56 40 44 54 12"/></circle></svg>
+        <div><b>موشک (کرش)</b><small>ضریب بالا می‌رود، قبل از سقوط برداشت کن</small><span class="rtp num">تا 1000x</span></div>
+      </div>
+      <div class="tile big t-slots" data-go="slots" role="button">
+        <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="3" y="14" width="18" height="36" rx="5" fill="#fff" opacity=".14"/><rect x="23" y="14" width="18" height="36" rx="5" fill="#fff" opacity=".14"/><rect x="43" y="14" width="18" height="36" rx="5" fill="#fff" opacity=".14"/><text x="12" y="38" font-size="15" text-anchor="middle">7️⃣</text><text x="32" y="38" font-size="15" text-anchor="middle">7️⃣</text><text x="52" y="38" font-size="15" text-anchor="middle">7️⃣</text></svg>
+        <div><b>اسلات ۷۷۷</b><small>سه قرقره، سه نماد یکسان و جایزه بزرگ</small><span class="rtp num">تا 300x</span></div>
+      </div>
+    </div>
+
+    <div class="ticker"><div id="tick"></div></div>
+  </section>
+
+  <!-- BUY -->
+  <section class="view" id="view-buy">
+    <div class="card">
+      <h3>خرید توکن</h3>
+      <div class="pay-card" id="payCard">
+        <div style="color:#aab3d6;font-size:12px">برای کپی کلیک کنید</div>
+        <div class="cn num">6219-8619-7555-0053</div>
+        <div style="color:#aab3d6;font-size:12px">به نام کیانی</div>
+      </div>
+      <div class="field"><label>تعداد توکن</label><input type="text" inputmode="numeric" id="buyAmount" value="100"></div>
+      <div class="chips" data-for="buyAmount"><button class="chip" data-v="50">50</button><button class="chip" data-v="100">100</button><button class="chip" data-v="500">500</button><button class="chip" data-v="1000">1000</button></div>
+      <div class="summary"><span style="color:var(--muted)">مبلغ</span><span class="num" id="buyPrice">100,000 تومان</span></div>
+      <div class="field"><label>کد رهگیری</label><input type="text" id="buyTracking" placeholder="123456789"></div>
+      <button class="btn" id="btnBuy">ثبت سفارش</button>
+    </div>
+  </section>
+
+  <!-- SELL -->
+  <section class="view" id="view-sell">
+    <div class="card">
+      <h3>فروش توکن</h3>
+      <div class="field"><label>شماره کارت شما</label><input type="text" inputmode="numeric" id="sellCard" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19"></div>
+      <div class="field"><label>تعداد توکن (موجودی: <span class="num" id="sellBal">0</span>)</label><input type="text" inputmode="numeric" id="sellAmount" placeholder="0"></div>
+      <div class="chips"><button class="chip" id="sellAll" style="flex:1">فروش همه موجودی</button></div>
+      <div class="summary"><span style="color:var(--muted)">دریافتی</span><span class="num" id="sellReceive">0 تومان</span></div>
+      <button class="btn" style="background:linear-gradient(135deg,#ef4444,#b91c1c)" id="btnSell">ثبت درخواست فروش</button>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="view" id="view-history">
+    <div class="sec">تاریخچه تراکنش‌ها</div>
+    <div id="histList"></div>
+  </section>
+
+  <section class="view" id="view-wheel"><div class="gtop"><button class="icon-btn" data-go="home" aria-label="back"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><h2>گردونه شانس</h2><div class="balchip"><span class="num gbal">0</span> T</div></div>
+<div class="res" id="w_res">شرط را بگذار و بچرخان</div>
+<div class="wstage" id="w_stage"><div class="wglow"></div><div class="wbulbs" id="w_bulbs"></div><div class="wptr"></div><div class="wrim"><canvas id="w_wheel" width="640" height="640"></canvas></div><div class="whub"><svg viewBox="0 0 24 24" style="stroke:currentColor"><path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/></svg></div><canvas id="w_fx" class="wfx" width="700" height="700"></canvas></div>
+<div class="card"><div id="w_betBox"></div><button class="btn gold" id="w_go" style="margin-top:14px">بچرخان</button>
+<div class="info"><span>بازگشت به بازیکن: <b class="num">85%</b></span><span>احتمال بردن (بالای 1x): <b class="num">20%</b></span></div></div>
+<div class="card"><div style="font-size:13px;font-weight:700">جدول ضرایب (20 خانه)</div>
+<div class="tbl"><div>0x<br><b class="num">9</b></div><div>0.5x<br><b class="num">4</b></div><div>1x<br><b class="num">3</b></div><div>2x<br><b class="num">2</b></div><div>3x<br><b class="num">1</b></div><div>5x<br><b class="num">1</b></div></div>
+<div class="note">همه خانه‌ها برای همه بازیکنان و همه دفعات یکسان است. نتیجه با عدد تصادفی امن مرورگر انتخاب می‌شود. ضریب کمتر از 1x یعنی باخت بخشی از شرط.</div></div>
+</section>
+<section class="view" id="view-mines"><div class="gtop"><button class="icon-btn" data-go="home" aria-label="back"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><h2>بازی انفجار</h2><div class="balchip"><span class="num gbal">0</span> T</div></div>
+<div class="res" id="m_res">تعداد بمب را انتخاب کن و شروع کن</div>
+<div class="grid" id="m_grid"></div>
+<div class="card"><div id="m_betBox"></div>
+<div class="field" style="margin-top:12px"><label>تعداد بمب</label><select id="m_mc"><option>3</option><option selected>5</option><option>8</option><option>12</option></select></div>
+<div class="mrow" style="margin-top:14px"><div><button class="btn gold" id="m_start">شروع</button></div><div><button class="btn green" id="m_cash" disabled>برداشت</button></div></div>
+<div class="info"><span>ضریب فعلی: <b class="num" id="m_cm">1.00x</b></span><span>ضریب بعدی: <b class="num" id="m_nm">-</b></span></div>
+<div class="info"><span>بازگشت به بازیکن: <b class="num">85%</b></span><span>برداشت: <b class="num" id="m_cv">0</b> T</span></div>
+<div class="note">ضرایب با فرمول احتمال واقعی و 15% کارمزد سایت محاسبه می‌شود: هر چه بمب بیشتر، ضریب و ریسک بالاتر. جای بمب‌ها قبل از شروع تصادفی تعیین می‌شود و با کلیک تغییر نمی‌کند.</div></div>
+</section>
+<section class="view" id="view-plinko"><div class="gtop"><button class="icon-btn" data-go="home" aria-label="back"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><h2>بازی پلینکو</h2><div class="balchip"><span class="num gbal">0</span> T</div></div>
+<div class="res" id="p_res">توپ را رها کن</div>
+<canvas id="p_cv" width="640" height="640"></canvas>
+<div class="card"><div class="field"><label>سطح ریسک (ضرایب)</label><div class="seg" id="p_risk"><button data-r="0">کم</button><button class="on" data-r="1">متوسط</button><button data-r="2">زیاد</button></div></div><div class="field"><label>تعداد توپ در هر رها کردن</label><div class="seg" id="p_n"><button class="on" data-n="1">1</button><button data-n="3">3</button><button data-n="5">5</button><button data-n="10">10</button></div></div><div id="p_betBox"></div><button class="btn gold" id="p_drop" style="margin-top:14px">رها کردن توپ</button>
+<div class="info"><span>بازگشت به بازیکن: <b class="num" id="p_rtp">91.6%</b></span><span>احتمال بردن (بالای 1x): <b class="num" id="p_pw">29%</b></span></div>
+<div class="note">ریسک کم: ضرایب نزدیک هم (تا 5x). متوسط: تا 10x. زیاد: تا 23x ولی وسط جدول تقریباً 0.2x است. مبلغ شرط برای هر توپ جداگانه حساب می‌شود و مسیر هر توپ با عدد تصادفی امن تعیین می‌شود.</div></div>
+</section>
+<section class="view" id="view-cups"><div class="gtop"><button class="icon-btn" data-go="home" aria-label="back"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><h2>توپ زیر لیوان</h2><div class="balchip"><span class="num gbal">0</span> T</div></div>
+<div class="res" id="c_res">شرط را بگذار و شروع کن</div>
+<div class="cstage" id="c_stage">
+<div class="cupwrap"><div class="cball"></div><button class="cup" aria-label="cup"><svg viewBox="0 0 100 120"><path d="M20 14L4 108Q50 122 96 108L80 14Z" fill="url(#cg)"/><path d="M11 62Q50 74 89 62L87 72Q50 84 13 72Z" fill="#ffd84d"/><path d="M5 100Q50 114 95 100L96 108Q50 122 4 108Z" fill="#2a0a4a" opacity=".45"/><ellipse cx="50" cy="14" rx="30" ry="9" fill="url(#cg2)"/><ellipse cx="50" cy="14" rx="22" ry="5.5" fill="#7c3aed" opacity=".55"/><path d="M28 24L17 96" stroke="#fff" stroke-opacity=".38" stroke-width="6" stroke-linecap="round"/></svg></button></div>
+<div class="cupwrap"><div class="cball"></div><button class="cup" aria-label="cup"><svg viewBox="0 0 100 120"><path d="M20 14L4 108Q50 122 96 108L80 14Z" fill="url(#cg)"/><path d="M11 62Q50 74 89 62L87 72Q50 84 13 72Z" fill="#ffd84d"/><path d="M5 100Q50 114 95 100L96 108Q50 122 4 108Z" fill="#2a0a4a" opacity=".45"/><ellipse cx="50" cy="14" rx="30" ry="9" fill="url(#cg2)"/><ellipse cx="50" cy="14" rx="22" ry="5.5" fill="#7c3aed" opacity=".55"/><path d="M28 24L17 96" stroke="#fff" stroke-opacity=".38" stroke-width="6" stroke-linecap="round"/></svg></button></div>
+<div class="cupwrap"><div class="cball"></div><button class="cup" aria-label="cup"><svg viewBox="0 0 100 120"><path d="M20 14L4 108Q50 122 96 108L80 14Z" fill="url(#cg)"/><path d="M11 62Q50 74 89 62L87 72Q50 84 13 72Z" fill="#ffd84d"/><path d="M5 100Q50 114 95 100L96 108Q50 122 4 108Z" fill="#2a0a4a" opacity=".45"/><ellipse cx="50" cy="14" rx="30" ry="9" fill="url(#cg2)"/><ellipse cx="50" cy="14" rx="22" ry="5.5" fill="#7c3aed" opacity=".55"/><path d="M28 24L17 96" stroke="#fff" stroke-opacity=".38" stroke-width="6" stroke-linecap="round"/></svg></button></div>
+<div class="ctable"></div></div>
+<div class="card"><div class="field"><label>حالت بازی</label><div class="seg" id="c_mode"><button class="on" data-m="1">1 توپ<b>ضریب 2.5x</b></button><button data-m="2">2 توپ<b>ضریب 1.25x</b></button></div></div><div id="c_betBox" style="margin-top:12px"></div><button class="btn gold" id="c_go" style="margin-top:14px">شروع بازی</button>
+<div class="info"><span>ضریب برد: <b class="num" id="c_x">2.5x</b></span><span>احتمال برد: <b class="num" id="c_p">33.3%</b></span></div>
+<div class="info"><span>بازگشت به بازیکن: <b class="num">83.3%</b></span><span>حداقل شرط: <b class="num">10</b></span></div>
+<div class="note">در حالت 1 توپ شانس 1 از 3 و ضریب 2.5x است. در حالت 2 توپ شانس 2 از 3 و ضریب 1.25x است. جای توپ‌ها قبل از جابجایی با عدد تصادفی امن مشخص می‌شود و بعد از انتخاب تو تغییر نمی‌کند. بازگشت به بازیکن در هر دو حالت 83.3% است.</div></div></section>
+<section class="view" id="view-slots"><div class="gtop"><button class="icon-btn" data-go="home" aria-label="back"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><h2>اسلات ۷۷۷</h2><div class="balchip"><span class="num gbal">0</span> T</div></div>
+<div class="res" id="s_res">شرط را بگذار و بچرخان</div>
+<div class="slot" id="s_slot"><div class="reel" id="s_r0"><span>🍒</span></div><div class="reel" id="s_r1"><span>🍋</span></div><div class="reel" id="s_r2"><span>🔔</span></div></div>
+<div class="card"><div id="s_betBox"></div><button class="btn gold" id="s_go" style="margin-top:14px">بچرخان</button>
+<div class="info"><span>بازگشت به بازیکن: <b class="num" id="s_rtp">-</b></span><span>شانس بردن: <b class="num" id="s_pw">-</b></span></div>
+<div class="ptab" id="s_pay"></div><div class="note">سه نماد یکسان جایزه می‌دهد. دو گیلاس 1x یعنی شرط برمی‌گردد. هر قرقره مستقل و با عدد تصادفی امن انتخاب می‌شود و درصدها از احتمال واقعی نمادها محاسبه شده است.</div></div></section>
+<section class="view" id="view-crash"><div class="gtop"><button class="icon-btn" data-go="home" aria-label="back"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><h2>موشک (کرش)</h2><div class="balchip"><span class="num gbal">0</span> T</div></div>
+<div class="res" id="k_res">قبل از سقوط موشک برداشت کن</div>
+<canvas id="k_cv" width="640" height="380"></canvas><div class="khist" id="k_hist"></div>
+<div class="card"><div id="k_betBox"></div><div class="field" style="margin-top:12px"><label>برداشت خودکار (ضریب) - خالی = دستی</label><input id="k_auto" inputmode="decimal" value="2.00"></div><button class="btn gold" id="k_btn" style="margin-top:14px">شروع پرواز</button>
+<div class="info"><span>بازگشت به بازیکن: <b class="num">37.5%</b></span><span>بیشترین ضریب: <b class="num">1000x</b></span></div>
+<div class="info"><span>شانس رسیدن به 1.5x: <b class="num">25%</b></span><span>به 2x: <b class="num">18.75%</b></span></div><div class="note">ضریب بالا می‌رود و موشک در یک ضریب تصادفی سقوط می‌کند. برداشت از ضریب 1.50x به بعد فعال می‌شود. اگر قبل از سقوط برداشت کنی برنده‌ای، وگرنه شرط می‌سوزد. نقطه سقوط قبل از پرواز با عدد تصادفی امن مشخص می‌شود.</div></div></section>
+<div class="bottom-nav">
+    <button class="nav-btn active" data-go="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>بازی‌ها</button>
+    <button class="nav-btn" data-go="buy"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>خرید</button>
+    <button class="nav-btn" data-go="sell"><svg viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>فروش</button>
+    <button class="nav-btn" data-go="history"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>تاریخچه</button>
+  </div>
+</div>
+
+<div class="overlay" id="msgOverlay"><div class="modal" id="msgModal"></div></div>
+<div class="overlay" id="adminLoginOverlay">
+  <div class="modal"><h3>ورود ادمین</h3>
+    <div class="field"><input type="password" id="adminPassInput" placeholder="رمز ادمین"></div>
+    <button class="btn" id="adminLoginOk">ورود</button>
+  </div>
+</div>
+<div id="adminPanel"><div style="max-width:500px;margin:0 auto">
+  <h2 style="text-align:center;color:var(--cyan)">پنل مدیریت</h2>
+  <div id="adminOrders"></div>
+  <button class="btn ghost" style="margin-top:20px" id="adminClose">بستن پنل</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+var STORAGE_KEY="kiani_exchange_v5",SESSION_KEY="kiani_exchange_session",DEVICE_KEY="kiani_exchange_device";
+var ADMIN_HASH="91a6dba7d8f88cd70d4a1c5db0098d76f2a99257bc9d8524494bb1cd32b0fbd6";
+var TOKEN_PRICE=1000,CARD_NUMBER="6219861975550053",BUY_ADMIN_ID="@mahancn3",SELL_ADMIN_ID="@sobhan_1384_k",WELCOME_TOKENS=50;
+var db={users:{}},currentUser=null,shownBal=0;
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fmt(n){return Number(n||0).toLocaleString("en-US")}
+function digitsOnly(s){return String(s).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/[٠-٩]/g,function(d){return "٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/\D/g,"")}
+function makeId(p){return p+"-"+Date.now().toString(36).toUpperCase().slice(-5)+Math.random().toString(36).slice(2,5).toUpperCase()}
+function toast(m,err){var t=$("toast");t.textContent=m;t.className="toast show"+(err?" err":"");setTimeout(function(){t.className="toast"},2800)}
+function buzz(){try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
+async function sha256(t){if(window.crypto&&crypto.subtle){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.prototype.map.call(new Uint8Array(b),function(x){return x.toString(16).padStart(2,"0")}).join("")}return "plain:"+t}
+function loadDB(){try{var s=localStorage.getItem(STORAGE_KEY);if(s)db=JSON.parse(s)}catch(e){}if(!db.users)db.users={}}
+function saveDB(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}catch(e){}}
+function me(){return currentUser?db.users[currentUser]:null}
+function copy(t){try{navigator.clipboard.writeText(t).then(function(){toast("کپی شد")})}catch(e){toast("کپی نشد",true)}}
+
+async function doLogin(){
+  var u=$("authUser").value.trim().toLowerCase(),p=$("authPass").value;
+  if(!u||!p)return toast("نام و رمز را وارد کنید.",true);
+  var r=db.users[u];if(!r)return toast("حسابی با این نام پیدا نشد.",true);
+  if(await sha256(r.salt+p)!==r.hash)return toast("رمز عبور اشتباه است.",true);
+  startSession(u);
+}
+async function doRegister(){
+  var u=$("authUser").value.trim().toLowerCase(),p=$("authPass").value;
+  if(!/^[a-z0-9_]{3,24}$/.test(u))return toast("نام کاربری: 3 تا 24 حرف انگلیسی، عدد یا _",true);
+  if(p.length<6)return toast("رمز عبور حداقل 6 کاراکتر باشد.",true);
+  if(db.users[u])return toast("این نام کاربری قبلاً گرفته شده.",true);
+  if(localStorage.getItem(DEVICE_KEY))return toast("با این گوشی قبلاً حساب ساخته‌اید!",true);
+  var salt=Math.random().toString(36).slice(2)+Date.now().toString(36);
+  db.users[u]={salt:salt,hash:await sha256(salt+p),tokens:WELCOME_TOKENS,history:[],lastBonus:0};
+  db.users[u].history.push({id:makeId("GF"),type:"buy",tokens:WELCOME_TOKENS,amount:0,status:"approved",ts:Date.now(),note:"هدیه ثبت‌نام"});
+  try{localStorage.setItem(DEVICE_KEY,u)}catch(e){}
+  saveDB();startSession(u);toast("حساب ساخته شد! "+WELCOME_TOKENS+" توکن هدیه");
+}
+function startSession(u){
+  currentUser=u;try{localStorage.setItem(SESSION_KEY,u)}catch(e){}
+  $("authScreen").style.display="none";$("app").style.display="flex";$("authPass").value="";
+  shownBal=0;go("home");renderAll();
+}
+function logout(){currentUser=null;try{localStorage.removeItem(SESSION_KEY)}catch(e){}$("app").style.display="none";$("authScreen").style.display="flex"}
+
+function go(v){
+  document.querySelectorAll(".view").forEach(function(x){x.classList.remove("active")});
+  $("view-"+v).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(function(b){b.classList.toggle("active",b.dataset.go===v)});
+  if(v==="sell")$("sellBal").textContent=fmt(me()?me().tokens:0);
+  if(v==="history")renderHistory();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function countUp(el,to){
+  var from=shownBal,t0=performance.now(),d=700;
+  function step(t){var k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);el.textContent=fmt(Math.round(from+(to-from)*e));if(k<1)requestAnimationFrame(step);else shownBal=to}
+  requestAnimationFrame(step);
+}
+function renderAll(){
+  var u=me();if(!u)return;
+  $("helloUser").textContent=currentUser;$("avatar").textContent=currentUser.charAt(0).toUpperCase();
+  countUp($("balAmount"),u.tokens);
+  $("balToman").textContent=fmt(u.tokens*TOKEN_PRICE);document.querySelectorAll(".gbal").forEach(function(e){e.textContent=fmt(u.tokens)});$("sellBal").textContent=fmt(u.tokens);
+}
+function renderTicker(){
+  var s="";for(var i=0;i<2;i++)s+='<em>WHEEL</em>MAX x5<em>CUPS</em>x2.5<em>MINES</em>RTP 85%<em>PLINKO</em>MAX x23<em>CRASH</em>MAX x1000<em>SLOTS</em>MAX x300';
+  $("tick").innerHTML=s;
+}
+function renderHistory(){
+  var u=me(),box=$("histList");if(!u)return;
+  var h=u.history.slice().reverse();
+  if(!h.length){box.innerHTML='<div class="empty">هنوز تراکنشی ندارید</div>';return}
+  var st={pending:"در انتظار",approved:"تایید شده",rejected:"رد شده"};
+  box.innerHTML=h.map(function(t){
+    var buy=t.type==="buy",d=new Date(t.ts),ds=d.getFullYear()+"/"+(d.getMonth()+1)+"/"+d.getDate()+"  "+d.getHours()+":"+String(d.getMinutes()).padStart(2,"0");
+    return '<div class="tx"><div class="ti '+(buy?"in":"out")+'"><svg viewBox="0 0 24 24"><path d="'+(buy?"M12 19V5M5 12l7-7 7 7":"M12 5v14M19 12l-7 7-7-7")+'"/></svg></div>'+
+    '<div class="tt"><b>'+esc(t.note||(buy?"خرید توکن":"فروش توکن"))+'</b><small class="num">'+ds+'</small></div>'+
+    '<div class="ta"><b class="num">'+(buy?"+":"-")+fmt(t.tokens)+' T</b><span class="badge '+t.status+'">'+st[t.status]+'</span></div></div>';
+  }).join("");
+}
+function showModal(h){$("msgModal").innerHTML=h;$("msgOverlay").classList.add("show")}
+function closeModal(){$("msgOverlay").classList.remove("show")}
+var CHECK='<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>';
+var CLOCK='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+function updateBuyPrice(){var v=digitsOnly($("buyAmount").value);$("buyAmount").value=v;$("buyPrice").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
+function updateSellPrice(){var v=digitsOnly($("sellAmount").value);$("sellAmount").value=v;$("sellReceive").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
+
+function submitBuy(){
+  var u=me();if(!u)return;var amt=Number(digitsOnly($("buyAmount").value)),trk=$("buyTracking").value.trim();
+  if(!amt||amt<1)return toast("تعداد نامعتبر است.",true);if(trk.length<4)return toast("کد رهگیری را وارد کنید.",true);
+  var o={id:makeId("P"),type:"buy",tokens:amt,amount:amt*TOKEN_PRICE,tracking:trk,status:"pending",ts:Date.now()};
+  u.history.push(o);saveDB();renderAll();$("buyTracking").value="";buzz();
+  showModal('<div class="okring">'+CHECK+'</div><h3>سفارش خرید ثبت شد</h3>'+
+  '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(o.amount)+' تومان</span></div>'+
+  '<p style="margin-top:14px">شناسه سفارش (برای کپی کلیک کنید):</p><div class="order-id num" data-copy="'+esc(o.id)+'">'+esc(o.id)+'</div>'+
+  '<p style="color:var(--red);font-weight:700">لطفاً نام کاربری و رمز خود را به همراه رسید برای ادمین ارسال کنید.</p>'+
+  '<div class="tg-btn num" data-copy="'+esc(BUY_ADMIN_ID)+'">'+esc(BUY_ADMIN_ID)+'</div><button class="btn ghost" data-close="1">متوجه شدم</button>');
+}
+function submitSell(){
+  var u=me();if(!u)return;var card=digitsOnly($("sellCard").value),amt=Number(digitsOnly($("sellAmount").value));
+  if(card.length!==16)return toast("شماره کارت نامعتبر است.",true);if(!amt||amt<1)return toast("تعداد توکن را وارد کنید.",true);
+  if(amt>u.tokens)return toast("موجودی کافی نیست.",true);
+  u.tokens-=amt;var o={id:makeId("WD"),type:"sell",tokens:amt,amount:amt*TOKEN_PRICE,card:card,status:"pending",ts:Date.now()};
+  u.history.push(o);saveDB();renderAll();$("sellCard").value="";$("sellAmount").value="";$("sellReceive").textContent="0 تومان";buzz();
+  showModal('<div class="okring" style="background:rgba(251,191,36,.16);color:var(--gold)">'+CLOCK+'</div><h3>درخواست فروش ثبت شد</h3>'+
+  '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(o.amount)+' تومان</span></div>'+
+  '<p style="margin-top:14px">شناسه سفارش را برای ادمین بفرستید:</p><div class="order-id num" data-copy="'+esc(o.id)+'">'+esc(o.id)+'</div><br>'+
+  '<div class="tg-btn num" data-copy="'+esc(SELL_ADMIN_ID)+'">'+esc(SELL_ADMIN_ID)+'</div><button class="btn ghost" data-close="1">متوجه شدم</button>');
+}
+
+function bind(){
+  $("btnLogin").addEventListener("click",doLogin);$("btnRegister").addEventListener("click",doRegister);$("btnLogout").addEventListener("click",logout);
+  $("payCard").addEventListener("click",function(){copy(CARD_NUMBER)});
+  $("buyAmount").addEventListener("input",updateBuyPrice);$("btnBuy").addEventListener("click",submitBuy);
+  $("sellAmount").addEventListener("input",updateSellPrice);$("btnSell").addEventListener("click",submitSell);
+  $("sellAll").addEventListener("click",function(){var u=me();if(u){$("sellAmount").value=u.tokens;updateSellPrice()}});
+  document.querySelectorAll(".chips[data-for] .chip").forEach(function(c){c.addEventListener("click",function(){$("buyAmount").value=c.dataset.v;updateBuyPrice()})});
+  document.addEventListener("click",function(e){
+    var g=e.target.closest("[data-go]");if(g){buzz();return go(g.dataset.go)}
+    var cp=e.target.closest("[data-copy]");if(cp)return copy(cp.dataset.copy);
+    if(e.target.closest("[data-close]"))return closeModal();
+  });
+  $("msgOverlay").addEventListener("click",function(e){if(e.target===this)closeModal()});
+  $("btnAdmin").addEventListener("click",function(){$("adminLoginOverlay").classList.add("show")});
+  $("adminLoginOverlay").addEventListener("click",function(e){if(e.target===this)this.classList.remove("show")});
+  $("adminLoginOk").addEventListener("click",async function(){
+    if(await sha256($("adminPassInput").value)===ADMIN_HASH){$("adminLoginOverlay").classList.remove("show");$("adminPassInput").value="";$("adminPanel").style.display="block";renderAdmin()}
+    else toast("رمز اشتباه است",true);
+  });
+  $("adminClose").addEventListener("click",function(){$("adminPanel").style.display="none"});
+}
+function renderAdmin(){
+  var box=$("adminOrders");box.innerHTML="";var p=[];
+  Object.keys(db.users).forEach(function(n){db.users[n].history.forEach(function(t){if(t.status==="pending")p.push({user:n,t:t})})});
+  if(!p.length){box.innerHTML="<div class='empty'>سفارشی وجود ندارد</div>";return}
+  p.forEach(function(o){var t=o.t,b=t.type==="buy";
+    box.innerHTML+='<div class="admin-order"><div class="line"><span>کاربر</span><b>'+esc(o.user)+'</b></div><div class="line"><span>نوع</span><b>'+(b?"خرید":"فروش")+'</b></div><div class="line"><span>تعداد</span><b class="num">'+fmt(t.tokens)+' T</b></div><div class="line"><span>کد/کارت</span><b class="num">'+esc(b?t.tracking:t.card)+'</b></div>'+
+    '<div class="acts"><button class="btn" style="background:var(--green)" onclick="resolveOrder(\''+esc(o.user)+'\',\''+esc(t.id)+'\',\'approve\')">تایید</button><button class="btn" style="background:var(--red)" onclick="resolveOrder(\''+esc(o.user)+'\',\''+esc(t.id)+'\',\'reject\')">رد</button></div></div>';
+  });
+}
+function resolveOrder(un,id,a){
+  var r=db.users[un],t=r.history.find(function(x){return x.id===id});if(!t)return;
+  t.status=a==="approve"?"approved":"rejected";
+  if(a==="approve"&&t.type==="buy")r.tokens+=t.tokens;
+  if(a==="reject"&&t.type==="sell")r.tokens+=t.tokens;
+  saveDB();renderAdmin();renderAll();toast("انجام شد");
+}
+
+
+var G={MIN:10};
+Object.defineProperty(G,"u",{get:function(){return me()}});
+G.$=function(i){return document.getElementById(i)};
+G.fmt=function(n){return Number(n||0).toLocaleString("en-US",{maximumFractionDigits:2})};
+G.save=function(){saveDB()};
+G.show=function(){renderAll()};
+G.rnd=function(n){var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n};
+G.betVal=function(p){return parseInt(digitsOnly(G.$(p+"bet").value),10)||0};
+G.take=function(p){var u=me();if(!u)return 0;var b=G.betVal(p);
+ if(b<G.MIN){toast("حداقل شرط "+G.MIN+" توکن است",true);return 0}
+ if(b>u.tokens){toast("موجودی کافی نیست",true);return 0}
+ u.tokens-=b;saveDB();renderAll();return b};
+G.pay=function(x){x=Math.floor(x);var u=me();if(u&&x>0){u.tokens+=x;saveDB();renderAll()}return x};
+G.result=function(p,t,win){var r=G.$(p+"res");r.textContent=t;r.className="res "+(win?"win":"lose")};
+G.seg=function(id,cb,can){G.$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b||(can&&!can()))return;[].forEach.call(this.children,function(c){c.classList.remove("on")});b.classList.add("on");cb(b.dataset)})};
+G.mount=function(id,p){
+ G.$(id).innerHTML='<div class="field"><label>مبلغ شرط (توکن) - حداقل '+G.MIN+'</label><input id="'+p+'bet" inputmode="numeric" value="10"></div><div class="chips" style="margin-top:10px"><button class="chip" data-b="10">10</button><button class="chip" data-b="50">50</button><button class="chip" data-b="h">نصف</button><button class="chip" data-b="d">دو برابر</button><button class="chip" data-b="m">همه</button></div>';
+ G.$(id).addEventListener("click",function(e){var c=e.target.closest("[data-b]");if(!c)return;var v=c.dataset.b,cur=G.betVal(p),u=me();
+  var n=v==="h"?Math.floor(cur/2):v==="d"?cur*2:v==="m"?Math.floor(u?u.tokens:0):Number(v);G.$(p+"bet").value=Math.max(0,n)})};
+(function(){
+var SEG=[0,2,0,.5,0,1,0,3,0,.5,0,2,0,5,0,.5,1,0,1,.5],N=SEG.length,A=360/N,cur=0,busy=false;
+var COL={"0":["#2a2f4a","#141728"],"0.5":["#4a5a92","#2a3563"],"1":["#3ee0c4","#0f766e"],"2":["#34d27b","#15803d"],"3":["#a78bfa","#6d28d9"],"5":["#ffd25a","#d97706"]};
+var cv=G.$("w_wheel"),x=cv.getContext("2d"),R=320;
+x.translate(R,R);
+for(var i=0;i<N;i++){var a0=(i*A-90)*Math.PI/180,a1=((i+1)*A-90)*Math.PI/180,c=COL[String(SEG[i])];
+ var g=x.createRadialGradient(0,0,30,0,0,R);g.addColorStop(0,c[1]);g.addColorStop(1,c[0]);
+ x.beginPath();x.moveTo(0,0);x.arc(0,0,R-6,a0,a1);x.closePath();x.fillStyle=g;x.fill();x.strokeStyle="rgba(8,10,18,.9)";x.lineWidth=4;x.stroke();
+ x.save();x.rotate((a0+a1)/2);x.shadowColor="rgba(0,0,0,.55)";x.shadowBlur=6;x.fillStyle=SEG[i]===0?"rgba(255,255,255,.45)":"#fff";x.font="900 40px sans-serif";x.textAlign="right";x.fillText(SEG[i]+"x",R-34,14);
+ x.shadowBlur=0;x.beginPath();x.arc(R-16,0,4,0,7);x.fillStyle="rgba(255,255,255,.55)";x.fill();x.restore();}
+x.beginPath();x.arc(0,0,R-5,0,7);x.strokeStyle="#fbbf24";x.lineWidth=6;x.stroke();
+var bl=G.$("w_bulbs"),h="";for(var k=0;k<24;k++){var t=k*Math.PI*2/24;h+='<i style="left:'+(50+48.2*Math.sin(t))+'%;top:'+(50-48.2*Math.cos(t))+'%"></i>'}bl.innerHTML=h;
+var fx=G.$("w_fx"),f=fx.getContext("2d"),parts=[],run=false,CL=["#fbbf24","#22d3ee","#8b5cf6","#22c55e","#ef4444","#fff"];
+function burst(n){for(var i=0;i<n;i++)parts.push({x:350,y:350,vx:(Math.random()-.5)*20,vy:-Math.random()*16-3,r:Math.random()*6+4,c:CL[i%6],l:1});if(!run){run=true;tick()}}
+function tick(){f.clearRect(0,0,700,700);parts=parts.filter(function(p){return p.l>0});
+ parts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.5;p.vx*=.99;p.l-=.011;f.globalAlpha=Math.max(p.l,0);f.fillStyle=p.c;f.fillRect(p.x,p.y,p.r*1.7,p.r)});
+ f.globalAlpha=1;if(parts.length)requestAnimationFrame(tick);else run=false}
+if(true){G.mount("w_betBox","w_");
+G.$("w_go").onclick=function(){
+ if(busy)return;var b=G.take("w_");if(!b)return;busy=true;G.$("w_go").disabled=true;
+ var rs=G.$("w_res");rs.className="res";rs.textContent="در حال چرخش...";G.$("w_stage").classList.add("spin");
+ var i=G.rnd(N),mid=i*A+A/2,rot=cur+360*7+(((360-mid-cur)%360)+360)%360;cur=rot;
+ cv.style.transform="rotate("+rot+"deg)";
+ setTimeout(function(){var m=SEG[i],p=G.pay(b*m);G.$("w_stage").classList.remove("spin");
+  if(m>1){G.result("w_","برد! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);burst(m>=5?160:m>=3?110:70);try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}}
+  else if(m===1)G.result("w_","ضریب 1x - شرط برگشت",true);
+  else G.result("w_",m===0?"باخت  |  -"+G.fmt(b)+" توکن":"ضریب "+m+"x  |  -"+G.fmt(b-p)+" توکن",false);
+  busy=false;G.$("w_go").disabled=false;},5150);};}
+})();
+(function(){
+
+var DIA='<svg viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3l3 18M15 3l-3 18"/></svg>',BOMB='<svg viewBox="0 0 24 24"><circle cx="11" cy="14" r="7"/><path d="M15 9l3-3M18 3v3M21 6h-3"/></svg>';
+var T=25,mines=[],opened=0,bet=0,live=false,M=5;
+function mult(k){var v=.85;for(var i=0;i<k;i++)v*=(T-i)/(T-M-i);return v}
+function ui(){var m=mult(opened);G.$("m_cm").textContent=m.toFixed(2)+"x";G.$("m_nm").textContent=(live&&opened<T-M)?mult(opened+1).toFixed(2)+"x":"-";G.$("m_cv").textContent=G.fmt(Math.floor(bet*m));G.$("m_cash").disabled=!(live&&opened>0)}
+function build(){var g=G.$("m_grid");g.innerHTML="";for(var i=0;i<T;i++){var c=document.createElement("button");c.className="cell off";c.dataset.i=i;g.appendChild(c)}}
+function end(){live=false;G.$("m_start").disabled=false;G.$("m_mc").disabled=false;document.querySelectorAll(".cell").forEach(function(c){c.classList.add("off")});ui()}
+function reveal(){document.querySelectorAll(".cell").forEach(function(c){var i=+c.dataset.i;if(!c.classList.contains("safe")&&!c.classList.contains("bomb")){var b=mines.indexOf(i)>-1;c.innerHTML=b?BOMB:DIA;c.classList.add(b?"bomb":"dim")}})}
+if(true){G.mount("m_betBox","m_");build();
+G.$("m_start").onclick=function(){if(live)return;var b=G.take("m_");if(!b)return;bet=b;M=+G.$("m_mc").value;opened=0;mines=[];
+ while(mines.length<M){var r=G.rnd(T);if(mines.indexOf(r)<0)mines.push(r)}
+ live=true;G.$("m_start").disabled=true;G.$("m_mc").disabled=true;build();document.querySelectorAll(".cell").forEach(function(c){c.classList.remove("off")});G.$("m_res").className="res";G.$("m_res").textContent="خانه‌ها را باز کن";ui()};
+G.$("m_grid").onclick=function(e){var c=e.target.closest(".cell");if(!c||!live||c.classList.contains("safe"))return;var i=+c.dataset.i;
+ if(mines.indexOf(i)>-1){c.innerHTML=BOMB;c.classList.add("bomb");reveal();G.result("m_","انفجار!  |  -"+G.fmt(bet)+" توکن",false);end();return}
+ c.innerHTML=DIA;c.classList.add("safe");opened++;ui();
+ if(opened===T-M){var p=G.pay(bet*mult(opened));G.result("m_","همه الماس‌ها پیدا شد!  |  +"+G.fmt(p-bet)+" توکن",true);reveal();end()}};
+G.$("m_cash").onclick=function(){if(!live||!opened)return;var p=G.pay(bet*mult(opened));G.result("m_","برداشت موفق  |  +"+G.fmt(p-bet)+" توکن",p>=bet);reveal();end()};}
+
+})();
+(function(){
+var TB=[[5,2,1.1,.8,.35],[10,3,1.1,.6,.3],[23,4,1.1,.3,.2]],BN=[1,8,28,56,70,56,28,8,1],risk=1,cnt=1,R=8,W=640,S=62,CX=W/2,TOP0=60,DY=58,balls=[],fl=[];
+function tab(r){var h=TB[r];return h.concat(h.slice(0,4).reverse())}
+var MUL=tab(1),c=G.$("p_cv"),x=c.getContext("2d");
+function stats(){var r=0,w=0;MUL.forEach(function(m,k){r+=m*BN[k]/256;if(m>1)w+=BN[k]/256});G.$("p_rtp").textContent=(r*100).toFixed(1)+"%";G.$("p_pw").textContent=Math.round(w*100)+"%"}
+function sx(k){return CX+(k-4)*S}
+function col(m){return m>=10?"#fbbf24":m>=3?"#8b5cf6":m>1?"#22c55e":"#ef4444"}
+function draw(){x.clearRect(0,0,W,W);
+ for(var r=0;r<R;r++)for(var j=0;j<=r;j++){x.beginPath();x.arc(CX+(j-r/2)*S,TOP0+r*DY,5,0,7);x.fillStyle="rgba(255,255,255,.55)";x.fill()}
+ for(var k=0;k<9;k++){var o=(fl[k]||0)*10,y=TOP0+R*DY+10-o;fl[k]=Math.max(0,(fl[k]||0)-.05);x.fillStyle=col(MUL[k]);x.beginPath();x.rect(sx(k)-26,y,52,40);x.fill();x.fillStyle="#0b0d14";x.font="bold 19px sans-serif";x.textAlign="center";x.fillText(MUL[k]+"x",sx(k),y+26)}
+ balls.forEach(function(b){x.beginPath();x.arc(b.x,b.y,10,0,7);x.fillStyle="#22d3ee";x.shadowColor="#22d3ee";x.shadowBlur=16;x.fill();x.shadowBlur=0})}
+function wps(path){var w=[{x:CX,y:TOP0-40}],rt=0;
+ for(var r=0;r<R;r++){w.push({x:CX+(2*rt-r)*S/2,y:TOP0+r*DY});rt+=path[r]}
+ w.push({x:sx(rt),y:TOP0+R*DY+30});return w}
+function loop(){
+ for(var i=balls.length-1;i>=0;i--){var b=balls[i];b.t+=.08;
+  if(b.t>=b.w.length-1){var m=b.mul[b.k],p=G.pay(b.bet*m),q=b.q;fl[b.k]=1;q.left--;q.won+=p;
+   if(q.n===1){if(m>1)G.result("p_","ضریب "+m+"x  |  +"+G.fmt(p-b.bet)+" توکن",true);else G.result("p_","ضریب "+m+"x  |  -"+G.fmt(b.bet-p)+" توکن",false)}
+   else if(q.left===0){var d=q.won-q.cost;G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0)}
+   balls.splice(i,1);continue}
+  var s=Math.floor(b.t),f=b.t-s,a=b.w[s],z=b.w[s+1];
+  b.x=a.x+(z.x-a.x)*f;b.y=a.y+(z.y-a.y)*f*f-Math.sin(f*Math.PI)*6}
+ draw();requestAnimationFrame(loop)}
+G.mount("p_betBox","p_");stats();
+G.seg("p_risk",function(d){risk=+d.r;MUL=tab(risk);stats()});
+G.seg("p_n",function(d){cnt=+d.n});
+G.$("p_drop").onclick=function(){var u=me(),b=G.betVal("p_");if(!u)return;
+ if(b<G.MIN)return toast("حداقل شرط "+G.MIN+" توکن است",true);
+ if(b*cnt>u.tokens)return toast("موجودی برای "+cnt+" توپ کافی نیست",true);
+ u.tokens-=b*cnt;saveDB();renderAll();
+ var q={n:cnt,left:cnt,won:0,cost:b*cnt},mul=MUL;
+ for(let i=0;i<cnt;i++)setTimeout(function(){var p=[];for(var j=0;j<R;j++)p.push(G.rnd(2));balls.push({path:p,k:p.reduce(function(a,v){return a+v},0),w:wps(p),t:0,x:CX,y:TOP0-40,bet:b,mul:mul,q:q})},i*220);
+ G.$("p_res").className="res";G.$("p_res").textContent=cnt+" توپ در حال سقوط..."};
+loop();
+})();
+(function(){
+var W=[].slice.call(document.querySelectorAll("#c_stage .cupwrap")),slot=[0,1,2],balls=[],state="idle",bet=0,mode=1;
+function mult(){return mode===1?2.5:1.25}
+function place(){W.forEach(function(w,i){w.style.transform="translateX("+slot[i]*100+"%)"})}
+function lift(i,on){W[i].classList.toggle("up",on)}
+function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+async function start(){
+ if(state!=="idle")return;var b=G.take("c_");if(!b)return;bet=b;state="busy";G.$("c_go").disabled=true;
+ var rs=G.$("c_res");rs.className="res";
+ W.forEach(function(w,i){w.classList.remove("has","won");lift(i,false)});slot=[0,1,2];place();
+ balls=[];while(balls.length<mode){var r=G.rnd(3);if(balls.indexOf(r)<0)balls.push(r)}
+ balls.forEach(function(i){W[i].classList.add("has")});rs.textContent=mode===1?"تماشا کن، توپ اینجاست":"تماشا کن، دو توپ اینجاست";
+ await wait(350);balls.forEach(function(i){lift(i,true)});await wait(1100);balls.forEach(function(i){lift(i,false)});await wait(500);
+ rs.textContent="در حال جابجایی...";
+ for(var n=0;n<9;n++){var a=G.rnd(3),c=(a+1+G.rnd(2))%3,ia=slot.indexOf(a),ic=slot.indexOf(c);slot[ia]=c;slot[ic]=a;place();await wait(430)}
+ rs.textContent="یک لیوان را انتخاب کن";state="pick";
+}
+async function pick(i){
+ if(state!=="pick")return;state="busy";
+ var win=balls.indexOf(i)>-1,p=win?G.pay(bet*mult()):0;
+ lift(i,true);await wait(550);W.forEach(function(w,k){lift(k,true)});
+ if(win){W[i].classList.add("won");G.result("c_","درست حدس زدی!  |  +"+G.fmt(p-bet)+" توکن",true);try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}}
+ else G.result("c_","اشتباه بود  |  -"+G.fmt(bet)+" توکن",false);
+ await wait(900);state="idle";G.$("c_go").disabled=false;
+}
+G.mount("c_betBox","c_");place();
+G.seg("c_mode",function(d){mode=+d.m;G.$("c_x").textContent=mult()+"x";G.$("c_p").textContent=(mode===1?"33.3":"66.7")+"%"},function(){return state==="idle"});
+G.$("c_go").onclick=start;
+G.$("c_stage").addEventListener("click",function(e){var w=e.target.closest(".cupwrap");if(w)pick(W.indexOf(w))});
+})();
+(function(){
+var cv=G.$("k_cv"),x=cv.getContext("2d"),W=640,H=380,K=.15,st="idle",bet=0,cp=1,t0=0,cashed=0,auto=0,hist=[];
+function mAt(t){return t<1?t:Math.exp(K*(t-1))}function tOf(c){return c<=1?c:1+Math.log(c)/K}
+var ST=[];for(var q=0;q<45;q++)ST.push([Math.random()*W,Math.random()*H,Math.random()*1.4+.4]);
+function rocket(X,Y,ang){x.save();x.translate(X,Y);x.rotate(ang);x.scale(1.15,1.15);
+ var f=12+Math.random()*12,g=x.createLinearGradient(0,14,0,14+f);g.addColorStop(0,"#fff3b0");g.addColorStop(.5,"#ff9f1a");g.addColorStop(1,"rgba(255,60,60,0)");
+ x.fillStyle=g;x.beginPath();x.moveTo(-7,14);x.quadraticCurveTo(0,16+f*1.6,7,14);x.fill();
+ x.fillStyle="#ff2e93";x.beginPath();x.moveTo(-9,2);x.lineTo(-19,24);x.lineTo(-7,17);x.fill();x.beginPath();x.moveTo(9,2);x.lineTo(19,24);x.lineTo(7,17);x.fill();
+ var b=x.createLinearGradient(-11,0,11,0);b.addColorStop(0,"#bfb6ec");b.addColorStop(.45,"#fff");b.addColorStop(1,"#a99fe0");
+ x.fillStyle=b;x.beginPath();x.moveTo(0,-36);x.quadraticCurveTo(15,-14,11,17);x.lineTo(-11,17);x.quadraticCurveTo(-15,-14,0,-36);x.fill();
+ x.fillStyle="#ff2e93";x.beginPath();x.moveTo(0,-36);x.quadraticCurveTo(8,-27,10,-18);x.lineTo(-10,-18);x.quadraticCurveTo(-8,-27,0,-36);x.fill();
+ x.beginPath();x.arc(0,-6,5.5,0,7);x.fillStyle="#22e4ff";x.fill();x.lineWidth=2.5;x.strokeStyle="#7c3aed";x.stroke();x.restore()}
+function boom(X,Y){var g=x.createRadialGradient(X,Y,2,X,Y,50);g.addColorStop(0,"#fff");g.addColorStop(.35,"#ffd84d");g.addColorStop(.7,"#ff5d73");g.addColorStop(1,"rgba(255,46,147,0)");
+ x.fillStyle=g;x.beginPath();for(var i=0;i<16;i++){var r=i%2?20:50,a=i*Math.PI/8;x.lineTo(X+Math.cos(a)*r,Y+Math.sin(a)*r)}x.closePath();x.fill()}
+function draw(t,m,dead){
+ x.clearRect(0,0,W,H);x.fillStyle="#fff";ST.forEach(function(p){x.globalAlpha=.2+p[2]*.2;x.beginPath();x.arc(p[0],p[1],p[2],0,7);x.fill()});x.globalAlpha=1;
+ var xm=Math.max(6,t*1.15),ym=Math.max(2,m*1.25);
+ function px(a){return 30+a/xm*(W-60)}function py(v){return H-30-v/ym*(H-80)}
+ var sp=[.5,1,2,5,10,20,50,100,200,500,1000].filter(function(v){return ym/v<=5})[0]||1000;
+ x.font="bold 13px sans-serif";x.textAlign="left";x.lineWidth=1;
+ for(var v=sp;v<ym;v+=sp){var yy=py(v);x.strokeStyle="rgba(255,255,255,.08)";x.beginPath();x.moveTo(0,yy);x.lineTo(W,yy);x.stroke();x.fillStyle="rgba(255,255,255,.4)";x.fillText(v+"x",10,yy-6)}
+ var g=x.createLinearGradient(px(0),0,px(t)+1,0),c1=dead?"#ff5d73":"#7c3aed",c2=dead?"#ff9f1a":"#22e4ff";g.addColorStop(0,c1);g.addColorStop(1,c2);
+ x.beginPath();for(var i=0;i<=60;i++){var a=t*i/60;if(i)x.lineTo(px(a),py(mAt(a)));else x.moveTo(px(a),py(mAt(a)))}
+ x.strokeStyle=g;x.lineWidth=7;x.lineCap="round";x.shadowColor=c2;x.shadowBlur=16;x.stroke();x.shadowBlur=0;
+ x.lineTo(px(t),H-30);x.lineTo(px(0),H-30);var f=x.createLinearGradient(0,py(m),0,H-30);f.addColorStop(0,dead?"rgba(255,93,115,.28)":"rgba(34,228,255,.28)");f.addColorStop(1,"rgba(124,58,237,0)");x.fillStyle=f;x.fill();
+ var X=px(t),Y=py(m);
+ if(dead)boom(X,Y);else rocket(X,Y,Math.atan2((W-60)/xm,(t<1?1:K*mAt(t))/ym*(H-80)));
+ x.textAlign="center";x.shadowColor=dead?"#ff5d73":cashed?"#22e4ff":"#7c3aed";x.shadowBlur=24;x.font="900 74px sans-serif";x.fillStyle=dead?"#ff5d73":cashed?"#22e4ff":"#fff";x.fillText(m.toFixed(2)+"x",W/2,H/2-6);x.shadowBlur=0;
+ x.font="800 20px sans-serif";x.fillStyle="rgba(255,255,255,.7)";var lb=dead?"سقوط!":cashed?"برداشت شد در "+cashed.toFixed(2)+"x":"";if(lb)x.fillText(lb,W/2,H/2+30)}
+function rh(){G.$("k_hist").innerHTML=hist.slice(0,8).map(function(v){return '<span style="color:'+(v>=2?"#22e4ff":"#ff5d73")+'">'+v.toFixed(2)+'x</span>'}).join("")}
+function cash(m){cashed=m;var p=G.pay(bet*m);G.result("k_","برداشت در "+m.toFixed(2)+"x  |  +"+G.fmt(p-bet)+" توکن",true);G.$("k_btn").disabled=true;try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}}
+function frame(now){if(st!=="run")return;var t=(now-t0)/1000,m=mAt(t);
+ if(!cashed&&auto>1&&auto<cp&&m>=auto)cash(auto);
+ if(m>=cp){st="idle";draw(tOf(cp),cp,true);hist.unshift(cp);rh();if(!cashed)G.result("k_","سقوط در "+cp.toFixed(2)+"x  |  -"+G.fmt(bet)+" توکن",false);var b=G.$("k_btn");b.disabled=false;b.textContent="شروع پرواز";return}
+ if(!cashed)G.$("k_btn").textContent=m<1.5?"برداشت از 1.50x":"برداشت  "+G.fmt(Math.floor(bet*Math.floor(m*100)/100))+" T";
+ draw(t,m,false);requestAnimationFrame(frame)}
+G.mount("k_betBox","k_");draw(0,0,false);
+G.$("k_btn").onclick=function(){
+ if(st==="run"){if(!cashed){var m=Math.floor(mAt((performance.now()-t0)/1000)*100)/100;if(m<cp&&m>=1.5)cash(m)}return}
+ var b=G.take("k_");if(!b)return;bet=b;
+ var v=G.$("k_auto").value.replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)});auto=parseFloat(v)||0;if(auto>0)auto=Math.max(1.5,auto);
+ var u=G.rnd(1e9)/1e9;cp=Math.min(1000,Math.max(1,Math.floor(37.5/(1-u))/100));
+ cashed=0;st="run";G.$("k_res").className="res";G.$("k_res").textContent="موشک از 0.00x در حال پرواز...";t0=performance.now();requestAnimationFrame(frame)};
+})();
+(function(){
+var SY=[["🍒",30,5],["🍋",24,10],["🔔",18,20],["⭐",14,40],["💎",9,100],["7️⃣",5,300]],busy=false,R=[0,1,2].map(function(i){return G.$("s_r"+i)});
+function pick(){var r=G.rnd(100),a=0;for(var i=0;i<6;i++){a+=SY[i][1];if(r<a)return i}return 0}
+var rtp=0,pw=0;SY.forEach(function(s){var p=Math.pow(s[1]/100,3);rtp+=p*s[2];pw+=p});var p2=3*.09*.7;rtp+=p2;pw+=p2;
+G.$("s_rtp").textContent=(rtp*100).toFixed(1)+"%";G.$("s_pw").textContent=(pw*100).toFixed(1)+"%";
+G.$("s_pay").innerHTML=SY.map(function(s){return "<div>"+s[0]+s[0]+s[0]+"<br><b class='num'>"+s[2]+"x</b></div>"}).join("")+"<div>🍒🍒<br><b class='num'>1x</b></div>";
+G.mount("s_betBox","s_");
+G.$("s_go").onclick=async function(){var btn=this;if(busy)return;var b=G.take("s_");if(!b)return;busy=true;btn.disabled=true;
+ var f=[pick(),pick(),pick()],rs=G.$("s_res");rs.className="res";rs.textContent="در حال چرخش...";G.$("s_slot").classList.remove("win");
+ R.forEach(function(r){r.classList.add("spin")});
+ var iv=setInterval(function(){R.forEach(function(r){if(r.classList.contains("("spin"))r.firstElementChild.textContent=SY[Gs.rnd(6)][0]})_},70);
+ for(var i=0;i<3;i++){await new Promise(function(r){setTimeout(r,i?650:1000)});R[i].classList.remove("spin");R[i].firstElementChild.textContent=SY[f[i]][0];buzz()}
+ clearInterval(iv);
+ var m=0;if(f[0]===f[1]&&f[1]===f[2])m=SY[f[0]][2];else if(f.filter(function(v){return v===0}).length===2)m=1;
+ var p=G.pay(b*m);
+ if(m>1){G.result","جایزه! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);G.$("s_slot").classList.add("win");try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}}
+ else if(m===1)G.result("s_","دو گیلاس! شرط برگشت",true);
+ else G.result("s_","باخت  |  -"+G.fmt(b)+" توکن",false);
+ busy=false;btn.disabled=false};
+})();
+loadDB();bind();renderTicker();
+if(localStorage.getItem(SESSION_KEY)&&db.users[localStorage.getItem(SESSION_KEY)])startSession(localStorage.getItem(SESSION_KEY));
+</script>
+</body>
+</html>
+```
