@@ -1,0 +1,1126 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#070312">
+<title>KIANI GAMES - Hokm</title>
+<script async src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root { --bg: #070312; --panel: rgba(255,255,255,.05); --line: rgba(255,255,255,.09); --text: #fff; --muted: #8a90a6; --blue: #ff2e93; --cyan: #22e4ff; --violet: #7c3aed; --green: #22c55e; --red: #ef4444; --gold: #ffc83d; --font: Tahoma, Arial, sans-serif; }
+[data-theme="galaxy"] { --bg: #03001c; --panel: rgba(255,255,255,.06); --line: rgba(255,255,255,.15); --muted: #8a9bcc; --blue: #7c3aed; --cyan: #00f0ff; --violet: #4c1d95; --gold: #fbbf24; }
+[data-theme="halloween"] { --bg: #120600; --panel: rgba(255,255,255,.05); --line: rgba(255,150,0,.2); --muted: #cc9977; --blue: #ff6b00; --cyan: #ffb800; --violet: #8b2a00; --gold: #ffb800; }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;font-variant-numeric:lining-nums;transition: background 0.5s;}
+.num{direction:ltr;unicode-bidi:isolate;font-feature-settings:"lnum";letter-spacing:.3px}
+svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;perspective:520px;transition: 0.5s;}
+.bg i{position:absolute;width:320px;height:320px;border-radius:50%;filter:blur(90px);opacity:.22;animation:drift 18s ease-in-out infinite alternate}
+.bg i:nth-child(1){background:var(--blue);top:-80px;right:-60px}
+.bg i:nth-child(2){background:var(--violet);bottom:10%;left:-100px;animation-duration:23s}
+.bg i:nth-child(3){background:var(--cyan);top:45%;right:-120px;width:240px;height:240px;animation-duration:27s;opacity:.16}
+[data-theme="galaxy"] .bg::after{content:"";position:absolute;inset:0;background-image:radial-gradient(white 1px, transparent 1px);background-size:50px 50px;opacity:0.3;}
+[data-theme="halloween"] .bg{background:radial-gradient(ellipse at 50% 100%,#3d1400 0%,transparent 70%);}
+@keyframes drift{to{transform:translate(40px,-50px) scale(1.2)}}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+#authScreen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.auth-box{position:relative;z-index:1;width:100%;max-width:380px;padding:38px 24px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(20px);border-radius:28px;animation:fade .5s ease}
+.auth-box h2{font-size:30px;letter-spacing:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 8px;font-weight:900}
+.auth-logo{width:78px;height:78px;margin:0 auto 18px;border-radius:24px;background:linear-gradient(135deg,var(--blue),var(--violet));display:grid;place-items:center;font-size:38px;box-shadow:0 12px 44px rgba(0,0,0,.3);}
+#app{position:relative;z-index:1;display:none;flex-direction:column;padding:18px 15px 110px;max-width:500px;margin:0 auto;width:100%}
+.view{display:none}.view.active{display:block;animation:fade .35s ease}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.user{display:flex;align-items:center;gap:11px}
+.avatar{width:42px;height:42px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;font-weight:900;font-size:18px;color:#fff;box-shadow:0 0 22px rgba(0,0,0,.3)}
+.user small{display:block;color:var(--muted);font-size:12px}.user b{font-size:15px}
+.icons{display:flex;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:13px;background:var(--panel);border:1px solid var(--line);color:var(--text);font-size:18px;display:grid;place-items:center;cursor:pointer;transition:.2s}
+.icon-btn:active{transform:scale(.93)}
+.wbar{position:relative;overflow:hidden;padding:20px 22px;border-radius:30px;margin-bottom:22px;background:linear-gradient(135deg,var(--blue),var(--violet) 58%,var(--cyan));color:#fff;box-shadow:0 22px 56px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.4);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.wbar::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.14);right:-70px;top:-90px}
+.wbar::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.22) 50%,transparent 65%);background-size:250% 100%;animation:sweep 5s linear infinite}
+@keyframes sweep{to{background-position:-250% 0}}
+.wbar>*{position:relative;z-index:1}
+.wbar .lbl{font-size:12px;font-weight:700;opacity:.85;letter-spacing:1px}
+.wbar .amount{font-size:42px;font-weight:900;direction:ltr;display:flex;gap:5px;align-items:baseline;text-shadow:0 3px 16px rgba(0,0,0,.35)}
+.wbar .amount small{font-size:15px;opacity:.8}
+.wbar .toman{font-size:11.5px;opacity:.85;font-weight:700}
+.wacts{display:flex;flex-direction:column;gap:7px}
+.wacts button{border:0;border-radius:13px;padding:9px 18px;font:900 13px var(--font);cursor:pointer;background:#fff;color:#4c1d95;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:.2s}
+.wacts button+button{background:rgba(0,0,0,.3);color:#fff;box-shadow:none}
+.wacts button:active{transform:scale(.94)}
+.sec{display:flex;justify-content:space-between;align-items:center;margin:0 2px 12px;font-weight:900;font-size:19px}
+.sec span{font-size:12px;color:var(--cyan);font-weight:800;background:rgba(34,228,255,.16);padding:4px 12px;border-radius:999px}
+.bento{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:22px}
+.tile{position:relative;overflow:hidden;border-radius:28px;padding:18px;cursor:pointer;transition:transform .25s;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;animation:fade .5s ease both;border:1px solid transparent;background:linear-gradient(160deg,#1c0f40,#0d0624) padding-box,linear-gradient(135deg,var(--tc),rgba(255,255,255,.04) 65%) border-box;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.tile:active{transform:scale(.97)}
+.tile::before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;filter:blur(50px);opacity:.5;top:-50px;left:-40px;background:var(--tc)}
+.tile::after{content:"بازی ◂";position:absolute;bottom:14px;left:16px;font-size:11.5px;font-weight:900;padding:6px 14px;border-radius:999px;background:var(--tc);color:#12071f;box-shadow:0 0 20px var(--tc)}
+.tile>*{position:relative;z-index:1}
+.tile.big{flex-direction:row;align-items:center;gap:16px;min-height:160px}
+.tile .tg{width:68px;height:68px;flex:none;filter:drop-shadow(0 0 14px var(--tc))}
+.tile.big .tg{width:118px;height:118px}
+.tile b{display:block;font-size:19px;margin-bottom:4px;font-weight:900}
+.tile small{color:#cbbcf5;font-size:12px;line-height:1.7;display:block}
+.rtp{display:inline-block;margin-top:10px;font-size:11px;font-weight:800;padding:4px 11px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--tc);border:1px solid var(--tc)}
+.t-hokm{--tc:#fbbf24}
+.card{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.015));border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:26px;padding:20px;margin-bottom:14px}
+.card h3{margin:0 0 18px;font-size:18px;font-weight:900;display:flex;align-items:center;gap:8px}
+.card h3::before{content:"";width:4px;height:18px;background:linear-gradient(var(--blue),var(--violet));border-radius:4px}
+.field{margin-bottom:12px;text-align:right}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+.field input,.field select{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:16px;color:#fff;padding:15px;outline:none;text-align:center;transition:.2s;font-family:var(--font);font-size:15px}
+.field input:focus,.field select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,228,255,.25)}
+.btn{width:100%;border:none;border-radius:16px;padding:15px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;transition:.2s;background:linear-gradient(135deg,var(--blue),var(--violet));font-family:var(--font);box-shadow:0 8px 26px rgba(0,0,0,.35)}
+.btn:active{transform:scale(.97)} .btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:var(--panel);color:var(--text);box-shadow:none;border:1px solid var(--line)}
+.btn.gold{background:linear-gradient(135deg,#ffd84d,#ff9f1a);color:#2a1500;box-shadow:0 8px 26px rgba(255,170,30,.45)}
+.btn.green{background:linear-gradient(135deg,#22e4ff,#0e9f8e);color:#04201e}
+.pay-card{background:linear-gradient(135deg,#17240a,#0b2a22);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:18px;cursor:pointer}
+.pay-card .cn{font-size:21px;font-weight:700;letter-spacing:1.5px;margin:10px 0;direction:ltr;text-align:center}
+.chips{display:flex;gap:8px;margin:-4px 0 14px;flex-wrap:wrap}
+.chip{flex:1;min-width:60px;padding:9px 0;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;font-family:var(--font);font-weight:700;font-size:13px;cursor:pointer;transition:.2s}
+.chip:active{background:var(--blue);transform:scale(.95)}
+.summary{display:flex;justify-content:space-between;padding:14px;background:rgba(0,0,0,.3);border-radius:14px;margin-bottom:14px}
+.tx{display:flex;align-items:center;gap:12px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:20px;margin-bottom:10px}
+.tx .ti{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:18px;flex:none}
+.tx .ti.in{background:rgba(34,197,94,.16);color:var(--green)}.tx .ti.out{background:rgba(239,68,68,.16);color:var(--red)}
+.tx .tt{flex:1}.tx .tt b{display:block;font-size:14px}.tx .tt small{color:var(--muted);font-size:11.5px}
+.tx .ta{text-align:left}.tx .ta b{font-size:14px;display:block}
+.badge{font-size:10.5px;padding:2px 8px;border-radius:8px;display:inline-block;margin-top:3px}
+.badge.pending{background:rgba(251,191,36,.18);color:var(--gold)}.badge.approved{background:rgba(34,197,94,.18);color:var(--green)}.badge.rejected{background:rgba(239,68,68,.18);color:var(--red)}
+.empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px}
+.bottom-nav{position:fixed;bottom:12px;left:12px;right:12px;max-width:476px;margin:0 auto;background:rgba(20,8,44,.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.13);border-radius:30px;display:flex;justify-content:space-around;padding:10px 6px;z-index:100;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 14px 44px rgba(0,0,0,.65),0 0 34px rgba(124,58,237,.3)}
+.nav-btn{background:none;border:none;color:var(--muted);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;font-family:var(--font);font-weight:700;padding:6px 14px;border-radius:16px;transition:.25s}
+.nav-btn svg{font-size:21px}
+.nav-btn.active{color:#fff;background:linear-gradient(135deg,rgba(255,46,147,.32),rgba(124,58,237,.32));box-shadow:0 0 22px rgba(255,46,147,.35)}
+.nav-btn.active svg{color:var(--cyan)}
+.overlay{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.75);backdrop-filter:blur(6px)}
+.overlay.show{display:flex;animation:fade .2s ease}
+.modal{width:100%;max-width:380px;background:#140a2d;border:1px solid var(--line);border-radius:26px;padding:24px;text-align:center}
+.modal h3{margin:0 0 14px;font-size:19px}.modal p{color:var(--muted);font-size:13.5px;line-height:1.9;margin:0 0 14px}
+.modal .kv{display:flex;justify-content:space-between;padding:12px;background:rgba(255,255,255,.05);border-radius:12px;margin-bottom:8px}
+.okring{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;font-size:30px;background:rgba(34,197,94,.16);color:var(--green)}
+.tg-btn{display:inline-block;padding:11px 24px;border-radius:14px;background:#2aabee;color:#fff;font-weight:900;font-size:15px;cursor:pointer;margin-bottom:14px;box-shadow:0 4px 12px rgba(42,171,238,.4)}
+#adminPanel { position: fixed; inset: 0; z-index: 3000; display: none; background: var(--bg); padding: 20px; overflow-y: auto; }
+.admin-order { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin-bottom: 12px; }
+.admin-order .line { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.admin-order .line:last-child { border-bottom: 0; }
+.acts { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.acts .btn { padding: 12px; font-size: 13px; flex: 1; min-width: 100px; }
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-30px);z-index:4000;opacity:0;padding:12px 20px;border-radius:14px;font-weight:700;font-size:14px;transition:.3s;background:#1a0d3a;border:1px solid var(--blue);color:#fff;max-width:90%;text-align:center}
+.toast.err{border-color:var(--red)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.loading{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.8);display:none;place-items:center;backdrop-filter:blur(4px)}
+.loading.show{display:grid}
+.spinner{width:50px;height:50px;border:5px solid rgba(255,255,255,.1);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite}
+.stars-container{display:flex;justify-content:center;gap:10px;margin:20px 0;direction:ltr;}
+.star{font-size:40px;color:#333;cursor:pointer;transition:0.2s;}
+.star.active{color:#ffc83d;text-shadow:0 0 15px rgba(255,200,61,0.6);}
+.avg-display{text-align:center;font-size:20px;font-weight:bold;color:var(--gold);margin-bottom:15px;}
+
+/* =========================================
+   HOKM GAME CSS
+   ========================================= */
+#hokm-screen { position: fixed; inset: 0; z-index: 500; background: #050a1c; display: none; flex-direction: column; --gold:#e9bd55;--gold2:#a8791f;--navy:#0a1330;--navy2:#142257;--felt:#0f6a36;--felt2:#052e17;--felt1:#12843f;--ink:#f6ecd2;--mut:#b9c3ee;--bg1:#1a2a6c;--bg2:#0a1330;--bg3:#050a1c;--rim:#24378a;--btn:#17245e;--b1:#1b2a6e;--b2:#0e1850;--glow:#e9bd5555; font-family:var(--font); color:var(--ink); overflow: hidden; }
+#hokm-screen[data-hokm-theme=halloween]{--gold:#ff8a1f;--gold2:#b84a00;--navy:#12061c;--navy2:#3b1659;--felt:#3d1a66;--felt2:#14052a;--felt1:#5b2a96;--ink:#ffe9c9;--mut:#d3b3f0;--bg1:#4a1670;--bg2:#1a0828;--bg3:#07020c;--rim:#5a2a86;--btn:#2d1046;--b1:#ff7a00;--b2:#2a0a3d;--glow:#ff8a1f66}
+#hokm-screen[data-hokm-theme=royal]{--gold:#f1d27a;--gold2:#9c7a2a;--navy:#1a0a10;--navy2:#4a1424;--felt:#8f1426;--felt2:#3d0610;--felt1:#b3202f;--ink:#fbeedd;--mut:#e6b8bf;--bg1:#5a1426;--bg2:#220810;--bg3:#0c0306;--rim:#6a1a2c;--btn:#3a0f1c;--b1:#7a1020;--b2:#3d0610;--glow:#f1d27a55}
+
+#hokm-screen #hokm-app{position:relative;height:100%;max-width:900px;margin:auto;overflow:hidden; background:radial-gradient(circle at 15% 8%,var(--glow) 0 3px,transparent 40px),radial-gradient(circle at 85% 8%,var(--glow) 0 3px,transparent 40px), radial-gradient(1.5px 1.5px at 20% 30%,#fff9 50%,transparent),radial-gradient(1.5px 1.5px at 60% 12%,#fff9 50%,transparent), radial-gradient(1.5px 1.5px at 80% 40%,#fff8 50%,transparent),radial-gradient(1.5px 1.5px at 40% 6%,#fff8 50%,transparent), linear-gradient(var(--bg1),var(--bg2) 45%,var(--bg3))}
+#hokm-screen #hokm-app:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,#000c)}
+#hokm-screen #deco{position:absolute;inset:0;z-index:1;pointer-events:none}
+#hokm-screen #deco span{position:absolute;font-size:26px;opacity:.75;animation:hfl 4s ease-in-out infinite;filter:drop-shadow(0 4px 4px #000a)}
+#hokm-screen #deco span:nth-child(1){left:4%;top:14%}#hokm-screen #deco span:nth-child(2){right:5%;top:30%;animation-delay:.7s}#hokm-screen #deco span:nth-child(3){left:3%;bottom:20%;animation-delay:1.4s}
+#hokm-screen #deco span:nth-child(4){right:4%;bottom:12%;animation-delay:2s}#hokm-screen #deco span:nth-child(5){left:46%;top:58px;animation-delay:2.6s}#hokm-screen #deco span:nth-child(6){left:8%;bottom:3%;animation-delay:3s}
+@keyframes hfl{50%{transform:translateY(-9px) rotate(8deg)}}
+#hokm-screen header{position:relative;z-index:8;display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
+#hokm-screen .hr{display:flex;align-items:center;gap:8px}
+#hokm-screen .logo{display:flex;align-items:center;gap:10px}
+#hokm-screen .logo .ic{width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,var(--navy2),var(--navy));border:1.5px solid var(--gold);display:grid;place-items:center;font-size:24px;color:var(--gold);box-shadow:0 4px 0 #000a,0 8px 14px #000a,0 0 14px var(--glow)}
+#hokm-screen h1{margin:0;font-size:20px;color:var(--gold);line-height:1.1;text-shadow:0 1px 0 #000,0 2px 0 var(--gold2),0 4px 8px #000}
+#hokm-screen h1 small{display:block;font-size:11px;color:var(--mut);font-weight:400;text-shadow:none}
+#hokm-screen .coins{display:flex;align-items:center;gap:8px;background:linear-gradient(var(--navy2),var(--navy));border:1.5px solid var(--gold2);border-radius:30px;padding:4px 12px 4px 5px;direction:ltr;font-weight:800;box-shadow:0 3px 0 #000a,0 6px 10px #0008}
+#hokm-screen .coin{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff0a8,#c38a1c);border:2px solid #7a5410;display:inline-block;box-shadow:inset 0 0 0 3px var(--gold),0 2px 0 #5a3c08}
+#hokm-screen .thb{padding:4px 10px;font-size:18px;border-radius:30px;background:var(--btn);border:1.5px solid var(--gold2);color:var(--ink);cursor:pointer}
+
+/* Rounded Game Table */
+#hokm-screen #table{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:min(92vw, 400px); height:min(92vw, 400px);
+  border-radius:50%; padding:12px; z-index:2;
+  background:linear-gradient(145deg,var(--rim),var(--navy) 60%,var(--rim));
+  box-shadow:0 2px 0 var(--navy2),0 5px 0 #000,0 8px 0 var(--navy),0 11px 0 #000a,0 20px 40px #000d,inset 0 0 0 2px var(--glow),inset 0 0 0 6px var(--navy),inset 0 3px 8px #fff3;
+}
+#hokm-screen #felt{position:relative; width:100%; height:100%; border-radius:50%; border:2px solid var(--gold2); background:repeating-conic-gradient(from 0deg at 50% 50%,#ffffff06 0 10deg,transparent 10deg 20deg),radial-gradient(ellipse at 50% 35%,var(--felt1),var(--felt) 40%,var(--felt2)); box-shadow:inset 0 0 60px #000b,inset 0 10px 24px #0008,inset 0 -6px 14px #fff1;}
+#hokm-screen #felt:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(ellipse at 50% 10%,#fff2,transparent 55%)}
+#hokm-screen #mark{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;color:#cfeccf;opacity:.22;font-weight:800;font-size:36px}
+#hokm-screen #mark b{font-size:60px;line-height:1}
+#hokm-screen #mark:before{content:"";position:absolute;width:120px;height:120px;border:2px solid #fff6;border-radius:50%;box-shadow:0 0 0 8px #fff2}
+#hokm-screen .seat{position:absolute;display:flex;flex-direction:column;align-items:center;z-index:4}
+#hokm-screen .seat .av{position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 32% 22%,#fff5 0,transparent 38%),radial-gradient(circle at 35% 30%,var(--navy2),var(--navy));border:2.5px solid var(--gold);display:grid;place-items:center;font-size:22px;z-index:2;box-shadow:inset 0 -7px 12px #000b,0 5px 0 #000a,0 9px 14px #000a;transition:.3s}
+#hokm-screen .seat .nm{margin-top:-8px;background:linear-gradient(var(--navy2),var(--navy));border:1.5px solid var(--gold2);border-radius:9px;padding:11px 10px 3px;font-size:11px;min-width:70px;text-align:center;box-shadow:0 3px 0 #000a,0 6px 10px #0009}
+#hokm-screen .seat .crown{position:absolute;top:-17px;font-size:16px;display:none;z-index:3;filter:drop-shadow(0 0 5px var(--gold))}
+#hokm-screen .seat.hk .crown{display:block}
+#hokm-screen .seat.turn .av{box-shadow:inset 0 -7px 12px #000b,0 0 0 4px var(--glow),0 0 22px 4px var(--gold);transform:scale(1.08)}
+#hokm-screen .fan{display:flex;direction:ltr;margin-top:6px;height:28px}
+#hokm-screen .fan .back{width:20px;height:28px;margin-left:-14px;border-radius:4px}
+#hokm-screen .fan .back:first-child{margin-left:0}
+#hokm-screen .back{background:repeating-linear-gradient(45deg,var(--b1) 0 4px,var(--b2) 4px 8px);border:1.5px solid var(--gold);box-shadow:0 2px 0 #000a,0 4px 6px #000a}
+#hokm-screen #s2{top:-36px;left:50%;transform:translateX(-50%)}
+#hokm-screen #s1{right:-36px;top:50%;transform:translateY(-50%)}
+#hokm-screen #s3{left:-36px;top:50%;transform:translateY(-50%)}
+#hokm-screen #s0{bottom:-36px;left:50%;transform:translateX(-50%)}
+#hokm-screen .hokm-card{--w:46px;width:var(--w);height:calc(var(--w)*1.43);background:linear-gradient(160deg,#fffdf4,#efe6cd);border-radius:6px;border:1px solid #c9b98a;position:relative;font-weight:800;direction:ltr; box-shadow:inset 0 1px 0 #fff,inset 0 -3px 0 #d8c99b,0 2px 0 #b9a877,0 4px 0 #7d6f45,0 8px 12px #000b;user-select:none}
+#hokm-screen .hokm-card .cn{position:absolute;top:3px;left:4px;font-size:calc(var(--w)*.32);line-height:1;text-align:center}
+#hokm-screen .hokm-card .cc{position:absolute;inset:0;display:grid;place-items:center;font-size:calc(var(--w)*.62);opacity:.9;padding-top:8px;text-shadow:0 2px 2px #0003}
+#hokm-screen .hokm-card.r{color:#c0272d}#hokm-screen .hokm-card.b{color:#10162e}
+#hokm-screen #trick{position:absolute;inset:0;pointer-events:none;z-index:3}
+#hokm-screen #trick .hokm-card{position:absolute;animation:hd .28s ease-out;transform:rotate(var(--r,0deg))}
+@keyframes hd{from{transform:scale(1.35);opacity:0}}
+#hokm-screen .p0{left:calc(50% - 23px);top:52%;--r:-3deg}#hokm-screen .p2{left:calc(50% - 23px);top:20%;--r:-5deg}#hokm-screen .p1{left:calc(50% + 20px);top:36%;--r:6deg}#hokm-screen .p3{left:calc(50% - 66px);top:36%;--r:4deg}
+#hokm-screen #deck{position:absolute;left:calc(50% - 15px);top:calc(50% - 21px);width:30px;height:43px;border-radius:4px;z-index:2;display:none}
+#hokm-screen .fly{position:absolute;width:30px;height:43px;border-radius:4px;z-index:9;pointer-events:none}
+#hokm-screen #hand{position:absolute;bottom:20px;left:0;right:0;height:84px;z-index:6;direction:ltr}
+#hokm-screen #hand .hokm-card{position:absolute;bottom:0;transform-origin:50% 130%;transition:transform .18s,bottom .18s;animation:hp .3s}
+@keyframes hp{from{transform:translateY(-30px) scale(.6);opacity:0}}
+#hokm-screen #hand .hokm-card.ok{bottom:14px;cursor:pointer;box-shadow:0 0 0 2px var(--gold),0 4px 0 #7d6f45,0 10px 14px #000a}
+#hokm-screen #hand .hokm-card.no{filter:brightness(.6)}
+#hokm-screen #info{position:absolute;top:66px;left:10px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:7;font-size:12px}
+#hokm-screen #info span{background:linear-gradient(var(--navy2),var(--navy));border:1.5px solid var(--gold2);border-radius:20px;padding:3px 11px;box-shadow:0 3px 0 #000a,0 5px 8px #0008}
+#hokm-screen #trumpB{position:absolute;top:66px;right:12px;z-index:8;width:56px;padding:5px 0 7px;text-align:center;border-radius:14px; background:linear-gradient(160deg,var(--navy2),var(--navy));border:2px solid var(--gold);box-shadow:0 5px 0 #000a,0 0 16px var(--glow),0 10px 14px #000a}
+#hokm-screen #trumpB small{display:block;font-size:11px;color:var(--mut)}
+#hokm-screen #trumpB b{display:block;font-size:30px;line-height:1.1;color:var(--ink)}
+#hokm-screen #trumpB b.red{color:#ff6b6b}
+#hokm-screen #trumpB.set{animation:hp2 .6s}
+@keyframes hp2{50%{transform:scale(1.25)}}
+#hokm-screen #toast{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:9;background:var(--navy);border:1.5px solid var(--gold);border-radius:14px;padding:8px 18px;font-weight:800;color:var(--gold);opacity:0;transition:.3s;pointer-events:none;text-align:center;box-shadow:0 5px 0 #000a,0 10px 20px #000a;max-width:90%}
+#hokm-screen #toast.on{opacity:1}
+#hokm-screen .ov{position:absolute;inset:0;background:#000b;backdrop-filter:blur(3px);z-index:20;display:grid;place-items:center;padding:16px;overflow:auto}
+#hokm-screen .ov.h{display:none}
+#hokm-screen .box{background:linear-gradient(160deg,var(--navy2),var(--navy));border:2px solid var(--gold2);border-radius:20px;padding:20px;width:100%;max-width:370px;text-align:center;box-shadow:0 6px 0 #000a,0 0 40px var(--glow),0 24px 50px #000}
+#hokm-screen .box h2{margin:0 0 6px;color:var(--gold);font-size:22px;text-shadow:0 2px 0 #000}
+#hokm-screen .box p{margin:6px 0;color:var(--mut);font-size:13px;line-height:1.8}
+#hokm-screen #rP,#hokm-screen #endP{font-size:15px;line-height:2.2}#hokm-screen .box p b{color:var(--gold);font-size:17px}
+#hokm-screen .row{display:flex;gap:8px;justify-content:center;margin:10px 0;flex-wrap:wrap}
+#hokm-screen button{font-family:inherit;font-size:14px;font-weight:700;border:1.5px solid var(--gold2);background:var(--btn);color:var(--ink);border-radius:12px;padding:9px 14px;cursor:pointer;box-shadow:0 4px 0 #000a,0 7px 10px #0007;transition:.1s}
+#hokm-screen button:active{transform:translateY(3px);box-shadow:0 1px 0 #000a}
+#hokm-screen button.on{background:linear-gradient(#f6d36d,#b88620);color:#2a1a02;border-color:#7a5410}
+#hokm-screen button.go{width:100%;background:linear-gradient(#34c768,#12803a);border-color:#0a5a28;color:#fff;font-size:16px;padding:12px;box-shadow:0 5px 0 #0a5a28,0 9px 14px #000a}
+#hokm-screen button.low{opacity:.45}
+#hokm-screen .suit{font-size:30px;padding:8px 16px}
+#hokm-screen .red{color:#ff6b6b}
+#hokm-screen .wal{background:#0006;border:1px solid var(--gold2);border-radius:12px;padding:8px;font-size:14px;line-height:1.9;margin:8px 0}
+#hokm-screen .wal b{color:var(--gold)}#hokm-screen .okt{color:#7dffa6;font-size:13px}#hokm-screen .bad{color:#ff9a9a;font-size:13px}
+#hokm-screen .bet{background:var(--glow);border:1px dashed var(--gold2);border-radius:12px;padding:8px 10px;margin-top:8px;font-size:13px;line-height:1.8}
+#hokm-screen .bet b{color:var(--gold)}
+#hokm-screen #warn{display:none;margin-top:8px;background:#ff3b3b22;border:1px solid #ff6b6b;border-radius:10px;padding:8px;color:#ffb0b0;font-size:13px;line-height:1.8}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="cupBody" x1="0" x2="1"><stop offset="0" stop-color="#2a0d55"/><stop offset=".28" stop-color="#ff2e93"/><stop offset=".55" stop-color="#ff85c0"/><stop offset=".78" stop-color="#7c3aed"/><stop offset="1" stop-color="#2a0d55"/></linearGradient>
+</defs></svg>
+<div class="bg"><i></i><i></i><i></i></div>
+<div class="loading" id="loadingScreen"><div class="spinner"></div></div>
+
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo"><svg viewBox="0 0 24 24" style="stroke:#fff"><rect x="3" y="3" width="18" height="18" rx="5"/><g style="fill:#fff;stroke:none"><circle cx="8" cy="8" r="1.4"/><circle cx="16" cy="8" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="8" cy="16" r="1.4"/><circle cx="16" cy="16" r="1.4"/></g></svg></div>
+    <h2>KIANI GAMES</h2>
+    <p style="color:var(--muted);margin:0 0 24px;font-size:13.5px">ورود یا ساخت حساب جدید</p>
+    <div class="field"><input type="text" id="authUser" placeholder="نام کاربری" maxlength="24" autocomplete="username"></div>
+    <div class="field"><input type="password" id="authPass" placeholder="رمز عبور (حداقل 6 کاراکتر)" autocomplete="current-password"></div>
+    <button class="btn" id="btnLogin" type="button" style="margin-top:8px">ورود به بازی‌ها</button>
+    <button class="btn ghost" id="btnRegister" type="button" style="margin-top:10px">ساخت حساب (50 توکن هدیه)</button>
+  </div>
+</div>
+
+<div id="app">
+  <div class="header">
+    <div class="user"><div class="avatar" id="avatar">K</div><div><small>خوش آمدید</small><b id="helloUser">-</b></div></div>
+    <div class="icons">
+      <button class="icon-btn" id="btnSettings" aria-label="settings" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <button class="icon-btn" id="btnLogout" aria-label="logout" type="button"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
+    </div>
+  </div>
+
+  <section class="view active" id="view-home">
+    <div class="wbar"><div><div class="lbl">کیف پول</div><div class="amount"><span class="num" id="balAmount">0</span><small>T</small></div><div class="toman">≈ <span class="num" id="balToman">0</span> تومان</div></div><div class="wacts"><button data-go="buy" type="button">+ شارژ</button><button data-go="sell" type="button">برداشت</button></div></div>
+    <div class="sec"><span>بازی‌ها</span><span>1 بازی فعال</span></div>
+    <div class="bento">
+      <div class="tile big t-hokm" onclick="openHokmScreen()" role="button">
+        <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="4" y="8" width="30" height="42" rx="5" fill="#1a1a1a" stroke="#fbbf24" stroke-width="2" transform="rotate(-15 19 29)"/><text x="15" y="30" font-size="14" fill="#fbbf24" transform="rotate(-15 19 29)">A</text><text x="15" y="44" font-size="16" fill="#fbbf24" transform="rotate(-15 19 29)">♠</text><rect x="28" y="10" width="30" height="42" rx="5" fill="#fff" stroke="#fbbf24" stroke-width="2" transform="rotate(10 43 31)"/><text x="39" y="32" font-size="14" fill="#dc2626" transform="rotate(10 43 31)">K</text><text x="39" y="46" font-size="16" fill="#dc2626" transform="rotate(10 43 31)">♥</text></svg>
+        <div><b>حکم (Hokm)</b><small>با هوش مصنوعی رقابت کن، حکم را ببر و توکن بگیر</small><span class="rtp num">شرط ۲ برابری</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-buy">
+    <div class="card">
+      <h3>خرید توکن (حداقل 50)</h3>
+      <div class="pay-card" id="payCard">
+        <div style="color:#aab3d6;font-size:12px">برای کپی کلیک کنید</div>
+        <div class="cn num">6219-8619-7555-0053</div>
+        <div style="color:#aab3d6;font-size:12px">به نام کیانی</div>
+      </div>
+      <div class="field"><label>تعداد توکن</label><input type="text" inputmode="numeric" id="buyAmount" value="50"></div>
+      <div class="chips" data-for="buyAmount"><button class="chip" type="button" data-v="50">50</button><button class="chip" type="button" data-v="100">100</button><button class="chip" type="button" data-v="500">500</button><button class="chip" type="button" data-v="1000">1000</button></div>
+      <div class="summary"><span style="color:var(--muted)">مبلغ</span><span class="num" id="buyPrice">50,000 تومان</span></div>
+      <div class="field"><label>کد رهگیری</label><input type="text" id="buyTracking" placeholder="123456789"></div>
+      <button class="btn" id="btnBuy" type="button">ثبت سفارش</button>
+    </div>
+  </section>
+
+  <section class="view" id="view-sell">
+    <div class="card">
+      <h3>فروش توکن (حداقل 50)</h3>
+      <div class="field"><label>شماره کارت شما</label><input type="text" inputmode="numeric" id="sellCard" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19"></div>
+      <div class="field"><label>تعداد توکن (موجودی: <span class="num" id="sellBal">0</span>)</label><input type="text" inputmode="numeric" id="sellAmount" placeholder="0"></div>
+      <div class="chips"><button class="chip" id="sellAll" type="button" style="flex:1">فروش همه موجودی</button></div>
+      <div class="summary"><span style="color:var(--muted)">دریافتی</span><span class="num" id="sellReceive">0 تومان</span></div>
+      <button class="btn" style="background:linear-gradient(135deg,#ef4444,#b91c1c)" id="btnSell" type="button">ثبت درخواست فروش</button>
+    </div>
+  </section>
+
+  <section class="view" id="view-history">
+    <div class="sec"><span>تاریخچه تراکنش‌ها</span></div>
+    <div id="histList"></div>
+  </section>
+
+  <section class="view" id="view-rating">
+    <div class="card">
+      <h3>به بازی نمره بده</h3>
+      <div class="avg-display" id="avgRating">0.0 / 5</div>
+      <div class="stars-container" id="starContainer">
+        <span class="star" data-val="1">★</span>
+        <span class="star" data-val="2">★</span>
+        <span class="star" data-val="3">★</span>
+        <span class="star" data-val="4">★</span>
+        <span class="star" data-val="5">★</span>
+      </div>
+      <button class="btn" id="btnSubmitRating">ثبت نمره</button>
+    </div>
+  </section>
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" data-go="home" type="button"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>بازی‌ها</span></button>
+    <button class="nav-btn" data-go="buy" type="button"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg><span>خرید</span></button>
+    <button class="nav-btn" data-go="sell" type="button"><svg viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg><span>فروش</span></button>
+    <button class="nav-btn" data-go="history" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>تاریخچه</span></button>
+    <button class="nav-btn" data-go="rating" type="button"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>امتیاز</span></button>
+  </div>
+</div>
+
+<div id="hokm-screen" data-hokm-theme="night">
+  <div id="hokm-app">
+    <div id="deco"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <header>
+      <div class="logo"><div class="ic" id="logoIc">♠</div><h1>حکم آنلاین<small>بازی با توکن</small></h1></div>
+      <div class="hr">
+        <button class="thb" id="thB" title="تغییر تم">🎨</button>
+        <button class="thb" onclick="closeHokmScreen()" title="بازگشت" style="background:var(--navy)">↩</button>
+        <div class="coins"><span id="hokmBal">0</span><span class="coin"></span></div>
+      </div>
+    </header>
+    <div id="info"><span id="rnd"></span><span id="score">دست‌ها: شما ۰ — حریف ۰</span><span id="mw" style="display:none"></span></div>
+    <div id="trumpB"><small>حکم</small><b id="trumpS">—</b></div>
+    <div id="table"><div id="felt">
+      <div id="mark"><b id="mk">♠</b>حکم</div>
+      <div id="deck" class="back"></div>
+      <div id="trick"></div>
+      <div class="seat" id="s2"><span class="crown">👑</span><div class="av">👤</div><div class="nm">بازیکن ۳</div><div class="fan"></div></div>
+      <div class="seat" id="s1"><span class="crown">👑</span><div class="av">👤</div><div class="nm">بازیکن ۲</div><div class="fan"></div></div>
+      <div class="seat" id="s3"><span class="crown">👑</span><div class="av">👤</div><div class="nm">بازیکن ۴</div><div class="fan"></div></div>
+      <div class="seat" id="s0"><span class="crown">👑</span><div class="av">👤</div><div class="nm">شما</div></div>
+    </div></div>
+    <div id="hand"></div>
+    <div id="toast"></div>
+
+    <div class="ov" id="lobby"><div class="box">
+      <h2>♠ حکم آنلاین</h2>
+      <div class="wal" id="walBox"></div>
+      <p>نوع بازی</p>
+      <div class="row"><button id="mFree" class="on">غیر شرطی</button><button id="mBet">شرطی</button></div>
+      <p>تعداد دور (دور بیشتر = سخت‌تر)</p>
+      <div class="row" id="rds"></div>
+      <div id="betBox" style="display:none">
+        <p>مبلغ ورودی هر نفر (توکن)</p>
+        <div class="row" id="amts"></div>
+        <div class="bet" id="betNote"></div>
+        <div id="warn"></div>
+      </div>
+      <button class="go" id="start">شروع بازی</button>
+    </div></div>
+
+    <div class="ov h" id="trumpOv"><div class="box">
+      <h2>شما حاکم هستید 👑</h2><p>با دیدن این ۵ کارت، حکم را انتخاب کنید</p>
+      <div class="row" id="suits"></div>
+    </div></div>
+
+    <div class="ov h" id="rov"><div class="box"><h2 id="rT"></h2><p id="rP"></p></div></div>
+
+    <div class="ov h" id="end"><div class="box">
+      <h2 id="endT"></h2><p id="endP"></p>
+      <button class="go" onclick="showLobby()">بازی جدید</button>
+      <button class="go" style="margin-top:10px;background:var(--navy2)" onclick="closeHokmScreen()">بازگشت به کیف پول</button>
+    </div></div>
+  </div>
+</div>
+
+<div class="overlay" id="msgOverlay"><div class="modal" id="msgModal"></div></div>
+<div class="overlay" id="settingsOverlay">
+  <div class="modal">
+    <h3 style="color:var(--cyan);margin-bottom:14px">تنظیمات</h3>
+    <div class="field">
+      <label>انتخاب تم</label>
+      <select id="themeSelect">
+        <option value="default">دیفالت</option>
+        <option value="galaxy">کهکشانی</option>
+        <option value="halloween">هالووین</option>
+      </select>
+    </div>
+    <button class="btn" id="adminBtn" type="button" style="margin-bottom:10px;background:var(--violet)">ورود به پنل مدیریت</button>
+    <button class="btn ghost" id="closeSettings" type="button">بستن</button>
+  </div>
+</div>
+<div class="overlay" id="adminLoginOverlay">
+  <div class="modal"><h3>ورود ادمین</h3>
+    <div class="field"><input type="password" id="adminPassInput" placeholder="رمز ادمین"></div>
+    <button class="btn" id="adminLoginOk" type="button">ورود</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="document.getElementById('adminLoginOverlay').classList.remove('show')">انصراف</button>
+  </div>
+</div>
+
+<div id="adminPanel">
+  <div style="max-width:500px;margin:0 auto">
+    <h2 style="text-align:center;color:var(--cyan)">پنل مدیریت</h2>
+    <div class="summary" id="adminTabs" style="margin-bottom:16px;cursor:pointer">
+      <button type="button" class="btn" style="background:var(--panel);color:#fff" data-tab="orders">سفارش‌ها</button>
+      <button type="button" class="btn" style="background:var(--panel);color:var(--muted)" data-tab="users">کاربران</button>
+    </div>
+    <div id="adminOrders"></div>
+    <div id="adminUsers" style="display:none"></div>
+    <button class="btn ghost" style="margin-top:20px" id="adminClose" type="button">بستن پنل</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const SUPABASE_URL = "https://txcdmnsmoagvoecswcdr.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Y2RtbnNtb2Fndm9lY3N3Y2RyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDc3MDQsImV4cCI6MjEwODMyMzcwNH0.tdPdXS0YssPROmoV33jCMQx4cVFE_iv7-zx7Fe3qV1s";
+const ADMIN_PASS = "09120536419Mm"; 
+const TOKEN_PRICE = 1000;
+const CARD_NUMBER = "6219861975550053";
+const WELCOME_TOKENS = 50;
+const MIN_TOKEN_LIMIT = 50;
+
+let currentUser = null;
+let adminMode = false, adminPrevUser = null;
+let shownBal = 0;
+
+async function supabaseFetch(endpoint, options = {}) {
+  const url = SUPABASE_URL + "/rest/v1/" + endpoint;
+  const headers = { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=representation" };
+  const res = await fetch(url, { ...options, headers: { ...headers, ...options.headers } });
+  if (!res.ok) {
+    let errorMsg = await res.text();
+    try { const json = JSON.parse(errorMsg); errorMsg = json.message || errorMsg; } catch(e) {}
+    throw new Error(errorMsg);
+  }
+  if (res.status === 204) return null;
+  return await res.json();
+}
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function fmt(n){return Number(n||0).toLocaleString("en-US")}
+function digitsOnly(s){return String(s).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/[٠-٩]/g,function(d){return "٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/\D/g,"")}
+function toast(m,err){var t=$("toast");if(!t)return;t.textContent=m;t.className="toast show"+(err?" err":"");clearTimeout(t._t);t._t=setTimeout(function(){t.className="toast"},2800)}
+function showLoading(show){$("loadingScreen").style.display = show ? "grid" : "none"}
+
+var AC=null;
+function ac(){if(!AC){try{var Ctx=window.AudioContext||window.webkitAudioContext;if(Ctx)AC=new Ctx()}catch(e){}}return AC}
+function tone(freq,dur,type,vol,slide){var c=ac();if(!c)return;try{if(c.state==="suspended")c.resume();var o=c.createOscillator(),g=c.createGain();o.type=type||"sine";o.frequency.setValueAtTime(freq,c.currentTime);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(1,slide),c.currentTime+dur);g.gain.setValueAtTime(0.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(vol||0.12,c.currentTime+0.015);g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur+0.02);}catch(e){}}
+var SFX={ click:function(){tone(700,0.06,"square",0.05,900)}, nav:function(){tone(380,0.08,"triangle",0.09,560)}, bet:function(){tone(520,0.1,"sine",0.1,680)}, win:function(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){tone(f,0.18,"triangle",0.13)},i*90)})}, bigwin:function(){[523,659,784,1047,1319,1568].forEach(function(f,i){setTimeout(function(){tone(f,0.22,"triangle",0.15)},i*100)})}, lose:function(){tone(330,0.18,"sawtooth",0.1,180)}, coin:function(){tone(1046,0.09,"square",0.08,1318)}, error:function(){tone(200,0.16,"square",0.12,150)}};
+document.addEventListener("pointerdown",()=>{var c=ac();if(c&&c.state==="suspended")c.resume();});
+
+async function doLogin(){
+  const u=$("authUser").value.trim().toLowerCase(), p=$("authPass").value;
+  if(!u||!p){SFX.error();return toast("نام و رمز را وارد کنید.",true)}
+  showLoading(true);
+  try {
+    const data = await supabaseFetch("users?username=eq." + encodeURIComponent(u));
+    if(!data || data.length===0) { showLoading(false); SFX.error(); return toast("حسابی با این نام پیدا نشد.",true) }
+    if(data[0].password_hash !== p) { showLoading(false); SFX.error(); return toast("رمز عبور اشتباه است.",true) }
+    startSession(data[0]);
+  } catch (err) { 
+    showLoading(false); SFX.error(); toast("خطای سرور: " + err.message, true); 
+  }
+}
+
+async function doRegister(){
+  const u=$("authUser").value.trim().toLowerCase(), p=$("authPass").value;
+  if(!/^[a-z0-9_]{3,24}$/.test(u)){SFX.error();return toast("نام کاربری: 3 تا 24 حرف انگلیسی، عدد یا _",true)}
+  if(p.length<6){SFX.error();return toast("رمز عبور حداقل 6 کاراکتر باشد.",true)}
+  
+  showLoading(true);
+  try {
+    const existing = await supabaseFetch("users?username=eq." + encodeURIComponent(u));
+    if(existing && existing.length > 0) { 
+      showLoading(false); SFX.error(); return toast("این نام کاربری قبلاً گرفته شده.",true) 
+    }
+    
+    const payload = { 
+      username: u, 
+      password_hash: p, 
+      tokens: WELCOME_TOKENS, 
+      salt: "salt" 
+    };
+    
+    const newUser = await supabaseFetch("users", { 
+      method: "POST", 
+      body: JSON.stringify(payload)
+    });
+    
+    if(!newUser || newUser.length === 0) {
+      throw new Error("خطا در ساخت کاربر");
+    }
+
+    await supabaseFetch("transactions", { 
+      method: "POST", 
+      body: JSON.stringify({ 
+        user_id: newUser[0].id, 
+        type: "buy", 
+        tokens: WELCOME_TOKENS, 
+        status: "approved" 
+      }) 
+    });
+    
+    showLoading(false);
+    SFX.win(); 
+    
+    $("authUser").value = ""; $("authPass").value = "";
+    showModal(`
+      <div class="okring">✓</div>
+      <h3>ثبت‌نام با موفقیت انجام شد!</h3>
+      <p style="color:var(--gold);font-size:15px;font-weight:bold;">${fmt(WELCOME_TOKENS)} توکن هدیه به حساب شما اضافه شد.</p>
+      <p style="color:#fff;">حالا می‌توانید با نام کاربری و رمز عبور خود از پنل ورود، به بازی وارد شوید.</p>
+      <button class="btn" type="button" data-close="1">متوجه شدم</button>
+    `);
+
+  } catch(err) { 
+    showLoading(false); 
+    console.error("Register Error:", err);
+    SFX.error();
+    if(err.message.includes("row-level security") || err.message.includes("permission denied")) {
+      toast("خطای دسترسی دیتابیس (RLS). به ادمین اطلاع دهید.", true);
+    } else {
+      toast("خطا در ثبت‌نام: " + err.message, true);
+    }
+  }
+}
+
+async function startSession(user){
+  currentUser = user; shownBal = 0;
+  $("authScreen").style.display="none"; $("app").style.display="flex"; $("authPass").value="";
+  await refreshUserData(); go("home"); SFX.win(); showLoading(false);
+}
+async function refreshUserData(){
+  if(!currentUser) return;
+  try {
+    const data = await supabaseFetch("users?id=eq." + currentUser.id);
+    if(data && data.length > 0) { currentUser = data[0]; renderAll(); }
+  } catch(err) {}
+}
+function logout(){
+  currentUser = null; $("app").style.display="none"; $("authScreen").style.display="flex";
+  $("authUser").value = ""; $("authPass").value = ""; SFX.nav();
+}
+function go(v){
+  var target=$("view-"+v); if(!target)return;
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+  target.classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.go===v));
+  if(v==="sell")$("sellBal").textContent=fmt(currentUser?currentUser.tokens:0);
+  if(v==="history")renderHistory();
+  if(v==="rating")renderRating();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function countUp(el,to){
+  var from=shownBal,t0=performance.now(),d=700;
+  function step(t){var k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);el.textContent=fmt(Math.round(from+(to-from)*e));if(k<1)requestAnimationFrame(step);else shownBal=to}
+  requestAnimationFrame(step);
+}
+function renderAll(){
+  if(!currentUser) return;
+  $("helloUser").textContent = currentUser.username;
+  $("avatar").textContent = currentUser.username.charAt(0).toUpperCase();
+  countUp($("balAmount"), currentUser.tokens);
+  $("balToman").textContent = fmt(currentUser.tokens * TOKEN_PRICE);
+  $("hokmBal").textContent = fmt(currentUser.tokens);
+  $("sellBal").textContent = fmt(currentUser.tokens);
+}
+async function renderHistory(){
+  var box=$("histList"); if(!currentUser||!box)return;
+  box.innerHTML = '<div style="text-align:center;padding:20px">در حال بارگذاری...</div>';
+  try {
+    const data = await supabaseFetch("transactions?user_id=eq." + currentUser.id + "&order=created_at.desc&limit=50");
+    if(!data || !data.length){box.innerHTML='<div class="empty">هنوز تراکنشی ندارید</div>';return}
+    var st={pending:"در انتظار",approved:"تایید شده",rejected:"رد شده"};
+    box.innerHTML=data.map(function(t){
+      var buy=t.type==="buy", d=new Date(t.created_at), ds=d.toLocaleDateString("fa-IR");
+      return '<div class="tx"><div class="ti '+(buy?"in":"out")+'"><svg viewBox="0 0 24 24"><path d="'+(buy?"M12 19V5M5 12l7-7 7 7":"M12 5v14M19 12l-7 7-7-7")+'"/></svg></div>'+
+      '<div class="tt"><b>'+(buy?"خرید توکن":"فروش توکن")+'</b><small class="num">'+ds+'</small></div>'+
+      '<div class="ta"><b class="num">'+(buy?"+":"-")+fmt(t.tokens)+' T</b><span class="badge '+t.status+'">'+st[t.status]+'</span></div></div>';
+    }).join("");
+  } catch(err) { box.innerHTML='<div class="empty">خطا در دریافت تاریخچه</div>'; }
+}
+
+function updateBuyPrice(){var v=digitsOnly($("buyAmount").value);$("buyAmount").value=v;$("buyPrice").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
+function updateSellPrice(){var v=digitsOnly($("sellAmount").value);$("sellAmount").value=v;$("sellReceive").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
+
+async function submitBuy(){
+  if(!currentUser) return;
+  var amt=Number(digitsOnly($("buyAmount").value)),trk=$("buyTracking").value.trim();
+  if(!amt || amt < MIN_TOKEN_LIMIT){SFX.error();return toast("حداقل تعداد توکن برای خرید "+MIN_TOKEN_LIMIT+" عدد است.",true)}
+  if(trk.length<4){SFX.error();return toast("کد رهگیری را وارد کنید.",true)}
+  $("buyTracking").value=""; SFX.coin();
+  showModal(`
+    <div class="okring">✓</div>
+    <h3>خرید با موفقیت ثبت شد</h3>
+    <div class="kv"><span>تعداد</span><span class="num">${fmt(amt)} T</span></div>
+    <p style="color:var(--gold);font-weight:bold;margin-top:15px;line-height:1.8;">رسید واریز خود را همراه با نام کاربری و رمز عبور اکانت به ادمین ارسال کنید.</p>
+    <div class="tg-btn num" onclick="copy('@mahancn3')">@mahancn3</div>
+    <button class="btn ghost" type="button" data-close="1">متوجه شدم</button>
+  `);
+  try { await supabaseFetch("transactions", { method: "POST", body: JSON.stringify({ user_id: currentUser.id, type: "buy", tokens: amt, tracking_code: trk, status: "pending" }) }); } catch(err) {}
+}
+
+async function submitSell(){
+  if(!currentUser) return;
+  var card=digitsOnly($("sellCard").value), amt=Number(digitsOnly($("sellAmount").value));
+  if(card.length!==16){SFX.error();return toast("شماره کارت نامعتبر است.",true)}
+  if(!amt || amt < MIN_TOKEN_LIMIT){SFX.error();return toast("حداقل تعداد توکن برای فروش "+MIN_TOKEN_LIMIT+" عدد است.",true)}
+  
+  if(amt > currentUser.tokens) { SFX.error(); return toast(`موجودی کافی نیست. حداکثر: ${currentUser.tokens}`, true); }
+
+  const btn = $("btnSell");
+  btn.disabled = true; btn.textContent = "در حال پردازش...";
+
+  currentUser.tokens -= amt;
+  renderAll();
+  $("sellCard").value=""; $("sellAmount").value=""; $("sellReceive").textContent="0 تومان"; 
+  SFX.coin();
+  const toman = amt * TOKEN_PRICE;
+
+  const serverPromise = (async () => {
+    try {
+      await supabaseFetch("users?id=eq." + currentUser.id, { method: "PATCH", body: JSON.stringify({ tokens: currentUser.tokens }) });
+      await supabaseFetch("transactions", { method: "POST", body: JSON.stringify({ user_id: currentUser.id, type: "sell", tokens: amt, card_number: card, status: "pending" }) });
+    } catch(err) { 
+      console.error("Error submitting sell:", err); 
+      toast("خطا در ارتباط با سرور. در حال بازگرداندن توکن‌ها...", true);
+      currentUser.tokens += amt;
+      renderAll();
+    } finally {
+      btn.disabled = false; btn.textContent = "ثبت درخواست فروش";
+    }
+  })();
+
+  showModal(`
+    <div class="okring" style="background:rgba(34,197,94,.16);color:var(--green)">✓</div>
+    <h3>درخواست برداشت موفقیت آمیز بود</h3>
+    <p style="color:#fff; margin-top:10px;">لطفاً <b>عکس این صفحه</b> را به ادمین ارسال کنید.</p>
+    <div class="kv" style="margin-top:15px; background:rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
+      <span>تعداد توکن برداشتی:</span>
+      <b class="num" style="color:var(--gold); font-size:18px;">${fmt(amt)} T</b>
+    </div>
+    <p style="margin-top:15px; font-size:13px; color:var(--muted);">آیدی ادمین (برای کپی کلیک کنید):</p>
+    <div class="tg-btn num" onclick="copy('@sobhan_1384_k')" style="margin-top:8px;">@sobhan_1384_k</div>
+    <p style="font-size:11px;color:var(--red); margin-top:15px;">این پیام پس از 8 ثانیه بسته می‌شود.</p>
+    <button class="btn ghost" type="button" data-close="1" style="margin-top:5px;">بستن</button>
+  `);
+
+  setTimeout(() => { closeModal(); }, 8000);
+}
+
+function showModal(h){$("msgModal").innerHTML=h;$("msgOverlay").classList.add("show")}
+function closeModal(){$("msgOverlay").classList.remove("show")}
+let selectedStars = 0;
+function renderRating() {
+  const ratings = JSON.parse(localStorage.getItem("kiani_ratings") || "[]");
+  const avg = ratings.length ? (ratings.reduce((a,b)=>a+b,0) / ratings.length).toFixed(1) : "0.0";
+  $("avgRating").textContent = avg + " / 5";
+  $("starContainer").querySelectorAll(".star").forEach(s => s.classList.toggle("active", parseInt(s.dataset.val) <= selectedStars));
+}
+function setStars(val) {
+  selectedStars = val; SFX.click();
+  $("starContainer").querySelectorAll(".star").forEach(s => s.classList.toggle("active", parseInt(s.dataset.val) <= selectedStars));
+}
+function submitRating() {
+  if(selectedStars === 0) return toast("لطفاً ستاره انتخاب کنید", true);
+  let ratings = JSON.parse(localStorage.getItem("kiani_ratings") || "[]");
+  ratings.push(selectedStars); localStorage.setItem("kiani_ratings", JSON.stringify(ratings));
+  selectedStars = 0; renderRating(); SFX.win(); toast("امتیاز ثبت شد!");
+}
+
+function openAdminPanel(){
+  $("adminPanel").style.display="block";
+  renderAdminOrders(); renderAdminUsers(); SFX.win();
+  document.querySelectorAll("#adminTabs button").forEach(b => {
+    b.classList.remove("active"); b.style.background = "var(--panel)"; b.style.color = "var(--muted)";
+  });
+  let firstBtn = document.querySelector('#adminTabs button[data-tab="orders"]');
+  if(firstBtn) { firstBtn.style.background = "var(--violet)"; firstBtn.style.color = "#fff"; }
+  $("adminOrders").style.display="block"; $("adminUsers").style.display="none";
+}
+async function renderAdminOrders(){
+  var box=$("adminOrders"); if(!box) return;
+  box.innerHTML = '<div style="text-align:center;padding:20px">در حال بارگذاری...</div>';
+  try {
+    const data = await supabaseFetch("transactions?status=eq.pending");
+    if(!data || !data.length){ box.innerHTML="<div class='empty'>هیچ سفارش در انتظاری وجود ندارد</div>"; return; }
+    const userIds = [...new Set(data.map(t => t.user_id).filter(Boolean))];
+    let userMap = {};
+    if(userIds.length > 0) {
+      try { const usersData = await supabaseFetch(`users?id=in.(${userIds.join(',')})`); usersData.forEach(u => userMap[u.id] = u.username); } catch(e) {}
+    }
+    var html="";
+    data.forEach(function(t){
+      var b=t.type==="buy", un = userMap[t.user_id] || "ناشناس";
+      html+='<div class="admin-order"><div class="line"><span>کاربر</span><b>'+esc(un)+'</b></div><div class="line"><span>نوع</span><b>'+(b?"خرید":"فروش")+'</b></div><div class="line"><span>تعداد</span><b class="num">'+fmt(t.tokens)+' T</b></div><div class="line"><span>'+(b?"کد رهگیری":"شماره کارت")+'</span><b class="num">'+esc(b?t.tracking_code:t.card_number)+'</b></div>'+
+      '<div class="acts"><button class="btn" type="button" style="background:var(--green)" data-resolve="'+t.id+'|approve">✓ تایید</button><button class="btn" type="button" style="background:var(--red)" data-resolve="'+t.id+'|reject">✗ رد</button></div></div>';
+    });
+    box.innerHTML=html;
+  } catch(err) { box.innerHTML="<div class='empty'>خطا در دریافت سفارش‌ها</div>"; }
+}
+async function renderAdminUsers(){
+  var box=$("adminUsers"); if(!box) return;
+  box.innerHTML = '<div style="text-align:center;padding:20px">در حال بارگذاری...</div>';
+  try {
+    const data = await supabaseFetch("users?order=created_at.desc");
+    if(!data || !data.length){ box.innerHTML="<div class='empty'>هیچ کاربری ثبت‌نام نکرده</div>"; return; }
+    var html="";
+    data.forEach(function(u){
+      html+='<div class="admin-order"><div class="line"><span>نام کاربری</span><b>'+esc(u.username)+'</b></div><div class="line"><span>موجودی</span><b class="num">'+fmt(u.tokens)+' T</b></div>'+
+      '<div class="acts"><button class="btn" type="button" style="background:var(--cyan);color:#04201e" data-loginas="'+u.id+'">ورود به حساب</button><button class="btn" type="button" style="background:var(--green)" data-addtokens="'+u.id+'">شارژ توکن</button></div></div>';
+    });
+    box.innerHTML=html;
+  } catch(err) { box.innerHTML="<div class='empty'>خطا در دریافت کاربران</div>"; }
+}
+async function resolveOrder(transactionId, action){
+  try {
+    const tData = await supabaseFetch("transactions?id=eq." + transactionId);
+    if(!tData || !tData.length) return;
+    const t = tData[0];
+    await supabaseFetch("transactions?id=eq." + transactionId, { method: "PATCH", body: JSON.stringify({ status: action === "approve" ? "approved" : "rejected" }) });
+    if(action === "approve") {
+      if(t.type === "buy") {
+        const uData = await supabaseFetch("users?id=eq." + t.user_id);
+        if(uData && uData.length > 0) await supabaseFetch("users?id=eq." + uData[0].id, { method: "PATCH", body: JSON.stringify({ tokens: uData[0].tokens + t.tokens }) });
+      }
+    } else {
+      if(t.type === "sell") {
+        const uData = await supabaseFetch("users?id=eq." + t.user_id);
+        if(uData && uData.length > 0) await supabaseFetch("users?id=eq." + uData[0].id, { method: "PATCH", body: JSON.stringify({ tokens: uData[0].tokens + t.tokens }) });
+      }
+    }
+    renderAdminOrders(); refreshUserData(); SFX.coin();
+  } catch(err) { toast("خطا در انجام عملیات", true); }
+}
+async function adminLoginAs(userId){
+  try {
+    const data = await supabaseFetch("users?id=eq." + userId);
+    if(!data || !data.length) return toast("کاربر پیدا نشد", true);
+    if(!adminMode) { adminPrevUser = currentUser; adminMode = true; }
+    currentUser = data[0]; $("adminPanel").style.display="none"; await refreshUserData(); go("home"); toast("وارد حساب "+currentUser.username+" شدی"); SFX.coin();
+  } catch(err) { toast("خطا", true); }
+}
+async function adminAddTokens(userId){
+  try {
+    const data = await supabaseFetch("users?id=eq." + userId);
+    if(!data || !data.length) return;
+    const user = data[0];
+    var v = prompt("چند توکن برای «" + user.username + "»؟\n(مثبت = اضافه، منفی = کم)", "100");
+    if(v===null) return;
+    var neg = String(v).indexOf("-") === 0;
+    v = String(v).replace(/[۰-۹]/g, function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/\D/g,"");
+    var n = parseInt(v, 10);
+    if(!n) return toast("عدد نامعتبر", true);
+    if(neg) n = -n;
+    const newBalance = Math.max(0, user.tokens + n);
+    await supabaseFetch("users?id=eq." + user.id, { method: "PATCH", body: JSON.stringify({ tokens: newBalance }) });
+    await supabaseFetch("transactions", { method: "POST", body: JSON.stringify({ user_id: user.id, type: n>0?"buy":"sell", tokens: Math.abs(n), status: "approved" }) });
+    toast((n>0?"+"+n:" "+n)+" توکن برای "+user.username); renderAdminUsers(); refreshUserData(); SFX.coin();
+  } catch(err) { toast("خطا", true); }
+}
+
+let stakeGlobal = 50;
+const Wallet = {
+  balance: async () => { return currentUser ? currentUser.tokens : 0; },
+  lock: async (amount) => {
+    if (!currentUser) throw new Error("لطفاً وارد شوید");
+    if (currentUser.tokens < amount) throw new Error("موجودی کافی نیست");
+    await supabaseFetch("users?id=eq." + currentUser.id, { method: "PATCH", body: JSON.stringify({ tokens: currentUser.tokens - amount }) });
+    currentUser.tokens -= amount;
+    renderAll();
+  },
+  payout: async (mult) => {
+    if (!currentUser) return;
+    const prize = Math.round(stakeGlobal * mult);
+    await supabaseFetch("users?id=eq." + currentUser.id, { method: "PATCH", body: JSON.stringify({ tokens: currentUser.tokens + prize }) });
+    currentUser.tokens += prize;
+    renderAll();
+  }
+};
+
+const HokmCFG={amounts:[50,100,250,500],tricksToWin:7};
+const MODES={1:{n:1,mult:1.5,lv:1,label:'تک دور'},3:{n:3,mult:2.3,lv:3,label:'سه دور'},7:{n:7,mult:3.3,lv:3,label:'هفت دور'}};
+const TH=[
+ {id:'night',n:'شب طلایی',ic:'♠',mk:'♠',av:['👤','🤴','🧙','🥷'],dc:['✨','⭐','✨','⭐','✨','⭐']},
+ {id:'halloween',n:'هالووین',ic:'🎃',mk:'🎃',av:['🧑‍🎤','🧛','👻','🧟'],dc:['🦇','🎃','👻','🦇','🕷️','🦇']},
+ {id:'royal',n:'سلطنتی',ic:'♛',mk:'♛',av:['👸','🤴','🦁','🦅'],dc:['👑','💎','✨','💎','👑','✨']}];
+
+const $h=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const SU=['♠','♥','♦','♣'],RK={11:'J',12:'Q',13:'K',14:'A'};
+const rk=v=>RK[v]||v,isRed=s=>s===1||s===2,team=p=>p%2,fmtH=n=>n.toLocaleString('en');
+const NOFUND='تعداد توکن‌های شما کافی نیست. لطفاً ابتدا توکن تهیه کنید.';
+let S={},M={n:1,mult:1.5,lv:1,w:[0,0],r:1},mode='free',rounds=1,stake=HokmCFG.amounts[0],BAL=0,pickRes=null,thI=0;
+
+function applyHokmTheme(i){
+  thI=i;const t=TH[i];$h('hokm-screen').dataset.hokmTheme=t.id;
+  $h('logoIc').textContent=t.ic;$h('mk').textContent=t.mk;
+  ['s0','s1','s2','s3'].forEach((id,k)=>$h(id).querySelector('.av').textContent=t.av[k]);
+  document.querySelectorAll('#hokm-screen #deco span').forEach((e,k)=>e.textContent=t.dc[k]);
+  try{localStorage.setItem('hokmTheme',i)}catch(e){}
+}
+$h('thB').onclick=()=>{applyHokmTheme((thI+1)%TH.length);toastH('تم: '+TH[thI].n,900)};
+try{applyHokmTheme(+localStorage.getItem('hokmTheme')||0)}catch(e){applyHokmTheme(0)}
+
+function warnH(t){const w=$h('warn');w.textContent=t||'';w.style.display=t?'block':'none'}
+async function refreshBalH(){
+  BAL=await Wallet.balance();$h('hokmBal').textContent=fmtH(BAL);
+  const ok=BAL>=HokmCFG.amounts[0];
+  $h('walBox').innerHTML=`موجودی شما: <b>${fmtH(BAL)}</b> توکن<br><span class="${ok?'okt':'bad'}">${ok?'✅ می‌توانید شرط ببندید':'⚠️ توکن کافی برای شرط‌بندی ندارید'}</span>`;
+  if(mode==='bet')buildAmts();
+}
+function showLobby(){$h('end').classList.add('h');$h('lobby').classList.remove('h');warnH('');refreshBalH()}
+function buildRds(){
+  $h('rds').innerHTML='';
+  for(const k in MODES){const m=MODES[k],b=document.createElement('button');b.textContent=`${m.label} ×${m.mult}`;if(+k===rounds)b.className='on';
+    b.onclick=()=>{rounds=+k;buildRds();if(mode==='bet')buildAmts()};$h('rds').appendChild(b)}
+}
+function buildAmts(){
+  $h('amts').innerHTML='';
+  HokmCFG.amounts.forEach(a=>{const b=document.createElement('button');b.textContent=fmtH(a);b.className=(a===stake?'on ':'')+(a>BAL?'low':'');
+    b.onclick=()=>{stake=a;stakeGlobal=a;buildAmts();warnH(a>BAL?NOFUND:'')};$h('amts').appendChild(b)});
+  const m=MODES[rounds],w=Math.round(stake*m.mult);
+  $h('betNote').innerHTML=`${m.label}: در صورت برد <b>${m.mult} برابر</b> می‌شود.<br>مثلاً ورود با <b>${fmtH(stake)}</b> توکن ⟵ دریافت <b>${fmtH(w)}</b> توکن.<br>در صورت باخت، توکن ورودی از دست می‌رود.`;
+}
+$h('mFree').onclick=()=>{mode='free';$h('mFree').className='on';$h('mBet').className='';$h('betBox').style.display='none'};
+$h('mBet').onclick=()=>{mode='bet';$h('mBet').className='on';$h('mFree').className='';$h('betBox').style.display='block';buildAmts();warnH(stake>BAL?NOFUND:'')};
+$h('start').onclick=async()=>{
+  if(mode==='bet'){
+    BAL=await Wallet.balance();
+    if(BAL<stake){warnH(NOFUND);buildAmts();return}
+    try{await Wallet.lock(stake)}catch(e){warnH(/کافی/.test(e.message)?NOFUND:e.message);return}
+  }
+  $h('lobby').classList.add('h');refreshBalH();startMatch();
+};
+
+function deck(rounds){
+  const d=[];for(let s=0;s<4;s++)for(let v=2;v<=14;v++)d.push({s,v});
+  if(rounds > 1 && Math.random() < 0.15) { d.sort((a,b)=> a.v - b.v); }
+  for(let i=d.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[d[i],d[j]]=[d[j],d[i]]}return d
+}
+const sortH=h=>h.sort((a,b)=>a.s-b.s||b.v-a.v);
+function toastH(t,ms=1100){const e=$h('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),ms)}
+
+async function dealOne(p,card){
+  const f=$h('felt'),fr=f.getBoundingClientRect(),sr=$h('s'+p).querySelector('.av').getBoundingClientRect();
+  const e=document.createElement('div');e.className='fly back';f.appendChild(e);
+  const x0=fr.width/2-15,y0=fr.height/2-21,x1=sr.left-fr.left+sr.width/2-15,y1=sr.top-fr.top+sr.height/2-21;
+  e.style.left=x0+'px';e.style.top=y0+'px';
+  await e.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${x1-x0}px,${y1-y0}px) rotate(200deg)`}],{duration:230,easing:'ease-out'}).finished;
+  e.remove();S.hands[p].push(card);
+  if(p===0){sortH(S.hands[0]);renderHand()}else renderFan(p);
+}
+
+/* ============================================================
+   startMatch: تعیین پرچم "بدترین دست" با احتمال ۴۰٪
+   ============================================================ */
+function startMatch(){
+  const m=MODES[rounds];
+  M={...m,w:[0,0],r:1,need:Math.floor(m.n/2)+1,hk:Math.random()*4|0};
+  S.forceWorstHand = Math.random() < 0.40;
+  playRound();
+}
+
+/* ============================================================
+   تابع کمکی: انتخاب بدترین کارت از بین چند کارت
+   (برای بایاس منفی هنگام پخش به بازیکن ۰)
+   ============================================================ */
+function pickWorstFrom(pool){
+  let worst = pool[0], worstScore = Infinity;
+  const suitCount = [0,0,0,0];
+  pool.forEach(c => suitCount[c.s]++);
+  pool.forEach(c => {
+    // امتیاز منفی: کارت کم‌ارزش + رنگ پراکنده = بدتر
+    let score = c.v * 2 + (suitCount[c.s] > 1 ? 6 : 0);
+    if(score < worstScore){ worstScore = score; worst = c; }
+  });
+  return worst;
+}
+
+async function playRound(){
+  const d=deck(M.n),hk=M.hk;
+  const forceWorst = !!S.forceWorstHand;
+  S={hands:[[],[],[],[]],trick:[],tricks:[0,0],trump:null,hakem:hk,turn:0,seen:new Set(),playing:false,forceWorstHand:forceWorst};
+  setTrump(null);renderScore();$h('trick').innerHTML='';$h('hand').innerHTML='';
+  [1,2,3].forEach(renderFan);
+  document.querySelectorAll('#hokm-screen .seat').forEach(e=>e.classList.toggle('hk',+e.id[1]===hk));
+  $h('deck').style.display='block';
+  let ix=0;
+  toastH((M.n>1?`دور ${M.r} از ${M.n} — `:'')+(hk===0?'شما حاکم هستید':'حاکم: بازیکن '+['شما','۲','۳','۴'][hk]),1500);await sleep(1700);
+
+  // تابع توزیع: اگر بازیکن ۰ و forceWorst فعال => از بین ۶ کارت بعدی دک بدترین رو بده
+  function drawFor(p){
+    if(p === 0 && forceWorst){
+      const take = Math.min(6, d.length - ix);
+      if(take > 1){
+        const pool = d.slice(ix, ix + take);
+        const worst = pickWorstFrom(pool);
+        const idx = d.indexOf(worst, ix);
+        if(idx >= 0){ d.splice(idx, 1); return worst; }
+      }
+    }
+    return d[ix++];
+  }
+
+  // پخش ۵ کارت اول به حاکم
+  for(let i=0;i<5;i++){
+    const card = drawFor(hk);
+    await dealOne(hk, card);
+    await sleep(60);
+  }
+
+  // انتخاب حکم
+  if(hk===0)await chooseTrumpUI();else{await sleep(900);S.trump=bestSuit(S.hands[hk])}
+  setTrump(S.trump);
+  toastH('حکم: '+SU[S.trump]);await sleep(700);
+
+  // پخش بقیه کارت‌ها
+  while(S.hands.some(h=>h.length<13)){
+    for(let k=0;k<4;k++){
+      const p=(hk+k)%4;
+      if(S.hands[p].length<13){
+        const card = drawFor(p);
+        await dealOne(p, card);
+      }
+    }
+  }
+
+  $h('deck').style.display='none';S.turn=hk;S.playing=true;
+  sortH(S.hands[0]);renderHand();loop();
+}
+
+function setTrump(t){const b=$h('trumpS');b.textContent=t==null?'—':SU[t];b.className=t!=null&&isRed(t)?'red':'';
+  if(t!=null){const e=$h('trumpB');e.classList.remove('set');void e.offsetWidth;e.classList.add('set')}}
+function bestSuit(h){const c=[0,0,0,0];h.forEach(x=>c[x.s]+=1+x.v/20);return c.indexOf(Math.max(...c))}
+function chooseTrumpUI(){
+  return new Promise(res=>{
+    $h('suits').innerHTML='';
+    for(let s=0;s<4;s++){const b=document.createElement('button');b.className='suit '+(isRed(s)?'red':'');b.textContent=SU[s];
+      b.onclick=()=>{S.trump=s;$h('trumpOv').classList.add('h');res()};$h('suits').appendChild(b)}
+    $h('trumpOv').classList.remove('h');
+  });
+}
+
+function isMaster(p,c){
+  for(let v=c.v+1;v<=14;v++){
+    const cardId = c.s*20+v;
+    if(!S.seen.has(cardId) && !S.hands[p].some(x=>x.s===c.s&&x.v===v)) return false;
+  }
+  return true;
+}
+
+function legal(p){const h=S.hands[p];if(!S.trick.length)return h;const ls=S.trick[0].c.s;const f=h.filter(c=>c.s===ls);return f.length?f:h}
+function beats(a,b){if(a.s===b.s)return a.v>b.v;return a.s===S.trump}
+function winnerOf(){return S.trick.reduce((w,t)=>beats(t.c,w.c)?t:w).p}
+
+function bot(p){
+  const tr = S.trump;
+  const legalCards = legal(p);
+  let lv = 1;
+  if (p === 2 || p === 4) lv = 4;
+  else if (p === 3) lv = 2;
+  else lv = 3;
+  const makeMistake = (lv === 4) ? false : (Math.random() < 0.01); 
+  const asc = [...legalCards].sort((a,b)=>a.v-b.v);
+  const nonTrump = asc.filter(c=>c.s!==tr);
+  const trumps = asc.filter(c=>c.s===tr);
+  const bestDump = nonTrump.length ? nonTrump[0] : asc[0];
+
+  if(!S.trick.length){
+    if(lv===1) return asc[asc.length-1];
+    if(makeMistake) return asc[asc.length-1];
+    const masters = nonTrump.filter(c=>isMaster(p,c));
+    if(masters.length) return masters[masters.length-1];
+    if(nonTrump.length) return nonTrump[nonTrump.length-1];
+    return trumps[trumps.length-1];
+  }
+  const best = S.trick.reduce((w,t)=>beats(t.c,w.c)?t:w);
+  if(team(best.p) === team(p)){
+    if(lv===1) return bestDump;
+    if(makeMistake) return trumps.length ? trumps[0] : bestDump;
+    return bestDump;
+  }
+  const winCandidates = asc.filter(c=>beats(c,best.c));
+  if(winCandidates.length){
+    if(makeMistake) return winCandidates[winCandidates.length-1];
+    return winCandidates[0];
+  }
+  if(makeMistake) return trumps.length ? trumps[trumps.length-1] : bestDump;
+  return bestDump;
+}
+
+async function loop(){
+  while(true){
+    const p=S.turn;mark(p);let c;
+    if(p===0){renderHand();c=await new Promise(r=>pickRes=r)}else{await sleep(650);c=bot(p)}
+    S.hands[p]=S.hands[p].filter(x=>x!==c);S.trick.push({p,c});S.seen.add(c.s*20+c.v);drawTrick();
+    p===0?renderHand():renderFan(p);
+    if(S.trick.length<4){S.turn=(p+1)%4;continue}
+    await sleep(900);
+    const w=winnerOf();S.tricks[team(w)]++;S.trick=[];$h('trick').innerHTML='';S.turn=w;renderScore();
+    if(S.tricks[0]>=HokmCFG.tricksToWin||S.tricks[1]>=HokmCFG.tricksToWin)return roundEnd(S.tricks[0]>S.tricks[1]);
+  }
+}
+async function roundEnd(won){
+  S.playing=false;mark(-1);$h('hand').innerHTML='';
+  M.w[won?0:1]++;
+  if(team(S.hakem)!==(won?0:1))M.hk=(S.hakem+1)%4;else M.hk=S.hakem;
+  renderScore();
+  if(M.w[0]>=M.need||M.w[1]>=M.need||M.n===1)return finish(M.w[0]>M.w[1]);
+  $h('rT').textContent=won?`✅ دور ${M.r} را بردید`:`❌ دور ${M.r} را باختید`;
+  $h('rP').innerHTML=`دست‌ها: <b>شما ${S.tricks[0]}</b> — <b>حریف ${S.tricks[1]}</b><br>وضعیت دورها: <b>شما ${M.w[0]}</b> — <b>حریف ${M.w[1]}</b><br>برای برد کل بازی ${M.need} دور لازم است`;
+  $h('rov').classList.remove('h');await sleep(3200);$h('rov').classList.add('h');M.r++;playRound();
+}
+async function finish(won){
+  let detail=M.n>1?`دورها: <b>شما ${M.w[0]}</b> — <b>حریف ${M.w[1]}</b><br>آخرین دست: شما ${S.tricks[0]} — حریف ${S.tricks[1]}`:`دست‌ها: <b>شما ${S.tricks[0]}</b> — <b>حریف ${S.tricks[1]}</b>`;
+  if(mode==='bet'){
+    const prize=Math.round(stake*M.mult);
+    if(won){await Wallet.payout(M.mult);detail+=`<br>${fmtH(prize)} توکن به حساب شما اضافه شد`}
+    else detail+=`<br>${fmtH(stake)} توکن ورودی از دست رفت`;
+  }
+  $h('endT').textContent=won?'🎉 تیم شما برنده شد':'تیم شما باخت';$h('endP').innerHTML=detail;
+  $h('end').classList.remove('h');refreshBalH();
+}
+
+function cardEl(c,cls=''){const e=document.createElement('div');e.className='hokm-card '+(isRed(c.s)?'r ':'b ')+cls;
+  e.innerHTML=`<span class="cn">${rk(c.v)}<br>${SU[c.s]}</span><span class="cc">${SU[c.s]}</span>`;return e}
+function renderHand(){
+  const h=$h('hand');h.innerHTML='';const cards=S.hands[0];if(!cards.length)return;
+  const ok=(S.turn===0&&S.trick.length<4&&S.playing)?legal(0):[];
+  const cw=46,avail=h.clientWidth-16,n=cards.length;
+  const step=n>1?Math.min(cw-4,(avail-cw)/(n-1)):0,total=step*(n-1)+cw,x0=(h.clientWidth-total)/2;
+  cards.forEach((c,i)=>{const e=cardEl(c,ok.includes(c)?'ok':(ok.length?'no':''));e.style.left=(x0+i*step)+'px';
+    e.style.transform=`rotate(${((i-(n-1)/2)*1.6).toFixed(1)}deg)`;
+    if(ok.includes(c))e.onclick=()=>{if(pickRes){const r=pickRes;pickRes=null;r(c)}};h.appendChild(e)});
+}
+function renderFan(p){const f=$h('s'+p).querySelector('.fan');f.innerHTML='';
+  for(let i=0;i<Math.min(S.hands?.[p]?.length||0,13);i++){const b=document.createElement('div');b.className='back';f.appendChild(b)}}
+function drawTrick(){const t=$h('trick');t.innerHTML='';S.trick.forEach(x=>t.appendChild(cardEl(x.c,'p'+x.p)))}
+function renderScore(){
+  $h('rnd').textContent=`دور ${M.r} از ${M.n} · ×${M.mult}`;
+  $h('score').textContent=`دست‌ها: شما ${S.tricks[0]} — حریف ${S.tricks[1]}`;
+  $h('mw').style.display=M.n>1?'':'none';$h('mw').textContent=`دورها: شما ${M.w[0]} — حریف ${M.w[1]}`;
+}
+function mark(p){document.querySelectorAll('#hokm-screen .seat').forEach(e=>e.classList.toggle('turn',+e.id[1]===p))}
+addEventListener('resize',()=>S.hands&&renderHand());
+
+function openHokmScreen() {
+  SFX.nav(); $("app").style.display = "none"; $h("hokm-screen").style.display = "flex";
+  buildRds(); showLobby();
+}
+function closeHokmScreen() {
+  SFX.nav(); $h("hokm-screen").style.display = "none"; $("app").style.display = "flex"; S.playing = false;
+}
+
+function bind(){
+  $("btnLogin").addEventListener("click",doLogin);
+  $("btnRegister").addEventListener("click",doRegister);
+  $("btnLogout").addEventListener("click",logout);
+  $("payCard").addEventListener("click",()=>{SFX.click();copy(CARD_NUMBER)});
+  $("buyAmount").addEventListener("input",updateBuyPrice);
+  $("btnBuy").addEventListener("click",submitBuy);
+  $("sellAmount").addEventListener("input",updateSellPrice);
+  $("btnSell").addEventListener("click",submitSell);
+  $("sellAll").addEventListener("click",()=>{SFX.click();if(currentUser){$("sellAmount").value=currentUser.tokens;updateSellPrice()}});
+  document.querySelectorAll(".chips[data-for] .chip").forEach(c=>{
+    c.addEventListener("click",()=>{SFX.click();$("buyAmount").value=c.dataset.v;updateBuyPrice()});
+  });
+  $("btnSettings").addEventListener("click",()=>{SFX.click();$("settingsOverlay").classList.add("show")});
+  $("closeSettings").addEventListener("click",()=>{SFX.click();$("settingsOverlay").classList.remove("show")});
+  $("themeSelect").value = localStorage.getItem("kiani_theme") || "default";
+  $("themeSelect").addEventListener("change",(e)=>{
+    let t = e.target.value; localStorage.setItem("kiani_theme", t); document.body.setAttribute("data-theme", t); SFX.click();
+  });
+  $("starContainer").querySelectorAll(".star").forEach(s => {
+    s.addEventListener("click", () => setStars(parseInt(s.dataset.val)));
+  });
+  $("btnSubmitRating").addEventListener("click", submitRating);
+  $("adminBtn").addEventListener("click", () => {
+    $("settingsOverlay").classList.remove("show");
+    $("adminLoginOverlay").classList.add("show");
+  });
+  $("adminLoginOverlay").addEventListener("click", function(e) { if(e.target === this) this.classList.remove("show"); });
+  $("adminLoginOk").addEventListener("click", function() {
+    var entered = $("adminPassInput").value;
+    if(entered === ADMIN_PASS){
+      $("adminLoginOverlay").classList.remove("show"); $("adminPassInput").value = ""; openAdminPanel();
+    } else { SFX.error(); toast("رمز اشتباه است", true); }
+  });
+  $("adminClose").addEventListener("click", () => {
+    SFX.nav(); $("adminPanel").style.display = "none";
+    if(adminMode && adminPrevUser) { currentUser = adminPrevUser; adminMode = false; adminPrevUser = null; refreshUserData(); }
+  });
+  $("adminTabs").addEventListener("click", function(e) {
+    var b = e.target.closest("button"); if(!b) return;
+    SFX.click();
+    Array.from(this.children).forEach(c => { c.style.background = "var(--panel)"; c.style.color = "var(--muted)"; });
+    b.style.background = "var(--violet)"; b.style.color = "#fff";
+    var tab = b.dataset.tab;
+    $("adminOrders").style.display = (tab === "orders") ? "block" : "none";
+    $("adminUsers").style.display = (tab === "users") ? "block" : "none";
+  });
+  document.addEventListener("click",(e)=>{
+    try{
+      var g=e.target.closest("[data-go]"); if(g){SFX.nav();return go(g.dataset.go)}
+      if(e.target.closest("[data-close]"))return closeModal();
+      var res=e.target.closest("[data-resolve]"); if(res){var parts=res.dataset.resolve.split("|");resolveOrder(parts[0],parts[1]);return}
+      var la=e.target.closest("[data-loginas]"); if(la){adminLoginAs(la.dataset.loginas);return}
+      var at=e.target.closest("[data-addtokens]"); if(at){adminAddTokens(at.dataset.addtokens);return}
+      var tg = e.target.closest(".tg-btn");
+      if(tg){ var id = tg.textContent.trim(); copy(id); return; }
+    }catch(err){}
+  });
+  $("msgOverlay").addEventListener("click",function(e){if(e.target===this)closeModal()});
+}
+function copy(t){try{navigator.clipboard.writeText(t).then(()=>toast("کپی شد")).catch(()=>fallbackCopy(t))}catch(e){fallbackCopy(t)}}
+function fallbackCopy(t){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);toast("کپی شد")}catch(e){toast("کپی نشد",true)}}
+
+document.addEventListener("DOMContentLoaded", () => {
+  let t = localStorage.getItem("kiani_theme") || "default";
+  document.body.setAttribute("data-theme", t);
+  bind();
+  showLoading(false); 
+});
+</script>
+</body>
+</html>
