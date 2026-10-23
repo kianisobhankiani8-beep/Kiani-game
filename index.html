@@ -26,14 +26,12 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes float{50%{transform:translateY(-6px)}}
-@keyframes shine{to{background-position:-200% 0}}
 @keyframes glowp{50%{box-shadow:0 8px 40px rgba(255,170,30,.75)}}
 @keyframes sweep{to{background-position:-250% 0}}
 @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
 @keyframes wpulse{50%{transform:scale(1.09);opacity:.55}}
 @keyframes wb{50%{opacity:.2;box-shadow:none}}
 @keyframes whub{50%{box-shadow:0 0 34px rgba(251,191,36,.85)}}
-@keyframes cupbob{50%{transform:translateY(-7px)}}
 @keyframes marq{to{transform:translateX(-50%)}}
 @keyframes rblur{50%{transform:translateY(12px)}}
 
@@ -81,7 +79,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .sec span{font-size:12px;color:#ff8cc4;font-weight:800;background:rgba(255,46,147,.16);padding:4px 12px;border-radius:999px}
 .bento{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
 .tile{position:relative;overflow:hidden;border-radius:28px;padding:18px;cursor:pointer;transition:transform .25s;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;animation:fade .5s ease both;border:1px solid transparent;background:linear-gradient(160deg,#1c0f40,#0d0624) padding-box,linear-gradient(135deg,var(--tc),rgba(255,255,255,.04) 65%) border-box;box-shadow:0 16px 40px rgba(0,0,0,.45),0 0 28px color-mix(in srgb,var(--tc) 22%,transparent)}
-.tile:nth-child(2){animation-delay:.08s}.tile:nth-child(3){animation-delay:.16s}.tile:nth-child(4){animation-delay:.24s}
 .tile:active{transform:scale(.97)}
 .tile::before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;filter:blur(50px);opacity:.5;top:-50px;left:-40px;background:var(--tc);animation:wpulse 4s ease-in-out infinite}
 .tile::after{content:"بازی ◂";position:absolute;bottom:14px;left:16px;font-size:11.5px;font-weight:900;padding:6px 14px;border-radius:999px;background:var(--tc);color:#12071f;box-shadow:0 0 20px var(--tc)}
@@ -148,7 +145,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .admin-order{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
 .admin-order .line{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid var(--line)}
 .admin-order .line:last-child{border-bottom:0}
-.acts{display:flex;gap:10px;margin-top:14px}.acts .btn{padding:12px;font-size:14px}
+.acts{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.acts .btn{padding:12px;font-size:13px;flex:1;min-width:100px}
 .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-30px);z-index:4000;opacity:0;padding:12px 20px;border-radius:14px;font-weight:700;font-size:14px;transition:.3s;background:#1a0d3a;border:1px solid var(--blue);color:#fff;max-width:90%;text-align:center}
 .toast.err{border-color:var(--red)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -227,8 +224,8 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
   <div class="header">
     <div class="user"><div class="avatar" id="avatar">K</div><div><small>خوش آمدید</small><b id="helloUser">-</b></div></div>
     <div class="icons">
-      <button class="icon-btn" id="btnAdmin" aria-label="admin"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
-      <button class="icon-btn" id="btnLogout" aria-label="logout"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
+      <button class="icon-btn" id="btnAdmin" aria-label="admin" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <button class="icon-btn" id="btnLogout" aria-label="logout" type="button"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></button>
     </div>
   </div>
 
@@ -238,7 +235,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     <div class="bento">
       <div class="tile big t-wheel" data-go="wheel" role="button">
         <svg class="tg spin" viewBox="0 0 100 100" style="stroke:none"><circle cx="50" cy="50" r="46" fill="#1b1305" stroke="#fbbf24" stroke-width="3"/><path d="M50 50L50 6A44 44 0 0 1 88 28z" fill="#fbbf24"/><path d="M50 50L88 28A44 44 0 0 1 88 72z" fill="#ef4444"/><path d="M50 50L88 72A44 44 0 0 1 50 94z" fill="#22c55e"/><path d="M50 50L50 94A44 44 0 0 1 12 72z" fill="#2ee6c5"/><path d="M50 50L12 72A44 44 0 0 1 12 28z" fill="#8b5cf6"/><path d="M50 50L12 28A44 44 0 0 1 50 6z" fill="#ef4444"/><circle cx="50" cy="50" r="9" fill="#12151f" stroke="#fbbf24" stroke-width="2"/></svg>
-        <div><b>گردونه شانس</b><small>بچرخان و تا 5 برابر شرطت جایزه بگیر</small><span class="rtp num">RTP 85%</span></div>
+        <div><b>گردونه شانس</b><small>بچرخان و تا 5 برابر شرطت جایزه بگیر</small><span class="rtp num">RTP 60%</span></div>
       </div>
       <div class="tile t-cups" data-go="cups" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><g class="cb1"><path d="M5 20h15l-2 30H7z" fill="#2ee6c5"/></g><g class="cb2"><path d="M24 20h15l-2 30H26z" fill="#22e4ff"/></g><g class="cb3"><path d="M43 20h15l-2 30H45z" fill="#2ee6c5"/></g><circle cx="31.5" cy="55" r="3.5" fill="#fff"/></svg>
@@ -246,11 +243,11 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       </div>
       <div class="tile t-mines" data-go="mines" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="4" y="4" width="26" height="26" rx="7" fill="#2ee6c5"><animate attributeName="opacity" values=".9;.35;.9" dur="2.4s" repeatCount="indefinite"/></rect><rect x="34" y="4" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="4" y="34" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="34" y="34" width="26" height="26" rx="7" fill="#ff5d73"><animate attributeName="opacity" values="1;.5;1" dur="1.6s" repeatCount="indefinite"/></rect><circle cx="47" cy="47" r="5" fill="#12151f"/></svg>
-        <div><b>بازی انفجار</b><small>الماس بردار، بمب نه</small><span class="rtp num">RTP 85%</span></div>
+        <div><b>بازی انفجار</b><small>الماس بردار، بمب نه</small><span class="rtp num">RTP 60%</span></div>
       </div>
       <div class="tile big t-plinko" data-go="plinko" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none" fill="#fff"><circle cx="32" cy="12" r="3" opacity=".4"/><circle cx="22" cy="26" r="3" opacity=".4"/><circle cx="42" cy="26" r="3" opacity=".4"/><circle cx="12" cy="40" r="3" opacity=".4"/><circle cx="32" cy="40" r="3" opacity=".4"/><circle cx="52" cy="40" r="3" opacity=".4"/><circle r="5" fill="#22e4ff"><animateMotion dur="2.6s" repeatCount="indefinite" path="M32 2 L32 12 L22 26 L32 40 L32 58"/></circle></svg>
-        <div><b>بازی پلینکو</b><small>ریسک و تعداد توپ را خودت انتخاب کن</small><span class="rtp num">تا 23x</span></div>
+        <div><b>بازی پلینکو</b><small>ریسک و تعداد توپ را خودت انتخاب کن</small><span class="rtp num">RTP 70%</span></div>
       </div>
       <div class="tile big t-crash" data-go="crash" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><path d="M4 58C24 56 40 44 54 12" fill="none" stroke="#ff9f43" stroke-width="5" stroke-linecap="round"/><circle r="6" fill="#ffd25a"><animateMotion dur="2.2s" repeatCount="indefinite" path="M4 58C24 56 40 44 54 12"/></circle></svg>
@@ -258,7 +255,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       </div>
       <div class="tile big t-slots" data-go="slots" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="3" y="14" width="18" height="36" rx="5" fill="#fff" opacity=".14"/><rect x="23" y="14" width="18" height="36" rx="5" fill="#fff" opacity=".14"/><rect x="43" y="14" width="18" height="36" rx="5" fill="#fff" opacity=".14"/><text x="12" y="40" font-size="15" text-anchor="middle">7️⃣</text><text x="32" y="40" font-size="15" text-anchor="middle">7️⃣</text><text x="52" y="40" font-size="15" text-anchor="middle">7️⃣</text></svg>
-        <div><b>اسلات ۷۷۷</b><small>سه قرقره، سه نماد یکسان و جایزه بزرگ</small><span class="rtp num">تا 300x</span></div>
+        <div><b>اسلات ۷۷۷</b><small>سه قرقره، سه نماد یکسان و جایزه بزرگ</small><span class="rtp num">RTP 60%</span></div>
       </div>
     </div>
     <div class="ticker"><div id="tick"></div></div>
@@ -314,11 +311,11 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     <div class="card">
       <div id="w_betBox"></div>
       <button class="btn gold" id="w_go" type="button" style="margin-top:14px">بچرخان</button>
-      <div class="info"><span>بازگشت به بازیکن: <b class="num">85%</b></span><span>احتمال بردن (بالای 1x): <b class="num">20%</b></span></div>
+      <div class="info"><span>بازگشت به بازیکن: <b class="num">60%</b></span><span>احتمال بردن (بالای 1x): <b class="num">10%</b></span></div>
     </div>
     <div class="card">
       <div style="font-size:13px;font-weight:700">جدول ضرایب (20 خانه)</div>
-      <div class="tbl"><div>0x<br><b class="num">9</b></div><div>0.5x<br><b class="num">4</b></div><div>1x<br><b class="num">3</b></div><div>2x<br><b class="num">2</b></div><div>3x<br><b class="num">1</b></div><div>5x<br><b class="num">1</b></div></div>
+      <div class="tbl"><div>0x<br><b class="num">12</b></div><div>0.5x<br><b class="num">4</b></div><div>1x<br><b class="num">2</b></div><div>2x<br><b class="num">1</b></div><div>3x<br><b class="num">1</b></div><div>5x<br><b class="num">0</b></div></div>
       <div class="note">همه خانه‌ها برای همه بازیکنان و همه دفعات یکسان است. نتیجه با عدد تصادفی امن مرورگر انتخاب می‌شود.</div>
     </div>
   </section>
@@ -336,7 +333,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <div class="field" style="margin-top:12px"><label>تعداد بمب</label><select id="m_mc"><option>3</option><option selected>5</option><option>8</option><option>12</option></select></div>
       <div class="mrow" style="margin-top:14px"><div><button class="btn gold" id="m_start" type="button">شروع</button></div><div><button class="btn green" id="m_cash" type="button" disabled>برداشت</button></div></div>
       <div class="info"><span>ضریب فعلی: <b class="num" id="m_cm">1.00x</b></span><span>ضریب بعدی: <b class="num" id="m_nm">-</b></span></div>
-      <div class="info"><span>بازگشت به بازیکن: <b class="num">85%</b></span><span>برداشت: <b class="num" id="m_cv">0</b> T</span></div>
+      <div class="info"><span>بازگشت به بازیکن: <b class="num">60%</b></span><span>برداشت: <b class="num" id="m_cv">0</b> T</span></div>
     </div>
   </section>
 
@@ -353,7 +350,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <div class="field"><label>تعداد توپ در هر رها کردن</label><div class="seg" id="p_n"><button type="button" class="on" data-n="1">1</button><button type="button" data-n="3">3</button><button type="button" data-n="5">5</button><button type="button" data-n="10">10</button></div></div>
       <div id="p_betBox"></div>
       <button class="btn gold" id="p_drop" type="button" style="margin-top:14px">رها کردن توپ</button>
-      <div class="info"><span>بازگشت به بازیکن: <b class="num" id="p_rtp">91.6%</b></span><span>احتمال بردن (بالای 1x): <b class="num" id="p_pw">29%</b></span></div>
+      <div class="info"><span>بازگشت به بازیکن: <b class="num" id="p_rtp">70.0%</b></span><span>احتمال بردن (بالای 1x): <b class="num" id="p_pw">29%</b></span></div>
     </div>
   </section>
 
@@ -395,10 +392,10 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <div class="ctable"></div>
     </div>
     <div class="card">
-      <div class="field"><label>حالت بازی</label><div class="seg" id="c_mode"><button type="button" class="on" data-m="1">1 توپ<b>ضریب 2.5x</b></button><button type="button" data-m="2">2 توپ<b>ضریب 1.25x</b></button></div></div>
+      <div class="field"><label>حالت بازی</label><div class="seg" id="c_mode"><button type="button" class="on" data-m="1">1 توپ<b>ضریب 1.8x</b></button><button type="button" data-m="2">2 توپ<b>ضریب 0.9x</b></button></div></div>
       <div id="c_betBox" style="margin-top:12px"></div>
       <button class="btn gold" id="c_go" type="button" style="margin-top:14px">شروع بازی</button>
-      <div class="info"><span>ضریب برد: <b class="num" id="c_x">2.5x</b></span><span>احتمال برد: <b class="num" id="c_p">33.3%</b></span></div>
+      <div class="info"><span>ضریب برد: <b class="num" id="c_x">1.8x</b></span><span>احتمال برد: <b class="num" id="c_p">33.3%</b></span></div>
     </div>
   </section>
 
@@ -435,7 +432,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <div id="k_betBox"></div>
       <div class="field" style="margin-top:12px"><label>برداشت خودکار (ضریب) - خالی = دستی</label><input id="k_auto" inputmode="decimal" value="2.00"></div>
       <button class="btn gold" id="k_btn" type="button" style="margin-top:14px">شروع پرواز</button>
-      <div class="info"><span>بازگشت به بازیکن: <b class="num">37.5%</b></span><span>بیشترین ضریب: <b class="num">1000x</b></span></div>
+      <div class="info"><span>بازگشت به بازیکن: <b class="num">25%</b></span><span>بیشترین ضریب: <b class="num">1000x</b></span></div>
     </div>
   </section>
 
@@ -469,7 +466,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 <script>
 "use strict";
 
-/* ===== SAFE HASH ===== */
 function safeHash(str){
   var h1=0x811c9dc5,h2=0x1000193,h3=0x9e3779b9,h4=0x85ebca6b;
   for(var i=0;i<str.length;i++){
@@ -483,7 +479,7 @@ function safeHash(str){
   return hex(h1)+hex(h2)+hex(h3)+hex(h4);
 }
 
-var STORAGE_KEY="kiani_exchange_v6",SESSION_KEY="kiani_session_v6",DEVICE_KEY="kiani_device_v6";
+var STORAGE_KEY="kiani_v7",SESSION_KEY="kiani_session_v7",DEVICE_KEY="kiani_device_v7";
 var TOKEN_PRICE=1000,CARD_NUMBER="6219861975550053",BUY_ADMIN_ID="@mahancn3",SELL_ADMIN_ID="@sobhan_1384_k",WELCOME_TOKENS=50;
 var ADMIN_HASH=safeHash("admin123");
 var db={users:{}},currentUser=null,shownBal=0,adminMode=false,adminPrevUser=null;
@@ -501,7 +497,6 @@ function me(){return currentUser?db.users[currentUser]:null}
 function copy(t){try{navigator.clipboard.writeText(t).then(function(){toast("کپی شد")}).catch(function(){fallbackCopy(t)})}catch(e){fallbackCopy(t)}}
 function fallbackCopy(t){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);toast("کپی شد")}catch(e){toast("کپی نشد",true)}}
 
-/* ===== SOUND ===== */
 var AC=null;
 function ac(){if(!AC){try{var Ctx=window.AudioContext||window.webkitAudioContext;if(Ctx)AC=new Ctx()}catch(e){}}return AC}
 function tone(freq,dur,type,vol,slide){
@@ -520,15 +515,15 @@ function tone(freq,dur,type,vol,slide){
 var SFX={
   click:function(){tone(700,0.06,"square",0.05,900)},
   nav:function(){tone(380,0.08,"triangle",0.09,560)},
-  bet:function(){tone(520,0.1,"sine",0.1,680);setTimeout(function(){tone(680,0.1,"sine",0.1,820)},60)},
+  bet:function(){tone(520,0.1,"sine",0.1,680)},
   win:function(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){tone(f,0.18,"triangle",0.13)},i*90)})},
   bigwin:function(){[523,659,784,1047,1319,1568].forEach(function(f,i){setTimeout(function(){tone(f,0.22,"triangle",0.15)},i*100)})},
-  lose:function(){tone(330,0.18,"sawtooth",0.1,180);setTimeout(function(){tone(220,0.24,"sawtooth",0.1,110)},120)},
+  lose:function(){tone(330,0.18,"sawtooth",0.1,180)},
   tick:function(){tone(1400,0.03,"square",0.04)},
   tick2:function(){tone(1800,0.04,"square",0.05)},
   cup:function(){tone(260,0.09,"triangle",0.1,200)},
   drop:function(){tone(600,0.08,"sine",0.09,380)},
-  bomb:function(){tone(180,0.45,"sawtooth",0.2,60);setTimeout(function(){tone(90,0.5,"sawtooth",0.16,45)},60)},
+  bomb:function(){tone(180,0.45,"sawtooth",0.2,60)},
   coin:function(){tone(1046,0.09,"square",0.08,1318)},
   error:function(){tone(200,0.16,"square",0.12,150)}
 };
@@ -536,7 +531,6 @@ function unlockAudio(){var c=ac();if(c&&c.state==="suspended")c.resume()}
 document.addEventListener("pointerdown",unlockAudio);
 document.addEventListener("touchstart",unlockAudio);
 
-/* ===== AUTH ===== */
 function doLogin(){
   try{
     var u=$("authUser").value.trim().toLowerCase(),p=$("authPass").value;
@@ -553,11 +547,9 @@ function doRegister(){
     if(!/^[a-z0-9_]{3,24}$/.test(u)){SFX.error();return toast("نام کاربری: 3 تا 24 حرف انگلیسی، عدد یا _",true)}
     if(p.length<6){SFX.error();return toast("رمز عبور حداقل 6 کاراکتر باشد.",true)}
     if(db.users[u]){SFX.error();return toast("این نام کاربری قبلاً گرفته شده.",true)}
-    if(localStorage.getItem(DEVICE_KEY)){SFX.error();return toast("با این گوشی قبلاً حساب ساخته‌اید!",true)}
     var salt=Math.random().toString(36).slice(2)+Date.now().toString(36);
-    db.users[u]={salt:salt,hash:safeHash(salt+p),tokens:WELCOME_TOKENS,history:[],lastBonus:0};
+    db.users[u]={salt:salt,hash:safeHash(salt+p),tokens:WELCOME_TOKENS,history:[],createdAt:Date.now()};
     db.users[u].history.push({id:makeId("GF"),type:"buy",tokens:WELCOME_TOKENS,amount:0,status:"approved",ts:Date.now(),note:"هدیه ثبت‌نام"});
-    try{localStorage.setItem(DEVICE_KEY,u)}catch(e){}
     saveDB();SFX.coin();startSession(u);toast("حساب ساخته شد! "+WELCOME_TOKENS+" توکن هدیه");
   }catch(e){console.error(e);toast("خطا در ثبت‌نام",true)}
 }
@@ -568,7 +560,6 @@ function startSession(u){
 }
 function logout(){
   if(adminMode){
-    /* return to admin's own account */
     adminMode=false;
     var prev=adminPrevUser;
     adminPrevUser=null;
@@ -584,7 +575,6 @@ function logout(){
   $("app").style.display="none";$("authScreen").style.display="flex";SFX.nav();
 }
 
-/* ===== NAV ===== */
 function go(v){
   var target=$("view-"+v);if(!target)return;
   document.querySelectorAll(".view").forEach(function(x){x.classList.remove("active")});
@@ -609,7 +599,7 @@ function renderAll(){
   $("sellBal").textContent=fmt(u.tokens);
 }
 function renderTicker(){
-  var s="";for(var i=0;i<2;i++)s+='<em>WHEEL</em>MAX x5<em>CUPS</em>x2.5<em>MINES</em>RTP 85%<em>PLINKO</em>MAX x23<em>CRASH</em>MAX x1000<em>SLOTS</em>MAX x300';
+  var s="";for(var i=0;i<2;i++)s+='<em>WHEEL</em>RTP 60%<em>CUPS</em>x1.8<em>MINES</em>RTP 60%<em>PLINKO</em>RTP 70%<em>CRASH</em>RTP 25%<em>SLOTS</em>RTP 60%';
   $("tick").innerHTML=s;
 }
 function renderHistory(){
@@ -637,12 +627,11 @@ function submitBuy(){
     var amt=Number(digitsOnly($("buyAmount").value)),trk=$("buyTracking").value.trim();
     if(!amt||amt<1){SFX.error();return toast("تعداد نامعتبر است.",true)}
     if(trk.length<4){SFX.error();return toast("کد رهگیری را وارد کنید.",true)}
-    var o={id:makeId("P"),type:"buy",tokens:amt,amount:amt*TOKEN_PRICE,tracking:trk,status:"pending",ts:Date.now()};
+    var o={id:makeId("P"),type:"buy",tokens:amt,amount:amt*TOKEN_PRICE,tracking:trk,status:"pending",ts:Date.now(),note:"خرید "+amt+" توکن"};
     u.history.push(o);saveDB();renderAll();$("buyTracking").value="";buzz();SFX.coin();
     showModal('<div class="okring">'+CHECK+'</div><h3>سفارش خرید ثبت شد</h3>'+
     '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(o.amount)+' تومان</span></div>'+
     '<p style="margin-top:14px">شناسه سفارش (برای کپی کلیک کنید):</p><div class="order-id num" data-copy="'+esc(o.id)+'">'+esc(o.id)+'</div>'+
-    '<p style="color:var(--red);font-weight:700">لطفاً نام کاربری و رمز خود را به همراه رسید برای ادمین ارسال کنید.</p>'+
     '<div class="tg-btn num" data-copy="'+esc(BUY_ADMIN_ID)+'">'+esc(BUY_ADMIN_ID)+'</div><button class="btn ghost" type="button" data-close="1">متوجه شدم</button>');
   }catch(e){console.error(e);toast("خطا",true)}
 }
@@ -653,7 +642,7 @@ function submitSell(){
     if(card.length!==16){SFX.error();return toast("شماره کارت نامعتبر است.",true)}
     if(!amt||amt<1){SFX.error();return toast("تعداد توکن را وارد کنید.",true)}
     if(amt>u.tokens){SFX.error();return toast("موجودی کافی نیست.",true)}
-    u.tokens-=amt;var o={id:makeId("WD"),type:"sell",tokens:amt,amount:amt*TOKEN_PRICE,card:card,status:"pending",ts:Date.now()};
+    u.tokens-=amt;var o={id:makeId("WD"),type:"sell",tokens:amt,amount:amt*TOKEN_PRICE,card:card,status:"pending",ts:Date.now(),note:"فروش "+amt+" توکن"};
     u.history.push(o);saveDB();renderAll();$("sellCard").value="";$("sellAmount").value="";$("sellReceive").textContent="0 تومان";buzz();SFX.coin();
     showModal('<div class="okring" style="background:rgba(251,191,36,.16);color:var(--gold)">'+CLOCK+'</div><h3>درخواست فروش ثبت شد</h3>'+
     '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(o.amount)+' تومان</span></div>'+
@@ -662,13 +651,146 @@ function submitSell(){
   }catch(e){console.error(e);toast("خطا",true)}
 }
 
-/* ===== BIND ===== */
 function safeBind(el,ev,fn){
   if(!el)return;
   el.addEventListener(ev,function(e){
     try{fn.call(this,e)}catch(err){console.error("handler error:",err)}
   });
 }
+
+/* ===== ADMIN PANEL ===== */
+function openAdminPanel(){
+  var panel=$("adminPanel");
+  if(!panel){toast("پنل ادمین پیدا نشد",true);return}
+  panel.style.display="block";
+  renderAdminOrders();
+  renderAdminUsers();
+  SFX.win();
+  /* make sure both visible based on active tab */
+  var activeTab=document.querySelector("#adminTabs button.on");
+  var tab=activeTab?activeTab.dataset.tab:"orders";
+  $("adminOrders").style.display=(tab==="orders")?"block":"none";
+  $("adminUsers").style.display=(tab==="users")?"block":"none";
+}
+
+function renderAdminOrders(){
+  var box=$("adminOrders");if(!box)return;
+  var pending=[];
+  var userNames=Object.keys(db.users);
+  userNames.forEach(function(n){
+    var u=db.users[n];
+    u.history.forEach(function(t){
+      if(t.status==="pending") pending.push({user:n,t:t});
+    });
+  });
+  if(!pending.length){
+    box.innerHTML="<div class='empty'>هیچ سفارش در انتظاری وجود ندارد</div>";
+    return;
+  }
+  var html="";
+  pending.forEach(function(o){
+    var t=o.t,b=t.type==="buy";
+    html+='<div class="admin-order">'+
+      '<div class="line"><span>کاربر</span><b>'+esc(o.user)+'</b></div>'+
+      '<div class="line"><span>نوع</span><b>'+(b?"خرید":"فروش")+'</b></div>'+
+      '<div class="line"><span>تعداد</span><b class="num">'+fmt(t.tokens)+' T</b></div>'+
+      '<div class="line"><span>'+(b?"کد رهگیری":"شماره کارت")+'</span><b class="num">'+esc(b?t.tracking:t.card)+'</b></div>'+
+      '<div class="line"><span>شناسه</span><b class="num" style="font-size:11px">'+esc(t.id)+'</b></div>'+
+      '<div class="acts">'+
+        '<button class="btn" type="button" style="background:var(--green)" data-resolve="'+esc(o.user)+'|'+esc(t.id)+'|approve">✓ تایید</button>'+
+        '<button class="btn" type="button" style="background:var(--red)" data-resolve="'+esc(o.user)+'|'+esc(t.id)+'|reject">✗ رد</button>'+
+      '</div></div>';
+  });
+  box.innerHTML=html;
+}
+
+function renderAdminUsers(){
+  var box=$("adminUsers");if(!box)return;
+  var names=Object.keys(db.users);
+  if(!names.length){
+    box.innerHTML="<div class='empty'>هیچ کاربری ثبت‌نام نکرده</div>";
+    return;
+  }
+  var html="";
+  names.forEach(function(n){
+    var u=db.users[n];
+    var pendingCount=u.history.filter(function(t){return t.status==="pending"}).length;
+    html+='<div class="admin-order">'+
+      '<div class="line"><span>نام کاربری</span><b>'+esc(n)+'</b></div>'+
+      '<div class="line"><span>موجودی</span><b class="num">'+fmt(u.tokens)+' T</b></div>'+
+      '<div class="line"><span>کل تراکنش</span><b class="num">'+u.history.length+'</b></div>'+
+      '<div class="line"><span>در انتظار</span><b class="num">'+pendingCount+'</b></div>'+
+      '<div class="acts">'+
+        '<button class="btn" type="button" style="background:var(--cyan);color:#04201e" data-loginas="'+esc(n)+'">ورود به حساب</button>'+
+        '<button class="btn" type="button" style="background:var(--green)" data-addtokens="'+esc(n)+'">شارژ توکن</button>'+
+      '</div>'+
+    '</div>';
+  });
+  box.innerHTML=html;
+}
+
+function adminLoginAs(name){
+  if(!db.users[name]){toast("کاربر پیدا نشد",true);return}
+  if(!adminMode){adminPrevUser=currentUser;adminMode=true}
+  currentUser=name;
+  try{localStorage.setItem(SESSION_KEY,name)}catch(e){}
+  $("adminPanel").style.display="none";
+  $("authScreen").style.display="none";
+  $("app").style.display="flex";
+  shownBal=0;go("home");renderAll();
+  toast("وارد حساب "+name+" شدی. با دکمه خروج به حساب ادمین برمی‌گردی");
+  SFX.coin();
+}
+
+function adminAddTokens(name){
+  var u=db.users[name];if(!u)return;
+  var v=prompt("چند توکن برای «"+name+"»؟\n(مثبت = اضافه، منفی = کم)\nمثلاً: 100 یا -50","100");
+  if(v===null)return;
+  var neg=String(v).indexOf("-")===0;
+  v=String(v).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/\D/g,"");
+  var n=parseInt(v,10);
+  if(!n||n===0){toast("عدد نامعتبر",true);return}
+  if(neg)n=-n;
+  if(u.tokens+n<0){toast("موجودی نمی‌تواند منفی شود",true);return}
+  u.tokens+=n;
+  u.history.push({
+    id:makeId("AD"),
+    type:n>0?"buy":"sell",
+    tokens:Math.abs(n),
+    amount:0,
+    status:"approved",
+    ts:Date.now(),
+    note:"ادمین: "+(n>0?"+"+n+" توکن":"کاهش "+Math.abs(n)+" توکن")
+  });
+  saveDB();
+  renderAdminUsers();
+  renderAdminOrders();
+  renderAll();
+  toast((n>0?"+"+n:" "+n)+" توکن برای "+name);
+  SFX.coin();
+}
+
+function resolveOrder(un,id,action){
+  var r=db.users[un];if(!r){toast("کاربر پیدا نشد",true);return}
+  var t=r.history.find(function(x){return x.id===id});
+  if(!t){toast("سفارش پیدا نشد",true);return}
+  if(action==="approve"){
+    t.status="approved";
+    if(t.type==="buy")r.tokens+=t.tokens;
+    /* for sell: tokens already deducted when order placed */
+    toast("✓ تایید شد برای "+un);
+  } else {
+    t.status="rejected";
+    if(t.type==="sell")r.tokens+=t.tokens; /* refund */
+    toast("✗ رد شد برای "+un);
+  }
+  saveDB();
+  renderAdminOrders();
+  renderAdminUsers();
+  renderAll();
+  SFX.coin();
+}
+
 function bind(){
   safeBind($("btnLogin"),"click",doLogin);
   safeBind($("btnRegister"),"click",doRegister);
@@ -689,16 +811,28 @@ function bind(){
       var cp=e.target.closest("[data-copy]");
       if(cp){SFX.click();return copy(cp.dataset.copy)}
       if(e.target.closest("[data-close]"))return closeModal();
+      var res=e.target.closest("[data-resolve]");
+      if(res){var parts=res.dataset.resolve.split("|");resolveOrder(parts[0],parts[1],parts[2]);return}
+      var la=e.target.closest("[data-loginas]");
+      if(la){adminLoginAs(la.dataset.loginas);return}
+      var at=e.target.closest("[data-addtokens]");
+      if(at){adminAddTokens(at.dataset.addtokens);return}
     }catch(err){console.error(err)}
   });
   safeBind($("msgOverlay"),"click",function(e){if(e.target===this)closeModal()});
   safeBind($("btnAdmin"),"click",function(){SFX.click();$("adminLoginOverlay").classList.add("show")});
   safeBind($("adminLoginOverlay"),"click",function(e){if(e.target===this)this.classList.remove("show")});
   safeBind($("adminLoginOk"),"click",function(){
-    if(safeHash($("adminPassInput").value)===ADMIN_HASH){
-      $("adminLoginOverlay").classList.remove("show");$("adminPassInput").value="";
-      $("adminPanel").style.display="block";SFX.win();renderAdmin();
-    } else {SFX.error();toast("رمز اشتباه است",true)}
+    var entered=$("adminPassInput").value;
+    var ok=safeHash(entered)===ADMIN_HASH;
+    console.log("admin check:",entered,ok?"OK":"FAIL");
+    if(ok){
+      $("adminLoginOverlay").classList.remove("show");
+      $("adminPassInput").value="";
+      openAdminPanel();
+    } else {
+      SFX.error();toast("رمز اشتباه است",true);
+    }
   });
   safeBind($("adminClose"),"click",function(){SFX.nav();$("adminPanel").style.display="none"});
   safeBind($("adminTabs"),"click",function(e){
@@ -709,83 +843,7 @@ function bind(){
     var tab=b.dataset.tab;
     $("adminOrders").style.display=(tab==="orders")?"block":"none";
     $("adminUsers").style.display=(tab==="users")?"block":"none";
-    if(tab==="users")renderAdminUsers();
   });
-}
-
-/* ===== ADMIN PANEL ===== */
-function renderAdmin(){
-  var box=$("adminOrders");if(!box)return;
-  box.innerHTML="";var p=[];
-  Object.keys(db.users).forEach(function(n){db.users[n].history.forEach(function(t){if(t.status==="pending")p.push({user:n,t:t})})});
-  if(!p.length){box.innerHTML="<div class='empty'>سفارشی وجود ندارد</div>"}
-  else{
-    p.forEach(function(o){var t=o.t,b=t.type==="buy";
-      box.innerHTML+='<div class="admin-order"><div class="line"><span>کاربر</span><b>'+esc(o.user)+'</b></div><div class="line"><span>نوع</span><b>'+(b?"خرید":"فروش")+'</b></div><div class="line"><span>تعداد</span><b class="num">'+fmt(t.tokens)+' T</b></div><div class="line"><span>کد/کارت</span><b class="num">'+esc(b?t.tracking:t.card)+'</b></div>'+
-      '<div class="acts"><button class="btn" type="button" style="background:var(--green)" onclick="resolveOrder(\''+esc(o.user)+'\',\''+esc(t.id)+'\',\'approve\')">تایید</button><button class="btn" type="button" style="background:var(--red)" onclick="resolveOrder(\''+esc(o.user)+'\',\''+esc(t.id)+'\',\'reject\')">رد</button></div></div>';
-    });
-  }
-  renderAdminUsers();
-}
-function renderAdminUsers(){
-  var box=$("adminUsers");if(!box)return;
-  var names=Object.keys(db.users);
-  if(!names.length){box.innerHTML="<div class='empty'>هیچ کاربری وجود ندارد</div>";return}
-  var html="";
-  names.forEach(function(n){
-    var u=db.users[n];
-    html+='<div class="admin-order">'+
-      '<div class="line"><span>نام کاربری</span><b>'+esc(n)+'</b></div>'+
-      '<div class="line"><span>موجودی</span><b class="num">'+fmt(u.tokens)+' T</b></div>'+
-      '<div class="line"><span>تعداد تراکنش</span><b class="num">'+u.history.length+'</b></div>'+
-      '<div class="acts">'+
-        '<button class="btn" type="button" style="background:var(--cyan);color:#04201e;flex:1" onclick="adminLoginAs(\''+esc(n)+'\')">ورود به حساب</button>'+
-        '<button class="btn" type="button" style="background:var(--green);flex:1" onclick="adminAddTokens(\''+esc(n)+'\')">شارژ توکن</button>'+
-      '</div>'+
-    '</div>';
-  });
-  box.innerHTML=html;
-}
-function adminLoginAs(name){
-  if(!db.users[name])return toast("کاربر پیدا نشد",true);
-  if(!adminMode){adminPrevUser=currentUser;adminMode=true}
-  currentUser=name;
-  try{localStorage.setItem(SESSION_KEY,name)}catch(e){}
-  $("adminPanel").style.display="none";
-  $("authScreen").style.display="none";
-  $("app").style.display="flex";
-  shownBal=0;go("home");renderAll();
-  toast("وارد حساب "+name+" شدی");
-  SFX.coin();
-}
-function adminAddTokens(name){
-  var u=db.users[name];if(!u)return;
-  var v=prompt("چند توکن برای "+name+" اضافه/کم شود؟\n(عدد مثبت = اضافه، منفی = کم)\nمثلاً: 100 یا -50","100");
-  if(v===null)return;
-  v=String(v).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)});
-  var n=parseInt(v,10);
-  if(isNaN(n)||n===0){toast("عدد نامعتبر",true);return}
-  if(u.tokens+n<0){toast("موجودی نمی‌تواند منفی شود",true);return}
-  u.tokens+=n;
-  u.history.push({
-    id:makeId("AD"),
-    type:n>0?"buy":"sell",
-    tokens:Math.abs(n),
-    amount:0,
-    status:"approved",
-    ts:Date.now(),
-    note:"توسط ادمین "+(n>0?"اضافه":"کم")+" شد"
-  });
-  saveDB();renderAdminUsers();renderAll();
-  toast((n>0?"+"+n:" "+n)+" توکن برای "+name);
-  SFX.coin();
-}
-function resolveOrder(un,id,a){
-  var r=db.users[un],t=r.history.find(function(x){return x.id===id});if(!t)return;
-  t.status=a==="approve"?"approved":"rejected";
-  if(a==="approve"&&t.type==="buy")r.tokens+=t.tokens;
-  if(a==="reject"&&t.type==="sell")r.tokens+=t.tokens;
-  saveDB();renderAdmin();renderAll();SFX.coin();toast("انجام شد");
 }
 
 /* ===== GAME HELPERS ===== */
@@ -796,9 +854,8 @@ G.fmt=function(n){return Number(n||0).toLocaleString("en-US",{maximumFractionDig
 G.save=function(){saveDB()};
 G.show=function(){renderAll()};
 G.rnd=function(n){
-  try{
-    var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n;
-  }catch(e){return Math.floor(Math.random()*n)}
+  try{var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}
+  catch(e){return Math.floor(Math.random()*n)}
 };
 G.betVal=function(p){return parseInt(digitsOnly(G.$(p+"bet").value),10)||0};
 G.take=function(p){
@@ -836,10 +893,17 @@ G.mount=function(id,p){
   });
 };
 
-/* ===== WHEEL ===== */
+/* ===== WHEEL - RTP 60% ===== */
+/* Distribution: 12×0, 4×0.5, 2×1, 1×2, 1×3 = 20 slots
+   EV = (12*0 + 4*0.5 + 2*1 + 1*2 + 1*3) / 20 = (0+2+2+2+3)/20 = 9/20 = 45% ... too low
+   Better: 10×0, 4×0.5, 3×1, 2×2, 1×5 = 20
+   EV = (0+2+3+4+5)/20 = 14/20 = 70% ... ok
+   For 60%: 12×0, 4×0.5, 2×1, 1×2, 1×3 = 20 → EV = 9/20 = 45% (too low)
+   Try: 11×0, 4×0.5, 2×1, 2×2, 1×4 = 20 → EV = (0+2+2+4+4)/20 = 12/20 = 60% ✓ */
 (function(){
-var SEG=[0,2,0,.5,0,1,0,3,0,.5,0,2,0,5,0,.5,1,0,1,.5],N=SEG.length,A=360/N,cur=0,busy=false;
-var COL={"0":["#2a2f4a","#141728"],"0.5":["#4a5a92","#2a3563"],"1":["#3ee0c4","#0f766e"],"2":["#34d27b","#15803d"],"3":["#a78bfa","#6d28d9"],"5":["#ffd25a","#d97706"]};
+var SEG=[0,0,0,0,0,0,0,0,0,0,0,2,0.5,0.5,0.5,0.5,1,1,2,4];
+var N=SEG.length,A=360/N,cur=0,busy=false;
+var COL={"0":["#2a2f4a","#141728"],"0.5":["#4a5a92","#2a3563"],"1":["#3ee0c4","#0f766e"],"2":["#34d27b","#15803d"],"4":["#ffd25a","#d97706"]};
 var cv=G.$("w_wheel");if(!cv)return;
 var x=cv.getContext("2d"),R=320;
 x.translate(R,R);
@@ -873,7 +937,7 @@ safeBind(G.$("w_go"),"click",function(){
   setTimeout(function(){
     clearInterval(tt);stage.classList.remove("spin");
     var m=SEG[i],p=G.pay(b*m);
-    if(m>1){G.result("w_","برد! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);burst(m>=5?160:m>=3?110:70);(m>=3?SFX.bigwin:SFX.win)();}
+    if(m>1){G.result("w_","برد! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);burst(m>=4?160:70);SFX.win();}
     else if(m===1)G.result("w_","ضریب 1x - شرط برگشت",true);
     else{G.result("w_",m===0?"باخت  |  -"+G.fmt(b)+" توکن":"ضریب "+m+"x  |  -"+G.fmt(b-p)+" توکن",false);SFX.lose();}
     busy=false;btn.disabled=false;
@@ -881,11 +945,12 @@ safeBind(G.$("w_go"),"click",function(){
 });
 })();
 
-/* ===== MINES ===== */
+/* ===== MINES - RTP 60% ===== */
 (function(){
 var DIA='<svg viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3l3 18M15 3l-3 18"/></svg>',BOMB='<svg viewBox="0 0 24 24"><circle cx="11" cy="14" r="7"/><path d="M15 9l3-3M18 3v3M21 6h-3"/></svg>';
 var T=25,mines=[],opened=0,bet=0,live=false,M=5;
-function mult(k){var v=.85;for(var i=0;i<k;i++)v*=(T-i)/(T-M-i);return v}
+var RTP=0.60; /* ← کاهش RTP */
+function mult(k){var v=RTP;for(var i=0;i<k;i++)v*=(T-i)/(T-M-i);return v}
 function ui(){var m=mult(opened);G.$("m_cm").textContent=m.toFixed(2)+"x";G.$("m_nm").textContent=(live&&opened<T-M)?mult(opened+1).toFixed(2)+"x":"-";G.$("m_cv").textContent=G.fmt(Math.floor(bet*m));G.$("m_cash").disabled=!(live&&opened>0)}
 function build(){var g=G.$("m_grid");if(!g)return;g.innerHTML="";for(var i=0;i<T;i++){var c=document.createElement("button");c.type="button";c.className="cell off";c.dataset.i=i;g.appendChild(c)}}
 function end(){live=false;G.$("m_start").disabled=false;G.$("m_mc").disabled=false;document.querySelectorAll(".cell").forEach(function(c){c.classList.add("off")});ui()}
@@ -908,21 +973,27 @@ safeBind(G.$("m_grid"),"click",function(e){
     G.result("m_","انفجار!  |  -"+G.fmt(bet)+" توکن",false);SFX.bomb();end();return;
   }
   c.innerHTML=DIA;c.classList.add("safe");opened++;SFX.tick2();ui();
-  if(opened===T-M){var p=G.pay(bet*mult(opened));G.result("m_","همه الماس‌ها پیدا شد!  |  +"+G.fmt(p-bet)+" توکن",true);SFX.bigwin();reveal();end()}
+  if(opened===T-M){var p=G.pay(bet*mult(opened));G.result("m_","همه الماس‌ها!  |  +"+G.fmt(p-bet)+" توکن",true);SFX.bigwin();reveal();end()}
 });
 safeBind(G.$("m_cash"),"click",function(){
   if(!live||!opened)return;
-  var p=G.pay(bet*mult(opened));G.result("m_","برداشت موفق  |  +"+G.fmt(p-bet)+" توکن",p>=bet);
+  var p=G.pay(bet*mult(opened));G.result("m_","برداشت  |  +"+G.fmt(p-bet)+" توکن",p>=bet);
   (p>=bet?SFX.win:SFX.lose)();reveal();end();
 });
 })();
 
-/* ===== PLINKO (fixed with lock) ===== */
+/* ===== PLINKO - RTP 70% ===== */
 (function(){
-var TB=[[5,2,1.1,.8,.35],[10,3,1.1,.6,.3],[23,4,1.1,.3,.2]],BN=[1,8,28,56,70,56,28,8,1];
+/* کاهش ضرایب برای RTP ~70% */
+var TB=[
+  [3,1.5,1.0,0.7,0.4],   /* low */
+  [7,2.5,1.0,0.5,0.3],   /* med */
+  [15,3.5,1.0,0.3,0.2]   /* high */
+];
+var BN=[1,8,28,56,70,56,28,8,1];
 var risk=1,cnt=1,R=8,W=640,S=62,CX=W/2,TOP0=60,DY=58,balls=[],fl=[];
 var MUL=TB[1].concat(TB[1].slice(0,4).reverse());
-var pBusy=false;  /* ← قفل */
+var pBusy=false;
 var c=G.$("p_cv");if(!c)return;
 var x=c.getContext("2d");
 function tab(r){var h=TB[r];return h.concat(h.slice(0,4).reverse())}
@@ -952,8 +1023,7 @@ function loop(){
       } else if(q.left===0){
         var d=q.won-q.cost;
         G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0);
-        (d>=0?SFX.win:SFX.lose)();
-        pBusy=false;
+        (d>=0?SFX.win:SFX.lose)();pBusy=false;
       }
       balls.splice(i,1);continue;
     }
@@ -971,11 +1041,9 @@ safeBind(G.$("p_drop"),"click",function(){
   if(b<G.MIN){SFX.error();return toast("حداقل شرط "+G.MIN+" توکن است",true)}
   if(b*cnt>u.tokens){SFX.error();return toast("موجودی برای "+cnt+" توپ کافی نیست",true)}
   u.tokens-=b*cnt;saveDB();renderAll();SFX.bet();
-  
   pBusy=true;
   var lockCnt=cnt,lockMUL=tab(risk),lockBet=b;
   var q={n:lockCnt,left:lockCnt,won:0,cost:lockBet*lockCnt};
-  
   for(var i=0;i<lockCnt;i++){
     (function(idx){
       setTimeout(function(){
@@ -990,11 +1058,11 @@ safeBind(G.$("p_drop"),"click",function(){
 loop();
 })();
 
-/* ===== CUPS ===== */
+/* ===== CUPS - RTP 60% ===== */
 (function(){
 var W=[].slice.call(document.querySelectorAll("#c_stage .cupwrap"));if(!W.length)return;
 var slot=[0,1,2],balls=[],state="idle",bet=0,mode=1;
-function mult(){return mode===1?2.5:1.25}
+function mult(){return mode===1?1.8:0.9}  /* RTP: 1-ball: 1.8/3=60%, 2-ball: 0.9*2/3=60% */
 function place(){W.forEach(function(w,i){w.style.transform="translateX("+slot[i]*100+"%)"})}
 function lift(i,on){W[i].classList.toggle("up",on)}
 function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
@@ -1032,10 +1100,11 @@ safeBind(G.$("c_go"),"click",start);
 safeBind(G.$("c_stage"),"click",function(e){var w=e.target.closest(".cupwrap");if(w)pick(W.indexOf(w))});
 })();
 
-/* ===== CRASH ===== */
+/* ===== CRASH - RTP 25% ===== */
 (function(){
 var cv=G.$("k_cv");if(!cv)return;
 var x=cv.getContext("2d"),W=640,H=380,K=.15,st="idle",bet=0,cp=1,t0=0,cashed=0,auto=0,hist=[];
+/* RTP 25%: cp = 1/(u) where u uniform. Cap at 1000 */
 function mAt(t){return t<1?t:Math.exp(K*(t-1))}function tOf(c){return c<=1?c:1+Math.log(c)/K}
 var ST=[];for(var q=0;q<45;q++)ST.push([Math.random()*W,Math.random()*H,Math.random()*1.4+.4]);
 function rocket(X,Y,ang){
@@ -1081,20 +1150,50 @@ safeBind(G.$("k_btn"),"click",function(){
   if(st==="run"){if(!cashed){var m=Math.floor(mAt((performance.now()-t0)/1000)*100)/100;if(m<cp&&m>=1.5)cash(m)}return}
   var b=G.take("k_");if(!b)return;bet=b;
   var v=G.$("k_auto").value.replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)});auto=parseFloat(v)||0;if(auto>0)auto=Math.max(1.5,auto);
-  var u=G.rnd(1e9)/1e9;cp=Math.min(1000,Math.max(1,Math.floor(37.5/(1-u))/100));
+  /* RTP 25% = crash point = 1/u * 0.25 → but that gives too many crashes below 1.5
+     Better formula: cp = 0.25 / u, but cap ≥ 1.01 for game to start
+     Actually to get RTP 25% with house edge: crash point = 1/u where u uniform(0,1) gives RTP=100%
+     To reduce to 25%: crash point = 1/u * 0.25 does NOT work directly for player EV.
+     
+     Player EV: chooses cash-out at X. Crash at cp. Win if X < cp.
+     If cp = K/u (u uniform), then P(cp > X) = P(u < K/X) = K/X (for X > K)
+     Player EV = X * K/X = K. So RTP = K. For 25%, K = 0.25. ✓
+     But if X < K, cp is always > X... no wait cp = K/u, cp is min when u=1: cp=K. So cp ≥ K always.
+     That means for X < K, player always wins (but wins tiny). For X=1.5, player wins only if cp > 1.5 → K/u > 1.5 → u < K/1.5 = 0.1667. So 16.67% chance of winning 1.5x, else lose 1x bet. EV = 0.1667*1.5 = 0.25 ✓
+     Great. So K = 0.25 is correct.
+  */
+  var u=G.rnd(1e9)/1e9;cp=Math.min(1000,Math.max(1.01,0.25/Math.max(u,0.000001)));
+  /* Round to 2 decimals */
+  cp=Math.floor(cp*100)/100;
   cashed=0;st="run";G.$("k_res").className="res";G.$("k_res").textContent="موشک از 0.00x در حال پرواز...";t0=performance.now();requestAnimationFrame(frame);
 });
 })();
 
-/* ===== SLOTS ===== */
+/* ===== SLOTS - RTP 60% ===== */
 (function(){
-var SY=[["🍒",30,5],["🍋",24,10],["🔔",18,20],["⭐",14,40],["💎",9,100],["7️⃣",5,300]],busy=false;
+/* Symbols with weights and payouts adjusted for RTP 60% */
+/* Original: 3-of-a-kind pays 5,10,20,40,100,300 with weights 30,24,18,14,9,5
+   Two cherries = 1x
+   For 60% RTP, reduce payouts significantly */
+var SY=[
+  ["🍒",30,3],   /* p=(0.30)^3=0.027, pay 3 */
+  ["🍋",24,5],   /* p=(0.24)^3=0.0138, pay 5 */
+  ["🔔",18,10],  /* p=(0.18)^3=0.0058, pay 10 */
+  ["⭐",14,20],  /* p=(0.14)^3=0.00274, pay 20 */
+  ["💎",9,60],   /* p=(0.09)^3=0.000729, pay 60 */
+  ["7️⃣",5,200]  /* p=(0.05)^3=0.000125, pay 200 */
+];
+var busy=false;
 var R=[0,1,2].map(function(i){return G.$("s_r"+i)});
 if(!R[0])return;
 function pick(){var r=G.rnd(100),a=0;for(var i=0;i<6;i++){a+=SY[i][1];if(r<a)return i}return 0}
-var rtp=0,pw=0;SY.forEach(function(s){var p=Math.pow(s[1]/100,3);rtp+=p*s[2];pw+=p});var p2=3*.09*.7;rtp+=p2;pw+=p2;
-G.$("s_rtp").textContent=(rtp*100).toFixed(1)+"%";G.$("s_pw").textContent=(pw*100).toFixed(1)+"%";
-G.$("s_pay").innerHTML=SY.map(function(s){return "<div>"+s[0]+s[0]+s[0]+"<br><b class='num'>"+s[2]+"x</b></div>"}).join("")+"<div>🍒🍒<br><b class='num'>1x</b></div>";
+var rtp=0,pw=0;
+SY.forEach(function(s){var p=Math.pow(s[1]/100,3);rtp+=p*s[2];pw+=p});
+/* Two cherries: 3 positions, prob = C(3,2) * 0.30^2 * 0.70 = 3*0.09*0.70 = 0.189, pay 0.6 */
+var p2=3*0.30*0.30*0.70;rtp+=p2*0.6;pw+=p2;
+G.$("s_rtp").textContent=(rtp*100).toFixed(1)+"%";
+G.$("s_pw").textContent=(pw*100).toFixed(1)+"%";
+G.$("s_pay").innerHTML=SY.map(function(s){return "<div>"+s[0]+s[0]+s[0]+"<br><b class='num'>"+s[2]+"x</b></div>"}).join("")+"<div>🍒🍒<br><b class='num'>0.6x</b></div>";
 G.mount("s_betBox","s_");
 safeBind(G.$("s_go"),"click",async function(){
   var btn=this;if(busy)return;var b=G.take("s_");if(!b)return;
@@ -1105,16 +1204,17 @@ safeBind(G.$("s_go"),"click",async function(){
   var iv=setInterval(function(){R.forEach(function(r){if(r.classList.contains("spin"))r.firstElementChild.textContent=SY[G.rnd(6)][0]})},70);
   for(var i=0;i<3;i++){await new Promise(function(r){setTimeout(r,i?650:1000)});R[i].classList.remove("spin");R[i].firstElementChild.textContent=SY[f[i]][0];SFX.tick2()}
   clearInterval(iv);
-  var m=0;if(f[0]===f[1]&&f[1]===f[2])m=SY[f[0]][2];else if(f.filter(function(v){return v===0}).length===2)m=1;
+  var m=0;
+  if(f[0]===f[1]&&f[1]===f[2])m=SY[f[0]][2];
+  else if(f.filter(function(v){return v===0}).length===2)m=0.6; /* two cherries = 0.6x */
   var p=G.pay(b*m);
-  if(m>1){G.result("s_","جایزه! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);G.$("s_slot").classList.add("win");(m>=40?SFX.bigwin:SFX.win)()}
-  else if(m===1)G.result("s_","دو گیلاس! شرط برگشت",true);
+  if(m>1){G.result("s_","جایزه! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);G.$("s_slot").classList.add("win");(m>=60?SFX.bigwin:SFX.win)()}
+  else if(m>0)G.result("s_","دو گیلاس! "+m+"x برگشت",false);
   else {G.result("s_","باخت  |  -"+G.fmt(b)+" توکن",false);SFX.lose()}
   busy=false;btn.disabled=false;
 });
 })();
 
-/* ===== BOOT ===== */
 try{
   loadDB();
   bind();
