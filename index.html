@@ -200,7 +200,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .khist{display:flex;gap:6px;margin-bottom:14px;direction:ltr;overflow:hidden;min-height:26px}
 .khist span{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:800;background:rgba(255,255,255,.06)}
 
-/* ===== GRAPHIC SUCCESS MODAL ===== */
 .gfx-modal{position:relative;overflow:hidden;border-radius:32px;padding:0;background:linear-gradient(160deg,#1b0a3f 0%,#0d0420 45%,#1a0738 100%);border:1.5px solid rgba(255,255,255,.14);box-shadow:0 30px 80px rgba(0,0,0,.75),0 0 60px rgba(255,46,147,.25);animation:gfxIn .5s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes gfxIn{from{opacity:0;transform:scale(.85) translateY(30px)}to{opacity:1;transform:none}}
 .gfx-modal::before{content:"";position:absolute;inset:-100% -100% auto -100%;height:300%;background:conic-gradient(from 0deg,transparent 0 65%,rgba(255,46,147,.4) 78%,rgba(34,228,255,.4) 88%,transparent 100%);animation:spin 9s linear infinite;opacity:.45;pointer-events:none}
@@ -330,7 +329,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <h3>فروش توکن</h3>
       <div class="field"><label>شماره کارت شما</label><input type="text" inputmode="numeric" id="sellCard" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19"></div>
       <div class="field"><label>تعداد توکن (موجودی: <span class="num" id="sellBal">0</span>)</label><input type="text" inputmode="numeric" id="sellAmount" placeholder="0"></div>
-      <div style="font-size:11.5px;color:var(--muted);margin:-4px 0 12px">قابل برداشت: <b class="num" id="sellFree">0</b> T <span style="opacity:.7">/ Withdrawable</span></div>
+      <div style="font-size:11.5px;color:var(--muted);margin:-4px 0 12px">قابل برداشت: <b class="num" id="sellFree">0</b> T</div>
       <div class="chips"><button class="chip" id="sellAll" type="button" style="flex:1">فروش همه موجودی قابل برداشت</button></div>
       <div class="summary"><span style="color:var(--muted)">دریافتی</span><span class="num" id="sellReceive">0 تومان</span></div>
       <button class="btn" style="background:linear-gradient(135deg,#ef4444,#b91c1c)" id="btnSell" type="button">ثبت درخواست فروش</button>
@@ -365,7 +364,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     <div class="card">
       <div style="font-size:13px;font-weight:700">جدول ضرایب (20 خانه)</div>
       <div class="tbl"><div>0x<br><b class="num">10</b></div><div>0.5x<br><b class="num">4</b></div><div>1x<br><b class="num">2</b></div><div>1.5x<br><b class="num">1</b></div><div>2x<br><b class="num">2</b></div><div>3x<br><b class="num">1</b></div><div>5x<br><b class="num">1</b></div></div>
-      <div class="note">همه خانه‌ها برای همه بازیکنان و همه دفعات یکسان است.</div>
     </div>
   </section>
 
@@ -530,7 +528,7 @@ async function supabaseFetch(endpoint, options = {}) {
   const url = SUPABASE_URL + "/rest/v1/" + endpoint;
   const headers = {"apikey": SUPABASE_KEY,"Authorization": "Bearer " + SUPABASE_KEY,"Content-Type": "application/json","Prefer": options.prefer || ""};
   const res = await fetch(url, { ...options, headers: { ...headers, ...options.headers } });
-  if (!res.ok) { const err = await res.text(); throw new Error(err); }
+  if (!res.ok) { const err = await res.text(); console.error("Supabase error:", err); throw new Error(err); }
   if (res.status === 204) return null;
   return await res.json();
 }
@@ -583,11 +581,11 @@ async function doLogin(){
   if(!u||!p){SFX.error();return toast("نام و رمز را وارد کنید.",true)}
   showLoading(true);
   try {
-    const data = await supabaseFetch("users?username=eq." + u);
+    const data = await supabaseFetch("users?username=eq." + encodeURIComponent(u));
     if(!data || data.length===0) { showLoading(false); SFX.error(); return toast("حسابی با این نام پیدا نشد.",true) }
     const user = data[0];
     if(user.password_hash !== p) { showLoading(false); SFX.error(); return toast("رمز عبور اشتباه است.",true) }
-    startSession(user);
+    await startSession(user);
   } catch (err) { console.error(err); showLoading(false); toast("خطا در ارتباط با سرور", true); }
 }
 
@@ -598,20 +596,41 @@ async function doRegister(){
   if(p.length<6){SFX.error();return toast("رمز عبور حداقل 6 کاراکتر باشد.",true)}
   showLoading(true);
   try {
-    const existing = await supabaseFetch("users?username=eq." + u);
+    const existing = await supabaseFetch("users?username=eq." + encodeURIComponent(u));
     if(existing.length > 0) { showLoading(false); SFX.error(); return toast("این نام کاربری قبلاً گرفته شده.",true) }
-    const newUser = await supabaseFetch("users", {method: "POST",body: JSON.stringify({ username: u, password_hash: p, tokens: WELCOME_TOKENS, bonus_locked: WELCOME_TOKENS, salt: "salt" }),prefer: "return=representation"});
-    await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: newUser[0].id, type: "buy", tokens: WELCOME_TOKENS, status: "approved" })});
+    
+    // فقط ستون‌هایی که در دیتابیس شما وجود دارد
+    const newUser = await supabaseFetch("users", {
+      method: "POST",
+      body: JSON.stringify({ 
+        username: u, 
+        password_hash: p, 
+        tokens: WELCOME_TOKENS,
+        salt: "temp_salt"
+      }),
+      prefer: "return=representation"
+    });
+    
+    if(!newUser || !newUser[0]) { showLoading(false); SFX.error(); return toast("خطا در ساخت حساب",true); }
+    try {
+      await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: newUser[0].id, type: "buy", tokens: WELCOME_TOKENS, status: "approved" })});
+    } catch(e) { console.error("Transaction log error:", e); }
     SFX.coin();
     showLoading(false);
-    showModal('<div class="okring">'+CHECK+'</div><h3>ثبت‌نام موفق</h3><p style="color:var(--muted);font-size:12px;margin-top:-6px">Registration successful</p><p>'+WELCOME_TOKENS+' توکن هدیه به حساب شما اضافه شد.</p><p style="color:var(--muted);font-size:12px;margin-top:-10px">'+WELCOME_TOKENS+' welcome tokens added to your account.</p><p style="color:var(--gold);font-weight:700;margin-bottom:4px">حالا از پنل ورود وارد شوید.</p><p style="color:var(--gold);font-size:12px;margin-top:0">Now log in from the login panel.</p><button class="btn" type="button" data-close="1">باشه / OK</button>');
-  } catch(err) { console.error(err); showLoading(false); toast("خطا در ثبت‌نام", true); }
+    showModal('<div class="okring">'+CHECK+'</div><h3>ثبت‌نام موفق</h3><p>'+WELCOME_TOKENS+' توکن هدیه به حساب شما اضافه شد.</p><p style="color:var(--gold);font-weight:700;margin-bottom:4px">حالا از پنل ورود وارد شوید.</p><button class="btn" type="button" data-close="1">باشه</button>');
+  } catch(err) {
+    console.error("Register error:", err);
+    showLoading(false);
+    let msg = "خطا در ثبت‌نام";
+    try { const parsed = JSON.parse(err.message); if(parsed && parsed.message) msg = "خطا: " + parsed.message; else msg = "خطا: " + err.message; } catch(e){ msg = "خطا: " + err.message; }
+    toast(msg, true);
+  }
 }
 
 async function startSession(user){
   currentUser = user; shownBal = 0;
   $("authScreen").style.display="none"; $("app").style.display="flex"; $("authPass").value="";
-  await refreshUserData(); go("home"); SFX.win(); showLoading(false);
+  renderAll(); go("home"); SFX.win(); showLoading(false);
 }
 
 async function refreshUserData(){
@@ -635,7 +654,7 @@ function go(v){
   document.querySelectorAll(".view").forEach(function(x){x.classList.remove("active")});
   target.classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(function(b){b.classList.toggle("active",b.dataset.go===v)});
-  if(v==="sell")$("sellBal").textContent=fmt(currentUser?currentUser.tokens:0);
+  if(v==="sell"&&currentUser){$("sellBal").textContent=fmt(currentUser.tokens); var frEl=$("sellFree"); if(frEl) frEl.textContent=fmt(currentUser.tokens||0);}
   if(v==="history")renderHistory();
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -655,7 +674,7 @@ function renderAll(){
   document.querySelectorAll(".gbal").forEach(function(e){e.textContent=fmt(currentUser.tokens)});
   $("sellBal").textContent = fmt(currentUser.tokens);
   var frEl = $("sellFree");
-  if(frEl) frEl.textContent = fmt(Math.max(0,(currentUser.tokens||0)-(currentUser.bonus_locked||0)));
+  if(frEl) frEl.textContent = fmt(currentUser.tokens||0);
 }
 
 function renderTicker(){
@@ -682,11 +701,9 @@ async function renderHistory(){
 function showModal(h){$("msgModal").innerHTML=h;$("msgOverlay").classList.add("show")}
 function closeModal(){$("msgOverlay").classList.remove("show")}
 var CHECK='<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>';
-var CLOCK='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
 function updateBuyPrice(){var v=digitsOnly($("buyAmount").value);$("buyAmount").value=v;$("buyPrice").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
 function updateSellPrice(){var v=digitsOnly($("sellAmount").value);$("sellAmount").value=v;$("sellReceive").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
 
-/* ================== خرید ================== */
 async function submitBuy(){
   if(!currentUser) return;
   var amt=Number(digitsOnly($("buyAmount").value)),trk=$("buyTracking").value.trim();
@@ -718,22 +735,18 @@ async function submitBuy(){
   try {
     await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: currentUser.id, type: "buy", tokens: amt, tracking_code: trk, status: "pending" })});
     $("buyTracking").value="";
-  } catch(err) {
-    console.error(err);
-  }
+  } catch(err) { console.error(err); }
   SFX.coin();
   showLoading(false);
   showBuySuccess();
 }
 
-/* ================== فروش ================== */
 async function submitSell(){
   if(!currentUser) return;
   var card=digitsOnly($("sellCard").value), amt=Number(digitsOnly($("sellAmount").value));
-  var free = (currentUser.tokens || 0) - (currentUser.bonus_locked || 0);
   if(card.length!==16){SFX.error();return toast("شماره کارت را کامل وارد کنید",true)}
   if(!amt||amt<1){SFX.error();return toast("تعداد توکن را وارد کنید",true)}
-  if(amt > free){SFX.error();return toast("موجودی قابل برداشت کافی نیست",true)}
+  if(amt > currentUser.tokens){SFX.error();return toast("موجودی کافی نیست",true)}
 
   function showSellSuccess(){
     showModal(
@@ -765,9 +778,7 @@ async function submitSell(){
     await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: currentUser.id, type: "sell", tokens: amt, card_number: card, status: "pending" })});
     await refreshUserData();
     $("sellCard").value=""; $("sellAmount").value=""; $("sellReceive").textContent="0 تومان";
-  } catch(err) {
-    console.error(err);
-  }
+  } catch(err) { console.error(err); }
   SFX.coin();
   showLoading(false);
   showSellSuccess();
@@ -789,7 +800,8 @@ async function renderAdminOrders(){
     const data = await supabaseFetch("transactions?status=eq.pending&order=created_at.desc");
     if(!data || !data.length){ box.innerHTML="<div class='empty'>هیچ سفارش در انتظاری وجود ندارد</div>"; return; }
     const userIds = [...new Set(data.map(t => t.user_id))];
-    const usersData = await supabaseFetch(`users?id=in.(${userIds.join(',')})`);
+    let usersData = [];
+    try { usersData = await supabaseFetch(`users?id=in.(${userIds.join(',')})`); } catch(e) {}
     const userMap = {}; usersData.forEach(u => userMap[u.id] = u.username);
     var html="";
     data.forEach(function(t){
@@ -808,7 +820,7 @@ async function renderAdminUsers(){
     if(!data || !data.length){ box.innerHTML="<div class='empty'>هیچ کاربری ثبت‌نام نکرده</div>"; return; }
     var html="";
     data.forEach(function(u){
-      html+='<div class="admin-order"><div class="line"><span>نام کاربری</span><b>'+esc(u.username)+'</b></div><div class="line"><span>موجودی</span><b class="num">'+fmt(u.tokens)+' T</b></div><div class="line"><span>قفل هدیه</span><b class="num">'+fmt(u.bonus_locked||0)+' T</b></div><div class="acts"><button class="btn" type="button" style="background:var(--cyan);color:#04201e" data-loginas="'+u.id+'">ورود به حساب</button><button class="btn" type="button" style="background:var(--green)" data-addtokens="'+u.id+'">شارژ توکن</button></div></div>';
+      html+='<div class="admin-order"><div class="line"><span>نام کاربری</span><b>'+esc(u.username)+'</b></div><div class="line"><span>موجودی</span><b class="num">'+fmt(u.tokens)+' T</b></div><div class="acts"><button class="btn" type="button" style="background:var(--cyan);color:#04201e" data-loginas="'+u.id+'">ورود به حساب</button><button class="btn" type="button" style="background:var(--green)" data-addtokens="'+u.id+'">شارژ توکن</button></div></div>';
     });
     box.innerHTML=html;
   } catch(err) { box.innerHTML="<div class='empty'>خطا در دریافت کاربران</div>"; }
@@ -821,7 +833,7 @@ async function adminLoginAs(userId){
     if(!adminMode) { adminPrevUser = currentUser; adminMode = true; }
     currentUser = data[0];
     $("adminPanel").style.display="none";
-    await refreshUserData(); go("home");
+    renderAll(); go("home");
     toast("وارد حساب "+currentUser.username+" شدی"); SFX.coin();
   } catch(err) { toast("خطا", true); }
 }
@@ -840,7 +852,9 @@ async function adminAddTokens(userId){
     if(neg) n = -n;
     const newBalance = Math.max(0, user.tokens + n);
     await supabaseFetch("users?id=eq." + user.id, {method: "PATCH",body: JSON.stringify({ tokens: newBalance })});
-    await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: user.id, type: n>0?"buy":"sell", tokens: Math.abs(n), status: "approved" })});
+    try {
+      await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: user.id, type: n>0?"buy":"sell", tokens: Math.abs(n), status: "approved" })});
+    } catch(e) { console.error(e); }
     toast((n>0?"+"+n:" "+n)+" توکن برای "+user.username);
     renderAdminUsers(); refreshUserData(); SFX.coin();
   } catch(err) { toast("خطا", true); }
@@ -930,15 +944,7 @@ G.mount=function(id,p){
 (function(){
 var SEG=[0, 0.5, 1, 0, 1.5, 0.5, 3, 0, 2, 0, 0.5, 1, 0, 5, 0, 0, 2, 0, 0, 0.5];
 var N=SEG.length,A=360/N,cur=0,busy=false;
-var COL={
-  "0":["#3a4066","#1c2033"],
-  "0.5":["#4a5a92","#2a3563"],
-  "1":["#3ee0c4","#0f766e"],
-  "1.5":["#34d27b","#15803d"],
-  "2":["#fbbf24","#b45309"],
-  "3":["#fb923c","#c2410c"],
-  "5":["#ff5d73","#991b1b"]
-};
+var COL={"0":["#3a4066","#1c2033"],"0.5":["#4a5a92","#2a3563"],"1":["#3ee0c4","#0f766e"],"1.5":["#34d27b","#15803d"],"2":["#fbbf24","#b45309"],"3":["#fb923c","#c2410c"],"5":["#ff5d73","#991b1b"]};
 var cv=G.$("w_wheel");if(!cv)return;
 var x=cv.getContext("2d"),R=320;
 x.translate(R,R);
@@ -957,9 +963,7 @@ var bl=G.$("w_bulbs"),h="";for(var k=0;k<24;k++){var t=k*Math.PI*2/24;h+='<i sty
 
 var fx=G.$("w_fx"),f=fx.getContext("2d"),parts=[],run=false,CL=["#fbbf24","#22d3ee","#8b5cf6","#22c55e","#ef4444","#fff"];
 function burst(n){for(var i=0;i<n;i++)parts.push({x:350,y:350,vx:(Math.random()-.5)*20,vy:-Math.random()*16-3,r:Math.random()*6+4,c:CL[i%6],l:1});if(!run){run=true;tick()}}
-function tick(){f.clearRect(0,0,700,700);parts=parts.filter(function(p){return p.l>0});
-  parts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.5;p.vx*=.99;p.l-=.011;f.globalAlpha=Math.max(p.l,0);f.fillStyle=p.c;f.fillRect(p.x,p.y,p.r*1.7,p.r)});
-  f.globalAlpha=1;if(parts.length)requestAnimationFrame(tick);else run=false}
+function tick(){f.clearRect(0,0,700,700);parts=parts.filter(function(p){return p.l>0});parts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.5;p.vx*=.99;p.l-=.011;f.globalAlpha=Math.max(p.l,0);f.fillStyle=p.c;f.fillRect(p.x,p.y,p.r*1.7,p.r)});f.globalAlpha=1;if(parts.length)requestAnimationFrame(tick);else run=false}
 
 G.mount("w_betBox","w_");
 G.$("w_go").addEventListener("click", async function(){
@@ -1035,10 +1039,7 @@ function draw(){
   for(var k=0;k<9;k++){var o=(fl[k]||0)*10,y=TOP0+R*DY+10-o;fl[k]=Math.max(0,(fl[k]||0)-.05);x.fillStyle=col(MUL[k]);x.beginPath();x.rect(sx(k)-26,y,52,40);x.fill();x.fillStyle="#0b0d14";x.font="bold 19px sans-serif";x.textAlign="center";x.fillText(MUL[k]+"x",sx(k),y+26)}
   balls.forEach(function(b){x.beginPath();x.arc(b.x,b.y,10,0,7);x.fillStyle="#22d3ee";x.shadowColor="#22d3ee";x.shadowBlur=16;x.fill();x.shadowBlur=0})
 }
-function wps(path){var w=[{x:CX,y:TOP0-40}],rt=0;
-  for(var r=0;r<R;r++){w.push({x:CX+(2*rt-r)*S/2,y:TOP0+r*DY});rt+=path[r]}
-  w.push({x:sx(rt),y:TOP0+R*DY+30});return w
-}
+function wps(path){var w=[{x:CX,y:TOP0-40}],rt=0;for(var r=0;r<R;r++){w.push({x:CX+(2*rt-r)*S/2,y:TOP0+r*DY});rt+=path[r]}w.push({x:sx(rt),y:TOP0+R*DY+30});return w}
 function loop(){
   for(var i=balls.length-1;i>=0;i--){
     var b=balls[i];b.t+=.08;
@@ -1046,15 +1047,8 @@ function loop(){
       var m=b.mul[b.k],q=b.q;fl[b.k]=1;q.left--;
       G.pay(b.bet*m).then(p=>{ q.won+=p;
         if(m>1)SFX.coin();
-        if(q.n===1){
-          if(m>1){G.result("p_","ضریب "+m+"x  |  +"+G.fmt(p-b.bet)+" توکن",true);SFX.win()}
-          else{G.result("p_","ضریب "+m+"x  |  -"+G.fmt(b.bet-p)+" توکن",false);SFX.lose()}
-          pBusy=false;
-        } else if(q.left===0){
-          var d=q.won-q.cost;
-          G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0);
-          (d>=0?SFX.win:SFX.lose)();pBusy=false;
-        }
+        if(q.n===1){if(m>1){G.result("p_","ضریب "+m+"x  |  +"+G.fmt(p-b.bet)+" توکن",true);SFX.win()}else{G.result("p_","ضریب "+m+"x  |  -"+G.fmt(b.bet-p)+" توکن",false);SFX.lose()}pBusy=false}
+        else if(q.left===0){var d=q.won-q.cost;G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0);(d>=0?SFX.win:SFX.lose)();pBusy=false}
       });
       balls.splice(i,1);continue;
     }
@@ -1073,8 +1067,10 @@ G.$("p_drop").addEventListener("click", async function(){
   if(b*cnt>currentUser.tokens){SFX.error();return toast("موجودی برای "+cnt+" توپ کافی نیست",true)}
   var totalBet = b*cnt;
   await G.take("p_");
-  await supabaseFetch("users?id=eq." + currentUser.id, { method: "PATCH", body: JSON.stringify({ tokens: currentUser.tokens - totalBet + b }) });
-  currentUser.tokens -= totalBet - b; 
+  try {
+    await supabaseFetch("users?id=eq." + currentUser.id, { method: "PATCH", body: JSON.stringify({ tokens: currentUser.tokens - totalBet + b }) });
+    currentUser.tokens -= totalBet - b;
+  } catch(e){}
   pBusy=true;
   var lockCnt=cnt,lockMUL=tab(risk),lockBet=b;
   var q={n:lockCnt,left:lockCnt,won:0,cost:lockBet*lockCnt};
@@ -1113,10 +1109,7 @@ async function start(){
   await wait(350);balls.forEach(function(i){lift(i,true);SFX.cup()});await wait(1100);
   balls.forEach(function(i){lift(i,false);SFX.cup()});await wait(500);
   rs.textContent="در حال جابجایی...";
-  for(var n=0;n<9;n++){
-    var a=G.rnd(3),cc=(a+1+G.rnd(2))%3,ia=slot.indexOf(a),ic=slot.indexOf(cc);
-    slot[ia]=cc;slot[ic]=a;place();SFX.tick();await wait(430);
-  }
+  for(var n=0;n<9;n++){var a=G.rnd(3),cc=(a+1+G.rnd(2))%3,ia=slot.indexOf(a),ic=slot.indexOf(cc);slot[ia]=cc;slot[ic]=a;place();SFX.tick();await wait(430)}
   rs.textContent="یک لیوان را انتخاب کن";state="pick";
 }
 async function pick(i){
@@ -1246,7 +1239,7 @@ function bind(){
   $("btnBuy").addEventListener("click",submitBuy);
   $("sellAmount").addEventListener("input",updateSellPrice);
   $("btnSell").addEventListener("click",submitSell);
-  $("sellAll").addEventListener("click",function(){SFX.click();if(currentUser){var fr=Math.max(0,(currentUser.tokens||0)-(currentUser.bonus_locked||0));$("sellAmount").value=fr;updateSellPrice()}});
+  $("sellAll").addEventListener("click",function(){SFX.click();if(currentUser){var fr=currentUser.tokens||0;$("sellAmount").value=fr;updateSellPrice()}});
   document.querySelectorAll(".chips[data-for] .chip").forEach(function(c){
     c.addEventListener("click",function(){SFX.click();$("buyAmount").value=c.dataset.v;updateBuyPrice()});
   });
