@@ -148,6 +148,9 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 .acts{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.acts .btn{padding:12px;font-size:13px;flex:1;min-width:100px}
 .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-30px);z-index:4000;opacity:0;padding:12px 20px;border-radius:14px;font-weight:700;font-size:14px;transition:.3s;background:#1a0d3a;border:1px solid var(--blue);color:#fff;max-width:90%;text-align:center}
 .toast.err{border-color:var(--red)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.loading{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.8);display:none;place-items:center;backdrop-filter:blur(4px)}
+.loading.show{display:grid}
+.spinner{width:50px;height:50px;border:5px solid rgba(255,255,255,.1);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite}
 
 .wstage{position:relative;width:min(310px,82vw);aspect-ratio:1;margin:16px auto 28px}
 .wglow{position:absolute;inset:-22px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.38),rgba(139,92,246,.16) 55%,transparent 70%);animation:wpulse 3s ease-in-out infinite;pointer-events:none}
@@ -208,6 +211,8 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 </defs></svg>
 <div class="bg"><i></i><i></i><i></i></div>
 
+<div class="loading" id="loadingScreen"><div class="spinner"></div></div>
+
 <div id="authScreen">
   <div class="auth-box">
     <div class="auth-logo"><svg viewBox="0 0 24 24" style="stroke:#fff"><rect x="3" y="3" width="18" height="18" rx="5"/><g style="fill:#fff;stroke:none"><circle cx="8" cy="8" r="1.4"/><circle cx="16" cy="8" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="8" cy="16" r="1.4"/><circle cx="16" cy="16" r="1.4"/></g></svg></div>
@@ -239,7 +244,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       </div>
       <div class="tile t-cups" data-go="cups" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><g class="cb1"><path d="M5 20h15l-2 30H7z" fill="#2ee6c5"/></g><g class="cb2"><path d="M24 20h15l-2 30H26z" fill="#22e4ff"/></g><g class="cb3"><path d="M43 20h15l-2 30H45z" fill="#2ee6c5"/></g><circle cx="31.5" cy="55" r="3.5" fill="#fff"/></svg>
-        <div><b>توپ زیر لیوان</b><small>1 یا 2 توپ، با ضریب متفاوت</small><span class="rtp num">1.25x - 2.5x</span></div>
+        <div><b>توپ زیر لیوان</b><small>1 یا 2 توپ، با ضریب متفاوت</small><span class="rtp num">1.8x - 0.9x</span></div>
       </div>
       <div class="tile t-mines" data-go="mines" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="4" y="4" width="26" height="26" rx="7" fill="#2ee6c5"><animate attributeName="opacity" values=".9;.35;.9" dur="2.4s" repeatCount="indefinite"/></rect><rect x="34" y="4" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="4" y="34" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="34" y="34" width="26" height="26" rx="7" fill="#ff5d73"><animate attributeName="opacity" values="1;.5;1" dur="1.6s" repeatCount="indefinite"/></rect><circle cx="47" cy="47" r="5" fill="#12151f"/></svg>
@@ -316,7 +321,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     <div class="card">
       <div style="font-size:13px;font-weight:700">جدول ضرایب (20 خانه)</div>
       <div class="tbl"><div>0x<br><b class="num">12</b></div><div>0.5x<br><b class="num">4</b></div><div>1x<br><b class="num">2</b></div><div>2x<br><b class="num">1</b></div><div>3x<br><b class="num">1</b></div><div>5x<br><b class="num">0</b></div></div>
-      <div class="note">همه خانه‌ها برای همه بازیکنان و همه دفعات یکسان است. نتیجه با عدد تصادفی امن مرورگر انتخاب می‌شود.</div>
+      <div class="note">همه خانه‌ها برای همه بازیکنان و همه دفعات یکسان است.</div>
     </div>
   </section>
 
@@ -466,37 +471,45 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
 <script>
 "use strict";
 
-function safeHash(str){
-  var h1=0x811c9dc5,h2=0x1000193,h3=0x9e3779b9,h4=0x85ebca6b;
-  for(var i=0;i<str.length;i++){
-    var c=str.charCodeAt(i);
-    h1=(h1^c)*16777619>>>0;
-    h2=(h2+c*2654435761)>>>0;
-    h3=(h3^(c<<((i%7)+1)))*2246822519>>>0;
-    h4=(h4+((c<<5)|(c>>>3)))*3266489917>>>0;
-  }
-  function hex(x){return ("00000000"+x.toString(16)).slice(-8)}
-  return hex(h1)+hex(h2)+hex(h3)+hex(h4);
-}
+// ================== تنظیمات Supabase ==================
+const SUPABASE_URL = "https://txcdmnsmoagvoecswcdr.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4Y2RtbnNtb2Fndm9lY3N3Y2RyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDc3MDQsImV4cCI6MjEwODMyMzcwNH0.tdPdXS0YssPROmoV33jCMQx4cVFE_iv7-zx7Fe3qV1s";
+// =======================================================
 
-var STORAGE_KEY="kiani_v7",SESSION_KEY="kiani_session_v7",DEVICE_KEY="kiani_device_v7";
-var TOKEN_PRICE=1000,CARD_NUMBER="6219861975550053",BUY_ADMIN_ID="@mahancn3",SELL_ADMIN_ID="@sobhan_1384_k",WELCOME_TOKENS=50;
-var ADMIN_HASH=safeHash("admin123");
-var db={users:{}},currentUser=null,shownBal=0,adminMode=false,adminPrevUser=null;
+const TOKEN_PRICE=1000,CARD_NUMBER="6219861975550053",BUY_ADMIN_ID="@mahancn3",SELL_ADMIN_ID="@sobhan_1384_k",WELCOME_TOKENS=50;
+
+let currentUser = null; // ذخیره اطلاعات کاربر لاگین شده
+let adminMode = false;
+let adminPrevUser = null;
+let shownBal = 0;
+
+// توابع کمکی برای ارتباط با Supabase
+async function supabaseFetch(endpoint, options = {}) {
+  const url = SUPABASE_URL + "/rest/v1/" + endpoint;
+  const headers = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": "Bearer " + SUPABASE_KEY,
+    "Content-Type": "application/json",
+    "Prefer": options.prefer || ""
+  };
+  const res = await fetch(url, { ...options, headers: { ...headers, ...options.headers } });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+  if (res.status === 204) return null;
+  return await res.json();
+}
 
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function fmt(n){return Number(n||0).toLocaleString("en-US")}
 function digitsOnly(s){return String(s).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/[٠-٩]/g,function(d){return "٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/\D/g,"")}
-function makeId(p){return p+"-"+Date.now().toString(36).toUpperCase().slice(-5)+Math.random().toString(36).slice(2,5).toUpperCase()}
 function toast(m,err){var t=$("toast");if(!t)return;t.textContent=m;t.className="toast show"+(err?" err":"");clearTimeout(t._t);t._t=setTimeout(function(){t.className="toast"},2800)}
 function buzz(){try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
-function loadDB(){try{var s=localStorage.getItem(STORAGE_KEY);if(s)db=JSON.parse(s)}catch(e){}if(!db.users)db.users={}}
-function saveDB(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}catch(e){}}
-function me(){return currentUser?db.users[currentUser]:null}
-function copy(t){try{navigator.clipboard.writeText(t).then(function(){toast("کپی شد")}).catch(function(){fallbackCopy(t)})}catch(e){fallbackCopy(t)}}
-function fallbackCopy(t){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);toast("کپی شد")}catch(e){toast("کپی نشد",true)}}
+function showLoading(show){$("loadingScreen").style.display = show ? "grid" : "none"}
 
+// ===== SOUND =====
 var AC=null;
 function ac(){if(!AC){try{var Ctx=window.AudioContext||window.webkitAudioContext;if(Ctx)AC=new Ctx()}catch(e){}}return AC}
 function tone(freq,dur,type,vol,slide){
@@ -531,89 +544,156 @@ function unlockAudio(){var c=ac();if(c&&c.state==="suspended")c.resume()}
 document.addEventListener("pointerdown",unlockAudio);
 document.addEventListener("touchstart",unlockAudio);
 
-function doLogin(){
-  try{
-    var u=$("authUser").value.trim().toLowerCase(),p=$("authPass").value;
-    if(!u||!p){SFX.error();return toast("نام و رمز را وارد کنید.",true)}
-    var r=db.users[u];
-    if(!r){SFX.error();return toast("حسابی با این نام پیدا نشد.",true)}
-    if(safeHash(r.salt+p)!==r.hash){SFX.error();return toast("رمز عبور اشتباه است.",true)}
-    startSession(u);
-  }catch(e){console.error(e);toast("خطا در ورود",true)}
+// ================== احراز هویت ==================
+async function doLogin(){
+  const u=$("authUser").value.trim().toLowerCase();
+  const p=$("authPass").value;
+  if(!u||!p){SFX.error();return toast("نام و رمز را وارد کنید.",true)}
+  showLoading(true);
+  try {
+    const data = await supabaseFetch("users?username=eq." + u);
+    if(!data || data.length===0) { showLoading(false); SFX.error(); return toast("حسابی با این نام پیدا نشد.",true) }
+    const user = data[0];
+    if(user.password_hash !== p) { showLoading(false); SFX.error(); return toast("رمز عبور اشتباه است.",true) }
+    startSession(user);
+  } catch (err) {
+    console.error(err);
+    showLoading(false);
+    toast("خطا در ارتباط با سرور", true);
+  }
 }
-function doRegister(){
-  try{
-    var u=$("authUser").value.trim().toLowerCase(),p=$("authPass").value;
-    if(!/^[a-z0-9_]{3,24}$/.test(u)){SFX.error();return toast("نام کاربری: 3 تا 24 حرف انگلیسی، عدد یا _",true)}
-    if(p.length<6){SFX.error();return toast("رمز عبور حداقل 6 کاراکتر باشد.",true)}
-    if(db.users[u]){SFX.error();return toast("این نام کاربری قبلاً گرفته شده.",true)}
-    var salt=Math.random().toString(36).slice(2)+Date.now().toString(36);
-    db.users[u]={salt:salt,hash:safeHash(salt+p),tokens:WELCOME_TOKENS,history:[],createdAt:Date.now()};
-    db.users[u].history.push({id:makeId("GF"),type:"buy",tokens:WELCOME_TOKENS,amount:0,status:"approved",ts:Date.now(),note:"هدیه ثبت‌نام"});
-    saveDB();SFX.coin();startSession(u);toast("حساب ساخته شد! "+WELCOME_TOKENS+" توکن هدیه");
-  }catch(e){console.error(e);toast("خطا در ثبت‌نام",true)}
+
+async function doRegister(){
+  const u=$("authUser").value.trim().toLowerCase();
+  const p=$("authPass").value;
+  if(!/^[a-z0-9_]{3,24}$/.test(u)){SFX.error();return toast("نام کاربری: 3 تا 24 حرف انگلیسی، عدد یا _",true)}
+  if(p.length<6){SFX.error();return toast("رمز عبور حداقل 6 کاراکتر باشد.",true)}
+  
+  showLoading(true);
+  try {
+    // چک کردن اینکه نام کاربری تکراری نباشه
+    const existing = await supabaseFetch("users?username=eq." + u);
+    if(existing.length > 0) { showLoading(false); SFX.error(); return toast("این نام کاربری قبلاً گرفته شده.",true) }
+    
+    // ثبت نام کاربر جدید
+    const newUser = await supabaseFetch("users", {
+      method: "POST",
+      body: JSON.stringify({ username: u, password_hash: p, tokens: WELCOME_TOKENS, salt: "salt" }),
+      prefer: "return=representation"
+    });
+    
+    // ثبت تراکنش هدیه
+    await supabaseFetch("transactions", {
+      method: "POST",
+      body: JSON.stringify({ user_id: newUser[0].id, type: "buy", tokens: WELCOME_TOKENS, status: "approved" })
+    });
+    
+    SFX.coin();
+    startSession(newUser[0]);
+    toast("حساب ساخته شد! "+WELCOME_TOKENS+" توکن هدیه");
+  } catch(err) {
+    console.error(err);
+    showLoading(false);
+    toast("خطا در ثبت‌نام", true);
+  }
 }
-function startSession(u){
-  currentUser=u;try{localStorage.setItem(SESSION_KEY,u)}catch(e){}
-  $("authScreen").style.display="none";$("app").style.display="flex";$("authPass").value="";
-  shownBal=0;go("home");renderAll();SFX.win();
+
+async function startSession(user){
+  currentUser = user;
+  shownBal = 0;
+  $("authScreen").style.display="none";
+  $("app").style.display="flex";
+  $("authPass").value="";
+  await refreshUserData();
+  go("home");
+  SFX.win();
+  showLoading(false);
 }
+
+async function refreshUserData(){
+  if(!currentUser) return;
+  try {
+    const data = await supabaseFetch("users?id=eq." + currentUser.id);
+    if(data && data.length > 0) {
+      currentUser = data[0];
+      renderAll();
+    }
+  } catch(err) { console.error("Error refreshing user:", err); }
+}
+
 function logout(){
   if(adminMode){
-    adminMode=false;
-    var prev=adminPrevUser;
-    adminPrevUser=null;
-    if(prev&&db.users[prev]){
-      currentUser=prev;try{localStorage.setItem(SESSION_KEY,prev)}catch(e){}
-      shownBal=0;go("home");renderAll();
-      toast("برگشتی به حساب ادمین: "+prev);
-      SFX.nav();
+    adminMode = false;
+    currentUser = adminPrevUser;
+    adminPrevUser = null;
+    if(currentUser){
+      $("adminPanel").style.display = "none";
+      refreshUserData();
+      go("home");
+      toast("برگشتی به حساب ادمین");
       return;
     }
   }
-  currentUser=null;try{localStorage.removeItem(SESSION_KEY)}catch(e){}
-  $("app").style.display="none";$("authScreen").style.display="flex";SFX.nav();
+  currentUser = null;
+  $("app").style.display="none";
+  $("authScreen").style.display="flex";
+  $("authUser").value = "";
+  $("authPass").value = "";
+  SFX.nav();
 }
 
+// ================== رابط کاربری ==================
 function go(v){
   var target=$("view-"+v);if(!target)return;
   document.querySelectorAll(".view").forEach(function(x){x.classList.remove("active")});
   target.classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(function(b){b.classList.toggle("active",b.dataset.go===v)});
-  if(v==="sell")$("sellBal").textContent=fmt(me()?me().tokens:0);
+  if(v==="sell")$("sellBal").textContent=fmt(currentUser?currentUser.tokens:0);
   if(v==="history")renderHistory();
   window.scrollTo({top:0,behavior:"smooth"});
 }
+
 function countUp(el,to){
   var from=shownBal,t0=performance.now(),d=700;
   function step(t){var k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);el.textContent=fmt(Math.round(from+(to-from)*e));if(k<1)requestAnimationFrame(step);else shownBal=to}
   requestAnimationFrame(step);
 }
+
 function renderAll(){
-  var u=me();if(!u)return;
-  $("helloUser").textContent=currentUser+(adminMode?" (ادمین)":"");
-  $("avatar").textContent=currentUser.charAt(0).toUpperCase();
-  countUp($("balAmount"),u.tokens);
-  $("balToman").textContent=fmt(u.tokens*TOKEN_PRICE);
-  document.querySelectorAll(".gbal").forEach(function(e){e.textContent=fmt(u.tokens)});
-  $("sellBal").textContent=fmt(u.tokens);
+  if(!currentUser) return;
+  $("helloUser").textContent = currentUser.username + (adminMode?" (ادمین)":"");
+  $("avatar").textContent = currentUser.username.charAt(0).toUpperCase();
+  countUp($("balAmount"), currentUser.tokens);
+  $("balToman").textContent = fmt(currentUser.tokens * TOKEN_PRICE);
+  document.querySelectorAll(".gbal").forEach(function(e){e.textContent=fmt(currentUser.tokens)});
+  $("sellBal").textContent = fmt(currentUser.tokens);
 }
+
 function renderTicker(){
   var s="";for(var i=0;i<2;i++)s+='<em>WHEEL</em>RTP 60%<em>CUPS</em>x1.8<em>MINES</em>RTP 60%<em>PLINKO</em>RTP 70%<em>CRASH</em>RTP 25%<em>SLOTS</em>RTP 60%';
   $("tick").innerHTML=s;
 }
-function renderHistory(){
-  var u=me(),box=$("histList");if(!u||!box)return;
-  var h=u.history.slice().reverse();
-  if(!h.length){box.innerHTML='<div class="empty">هنوز تراکنشی ندارید</div>';return}
-  var st={pending:"در انتظار",approved:"تایید شده",rejected:"رد شده"};
-  box.innerHTML=h.map(function(t){
-    var buy=t.type==="buy",d=new Date(t.ts),ds=d.getFullYear()+"/"+(d.getMonth()+1)+"/"+d.getDate()+"  "+d.getHours()+":"+String(d.getMinutes()).padStart(2,"0");
-    return '<div class="tx"><div class="ti '+(buy?"in":"out")+'"><svg viewBox="0 0 24 24"><path d="'+(buy?"M12 19V5M5 12l7-7 7 7":"M12 5v14M19 12l-7 7-7-7")+'"/></svg></div>'+
-    '<div class="tt"><b>'+esc(t.note||(buy?"خرید توکن":"فروش توکن"))+'</b><small class="num">'+ds+'</small></div>'+
-    '<div class="ta"><b class="num">'+(buy?"+":"-")+fmt(t.tokens)+' T</b><span class="badge '+t.status+'">'+st[t.status]+'</span></div></div>';
-  }).join("");
+
+async function renderHistory(){
+  var box=$("histList");if(!currentUser||!box)return;
+  box.innerHTML = '<div style="text-align:center;padding:20px">در حال بارگذاری...</div>';
+  try {
+    const data = await supabaseFetch("transactions?user_id=eq." + currentUser.id + "&order=created_at.desc&limit=50");
+    if(!data || !data.length){box.innerHTML='<div class="empty">هنوز تراکنشی ندارید</div>';return}
+    var st={pending:"در انتظار",approved:"تایید شده",rejected:"رد شده"};
+    box.innerHTML=data.map(function(t){
+      var buy=t.type==="buy", d=new Date(t.created_at), ds=d.toLocaleDateString("fa-IR");
+      var amount = t.tokens;
+      var title = buy ? "خرید توکن" : "فروش توکن";
+      if(t.status==="approved" && t.tokens === WELCOME_TOKENS && t.type==="buy") title = "هدیه ثبت‌نام";
+      
+      return '<div class="tx"><div class="ti '+(buy?"in":"out")+'"><svg viewBox="0 0 24 24"><path d="'+(buy?"M12 19V5M5 12l7-7 7 7":"M12 5v14M19 12l-7 7-7-7")+'"/></svg></div>'+
+      '<div class="tt"><b>'+esc(title)+'</b><small class="num">'+ds+'</small></div>'+
+      '<div class="ta"><b class="num">'+(buy?"+":"-")+fmt(amount)+' T</b><span class="badge '+t.status+'">'+st[t.status]+'</span></div></div>';
+    }).join("");
+  } catch(err) { box.innerHTML='<div class="empty">خطا در دریافت تاریخچه</div>'; }
 }
+
 function showModal(h){$("msgModal").innerHTML=h;$("msgOverlay").classList.add("show")}
 function closeModal(){$("msgOverlay").classList.remove("show")}
 var CHECK='<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>';
@@ -621,251 +701,250 @@ var CLOCK='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 
 function updateBuyPrice(){var v=digitsOnly($("buyAmount").value);$("buyAmount").value=v;$("buyPrice").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
 function updateSellPrice(){var v=digitsOnly($("sellAmount").value);$("sellAmount").value=v;$("sellReceive").textContent=fmt(Number(v||0)*TOKEN_PRICE)+" تومان"}
 
-function submitBuy(){
-  try{
-    var u=me();if(!u)return;
-    var amt=Number(digitsOnly($("buyAmount").value)),trk=$("buyTracking").value.trim();
-    if(!amt||amt<1){SFX.error();return toast("تعداد نامعتبر است.",true)}
-    if(trk.length<4){SFX.error();return toast("کد رهگیری را وارد کنید.",true)}
-    var o={id:makeId("P"),type:"buy",tokens:amt,amount:amt*TOKEN_PRICE,tracking:trk,status:"pending",ts:Date.now(),note:"خرید "+amt+" توکن"};
-    u.history.push(o);saveDB();renderAll();$("buyTracking").value="";buzz();SFX.coin();
+async function submitBuy(){
+  if(!currentUser) return;
+  var amt=Number(digitsOnly($("buyAmount").value)),trk=$("buyTracking").value.trim();
+  if(!amt||amt<1){SFX.error();return toast("تعداد نامعتبر است.",true)}
+  if(trk.length<4){SFX.error();return toast("کد رهگیری را وارد کنید.",true)}
+  
+  showLoading(true);
+  try {
+    await supabaseFetch("transactions", {
+      method: "POST",
+      body: JSON.stringify({ user_id: currentUser.id, type: "buy", tokens: amt, tracking_code: trk, status: "pending" })
+    });
+    $("buyTracking").value="";
+    SFX.coin();
     showModal('<div class="okring">'+CHECK+'</div><h3>سفارش خرید ثبت شد</h3>'+
-    '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(o.amount)+' تومان</span></div>'+
-    '<p style="margin-top:14px">شناسه سفارش (برای کپی کلیک کنید):</p><div class="order-id num" data-copy="'+esc(o.id)+'">'+esc(o.id)+'</div>'+
+    '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(amt*TOKEN_PRICE)+' تومان</span></div>'+
     '<div class="tg-btn num" data-copy="'+esc(BUY_ADMIN_ID)+'">'+esc(BUY_ADMIN_ID)+'</div><button class="btn ghost" type="button" data-close="1">متوجه شدم</button>');
-  }catch(e){console.error(e);toast("خطا",true)}
+  } catch(err) { toast("خطا در ثبت سفارش", true); }
+  showLoading(false);
 }
-function submitSell(){
-  try{
-    var u=me();if(!u)return;
-    var card=digitsOnly($("sellCard").value),amt=Number(digitsOnly($("sellAmount").value));
-    if(card.length!==16){SFX.error();return toast("شماره کارت نامعتبر است.",true)}
-    if(!amt||amt<1){SFX.error();return toast("تعداد توکن را وارد کنید.",true)}
-    if(amt>u.tokens){SFX.error();return toast("موجودی کافی نیست.",true)}
-    u.tokens-=amt;var o={id:makeId("WD"),type:"sell",tokens:amt,amount:amt*TOKEN_PRICE,card:card,status:"pending",ts:Date.now(),note:"فروش "+amt+" توکن"};
-    u.history.push(o);saveDB();renderAll();$("sellCard").value="";$("sellAmount").value="";$("sellReceive").textContent="0 تومان";buzz();SFX.coin();
+
+async function submitSell(){
+  if(!currentUser) return;
+  var card=digitsOnly($("sellCard").value), amt=Number(digitsOnly($("sellAmount").value));
+  if(card.length!==16){SFX.error();return toast("شماره کارت نامعتبر است.",true)}
+  if(!amt||amt<1){SFX.error();return toast("تعداد توکن را وارد کنید.",true)}
+  if(amt > currentUser.tokens){SFX.error();return toast("موجودی کافی نیست.",true)}
+  
+  showLoading(true);
+  try {
+    // کم کردن موجودی کاربر
+    await supabaseFetch("users?id=eq." + currentUser.id, {
+      method: "PATCH",
+      body: JSON.stringify({ tokens: currentUser.tokens - amt })
+    });
+    
+    // ثبت تراکنش
+    await supabaseFetch("transactions", {
+      method: "POST",
+      body: JSON.stringify({ user_id: currentUser.id, type: "sell", tokens: amt, card_number: card, status: "pending" })
+    });
+    
+    await refreshUserData();
+    $("sellCard").value=""; $("sellAmount").value=""; $("sellReceive").textContent="0 تومان";
+    SFX.coin();
     showModal('<div class="okring" style="background:rgba(251,191,36,.16);color:var(--gold)">'+CLOCK+'</div><h3>درخواست فروش ثبت شد</h3>'+
-    '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(o.amount)+' تومان</span></div>'+
-    '<p style="margin-top:14px">شناسه سفارش را برای ادمین بفرستید:</p><div class="order-id num" data-copy="'+esc(o.id)+'">'+esc(o.id)+'</div><br>'+
+    '<div class="kv"><span>تعداد توکن</span><span class="num">'+fmt(amt)+' T</span></div><div class="kv"><span>مبلغ</span><span class="num">'+fmt(amt*TOKEN_PRICE)+' تومان</span></div>'+
     '<div class="tg-btn num" data-copy="'+esc(SELL_ADMIN_ID)+'">'+esc(SELL_ADMIN_ID)+'</div><button class="btn ghost" type="button" data-close="1">متوجه شدم</button>');
-  }catch(e){console.error(e);toast("خطا",true)}
+  } catch(err) { toast("خطا در ثبت درخواست", true); }
+  showLoading(false);
 }
 
-function safeBind(el,ev,fn){
-  if(!el)return;
-  el.addEventListener(ev,function(e){
-    try{fn.call(this,e)}catch(err){console.error("handler error:",err)}
-  });
-}
-
-/* ===== ADMIN PANEL ===== */
-function openAdminPanel(){
-  var panel=$("adminPanel");
-  if(!panel){toast("پنل ادمین پیدا نشد",true);return}
-  panel.style.display="block";
-  renderAdminOrders();
-  renderAdminUsers();
+// ================== پنل ادمین ==================
+async function openAdminPanel(){
+  $("adminPanel").style.display="block";
+  await renderAdminOrders();
+  await renderAdminUsers();
   SFX.win();
-  /* make sure both visible based on active tab */
   var activeTab=document.querySelector("#adminTabs button.on");
   var tab=activeTab?activeTab.dataset.tab:"orders";
   $("adminOrders").style.display=(tab==="orders")?"block":"none";
   $("adminUsers").style.display=(tab==="users")?"block":"none";
 }
 
-function renderAdminOrders(){
-  var box=$("adminOrders");if(!box)return;
-  var pending=[];
-  var userNames=Object.keys(db.users);
-  userNames.forEach(function(n){
-    var u=db.users[n];
-    u.history.forEach(function(t){
-      if(t.status==="pending") pending.push({user:n,t:t});
+async function renderAdminOrders(){
+  var box=$("adminOrders"); if(!box) return;
+  box.innerHTML = '<div style="text-align:center;padding:20px">در حال بارگذاری...</div>';
+  try {
+    const data = await supabaseFetch("transactions?status=eq.pending&order=created_at.desc");
+    if(!data || !data.length){ box.innerHTML="<div class='empty'>هیچ سفارش در انتظاری وجود ندارد</div>"; return; }
+    
+    // گرفتن اطلاعات کاربران برای نمایش
+    const userIds = [...new Set(data.map(t => t.user_id))];
+    const usersData = await supabaseFetch(`users?id=in.(${userIds.join(',')})`);
+    const userMap = {};
+    usersData.forEach(u => userMap[u.id] = u.username);
+    
+    var html="";
+    data.forEach(function(t){
+      var b=t.type==="buy", un = userMap[t.user_id] || "ناشناس";
+      html+='<div class="admin-order">'+
+        '<div class="line"><span>کاربر</span><b>'+esc(un)+'</b></div>'+
+        '<div class="line"><span>نوع</span><b>'+(b?"خرید":"فروش")+'</b></div>'+
+        '<div class="line"><span>تعداد</span><b class="num">'+fmt(t.tokens)+' T</b></div>'+
+        '<div class="line"><span>'+(b?"کد رهگیری":"شماره کارت")+'</span><b class="num">'+esc(b?t.tracking_code:t.card_number)+'</b></div>'+
+        '<div class="acts">'+
+          '<button class="btn" type="button" style="background:var(--green)" data-resolve="'+t.id+'|approve">✓ تایید</button>'+
+          '<button class="btn" type="button" style="background:var(--red)" data-resolve="'+t.id+'|reject">✗ رد</button>'+
+        '</div></div>';
     });
-  });
-  if(!pending.length){
-    box.innerHTML="<div class='empty'>هیچ سفارش در انتظاری وجود ندارد</div>";
-    return;
-  }
-  var html="";
-  pending.forEach(function(o){
-    var t=o.t,b=t.type==="buy";
-    html+='<div class="admin-order">'+
-      '<div class="line"><span>کاربر</span><b>'+esc(o.user)+'</b></div>'+
-      '<div class="line"><span>نوع</span><b>'+(b?"خرید":"فروش")+'</b></div>'+
-      '<div class="line"><span>تعداد</span><b class="num">'+fmt(t.tokens)+' T</b></div>'+
-      '<div class="line"><span>'+(b?"کد رهگیری":"شماره کارت")+'</span><b class="num">'+esc(b?t.tracking:t.card)+'</b></div>'+
-      '<div class="line"><span>شناسه</span><b class="num" style="font-size:11px">'+esc(t.id)+'</b></div>'+
-      '<div class="acts">'+
-        '<button class="btn" type="button" style="background:var(--green)" data-resolve="'+esc(o.user)+'|'+esc(t.id)+'|approve">✓ تایید</button>'+
-        '<button class="btn" type="button" style="background:var(--red)" data-resolve="'+esc(o.user)+'|'+esc(t.id)+'|reject">✗ رد</button>'+
-      '</div></div>';
-  });
-  box.innerHTML=html;
+    box.innerHTML=html;
+  } catch(err) { box.innerHTML="<div class='empty'>خطا در دریافت سفارش‌ها</div>"; }
 }
 
-function renderAdminUsers(){
-  var box=$("adminUsers");if(!box)return;
-  var names=Object.keys(db.users);
-  if(!names.length){
-    box.innerHTML="<div class='empty'>هیچ کاربری ثبت‌نام نکرده</div>";
-    return;
-  }
-  var html="";
-  names.forEach(function(n){
-    var u=db.users[n];
-    var pendingCount=u.history.filter(function(t){return t.status==="pending"}).length;
-    html+='<div class="admin-order">'+
-      '<div class="line"><span>نام کاربری</span><b>'+esc(n)+'</b></div>'+
-      '<div class="line"><span>موجودی</span><b class="num">'+fmt(u.tokens)+' T</b></div>'+
-      '<div class="line"><span>کل تراکنش</span><b class="num">'+u.history.length+'</b></div>'+
-      '<div class="line"><span>در انتظار</span><b class="num">'+pendingCount+'</b></div>'+
-      '<div class="acts">'+
-        '<button class="btn" type="button" style="background:var(--cyan);color:#04201e" data-loginas="'+esc(n)+'">ورود به حساب</button>'+
-        '<button class="btn" type="button" style="background:var(--green)" data-addtokens="'+esc(n)+'">شارژ توکن</button>'+
-      '</div>'+
-    '</div>';
-  });
-  box.innerHTML=html;
+async function renderAdminUsers(){
+  var box=$("adminUsers"); if(!box) return;
+  box.innerHTML = '<div style="text-align:center;padding:20px">در حال بارگذاری...</div>';
+  try {
+    const data = await supabaseFetch("users?order=created_at.desc");
+    if(!data || !data.length){ box.innerHTML="<div class='empty'>هیچ کاربری ثبت‌نام نکرده</div>"; return; }
+    
+    var html="";
+    data.forEach(function(u){
+      html+='<div class="admin-order">'+
+        '<div class="line"><span>نام کاربری</span><b>'+esc(u.username)+'</b></div>'+
+        '<div class="line"><span>موجودی</span><b class="num">'+fmt(u.tokens)+' T</b></div>'+
+        '<div class="acts">'+
+          '<button class="btn" type="button" style="background:var(--cyan);color:#04201e" data-loginas="'+u.id+'">ورود به حساب</button>'+
+          '<button class="btn" type="button" style="background:var(--green)" data-addtokens="'+u.id+'">شارژ توکن</button>'+
+        '</div>'+
+      '</div>';
+    });
+    box.innerHTML=html;
+  } catch(err) { box.innerHTML="<div class='empty'>خطا در دریافت کاربران</div>"; }
 }
 
-function adminLoginAs(name){
-  if(!db.users[name]){toast("کاربر پیدا نشد",true);return}
-  if(!adminMode){adminPrevUser=currentUser;adminMode=true}
-  currentUser=name;
-  try{localStorage.setItem(SESSION_KEY,name)}catch(e){}
-  $("adminPanel").style.display="none";
-  $("authScreen").style.display="none";
-  $("app").style.display="flex";
-  shownBal=0;go("home");renderAll();
-  toast("وارد حساب "+name+" شدی. با دکمه خروج به حساب ادمین برمی‌گردی");
-  SFX.coin();
+async function adminLoginAs(userId){
+  try {
+    const data = await supabaseFetch("users?id=eq." + userId);
+    if(!data || !data.length) return toast("کاربر پیدا نشد", true);
+    
+    if(!adminMode) { adminPrevUser = currentUser; adminMode = true; }
+    currentUser = data[0];
+    
+    $("adminPanel").style.display="none";
+    await refreshUserData();
+    go("home");
+    toast("وارد حساب "+currentUser.username+" شدی");
+    SFX.coin();
+  } catch(err) { toast("خطا", true); }
 }
 
-function adminAddTokens(name){
-  var u=db.users[name];if(!u)return;
-  var v=prompt("چند توکن برای «"+name+"»؟\n(مثبت = اضافه، منفی = کم)\nمثلاً: 100 یا -50","100");
-  if(v===null)return;
-  var neg=String(v).indexOf("-")===0;
-  v=String(v).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/\D/g,"");
-  var n=parseInt(v,10);
-  if(!n||n===0){toast("عدد نامعتبر",true);return}
-  if(neg)n=-n;
-  if(u.tokens+n<0){toast("موجودی نمی‌تواند منفی شود",true);return}
-  u.tokens+=n;
-  u.history.push({
-    id:makeId("AD"),
-    type:n>0?"buy":"sell",
-    tokens:Math.abs(n),
-    amount:0,
-    status:"approved",
-    ts:Date.now(),
-    note:"ادمین: "+(n>0?"+"+n+" توکن":"کاهش "+Math.abs(n)+" توکن")
-  });
-  saveDB();
-  renderAdminUsers();
-  renderAdminOrders();
-  renderAll();
-  toast((n>0?"+"+n:" "+n)+" توکن برای "+name);
-  SFX.coin();
+async function adminAddTokens(userId){
+  try {
+    const data = await supabaseFetch("users?id=eq." + userId);
+    if(!data || !data.length) return;
+    const user = data[0];
+    
+    var v = prompt("چند توکن برای «" + user.username + "»؟\n(مثبت = اضافه، منفی = کم)", "100");
+    if(v===null) return;
+    var neg = String(v).indexOf("-") === 0;
+    v = String(v).replace(/[۰-۹]/g, function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/\D/g,"");
+    var n = parseInt(v, 10);
+    if(!n) return toast("عدد نامعتبر", true);
+    if(neg) n = -n;
+    
+    const newBalance = Math.max(0, user.tokens + n);
+    
+    await supabaseFetch("users?id=eq." + user.id, {
+      method: "PATCH",
+      body: JSON.stringify({ tokens: newBalance })
+    });
+    
+    await supabaseFetch("transactions", {
+      method: "POST",
+      body: JSON.stringify({ user_id: user.id, type: n>0?"buy":"sell", tokens: Math.abs(n), status: "approved" })
+    });
+    
+    toast((n>0?"+"+n:" "+n)+" توکن برای "+user.username);
+    renderAdminUsers();
+    refreshUserData();
+    SFX.coin();
+  } catch(err) { toast("خطا", true); }
 }
 
-function resolveOrder(un,id,action){
-  var r=db.users[un];if(!r){toast("کاربر پیدا نشد",true);return}
-  var t=r.history.find(function(x){return x.id===id});
-  if(!t){toast("سفارش پیدا نشد",true);return}
-  if(action==="approve"){
-    t.status="approved";
-    if(t.type==="buy")r.tokens+=t.tokens;
-    /* for sell: tokens already deducted when order placed */
-    toast("✓ تایید شد برای "+un);
-  } else {
-    t.status="rejected";
-    if(t.type==="sell")r.tokens+=t.tokens; /* refund */
-    toast("✗ رد شد برای "+un);
-  }
-  saveDB();
-  renderAdminOrders();
-  renderAdminUsers();
-  renderAll();
-  SFX.coin();
-}
-
-function bind(){
-  safeBind($("btnLogin"),"click",doLogin);
-  safeBind($("btnRegister"),"click",doRegister);
-  safeBind($("btnLogout"),"click",logout);
-  safeBind($("payCard"),"click",function(){SFX.click();copy(CARD_NUMBER)});
-  safeBind($("buyAmount"),"input",updateBuyPrice);
-  safeBind($("btnBuy"),"click",submitBuy);
-  safeBind($("sellAmount"),"input",updateSellPrice);
-  safeBind($("btnSell"),"click",submitSell);
-  safeBind($("sellAll"),"click",function(){SFX.click();var u=me();if(u){$("sellAmount").value=u.tokens;updateSellPrice()}});
-  document.querySelectorAll(".chips[data-for] .chip").forEach(function(c){
-    safeBind(c,"click",function(){SFX.click();$("buyAmount").value=c.dataset.v;updateBuyPrice()});
-  });
-  document.addEventListener("click",function(e){
-    try{
-      var g=e.target.closest("[data-go]");
-      if(g){SFX.nav();return go(g.dataset.go)}
-      var cp=e.target.closest("[data-copy]");
-      if(cp){SFX.click();return copy(cp.dataset.copy)}
-      if(e.target.closest("[data-close]"))return closeModal();
-      var res=e.target.closest("[data-resolve]");
-      if(res){var parts=res.dataset.resolve.split("|");resolveOrder(parts[0],parts[1],parts[2]);return}
-      var la=e.target.closest("[data-loginas]");
-      if(la){adminLoginAs(la.dataset.loginas);return}
-      var at=e.target.closest("[data-addtokens]");
-      if(at){adminAddTokens(at.dataset.addtokens);return}
-    }catch(err){console.error(err)}
-  });
-  safeBind($("msgOverlay"),"click",function(e){if(e.target===this)closeModal()});
-  safeBind($("btnAdmin"),"click",function(){SFX.click();$("adminLoginOverlay").classList.add("show")});
-  safeBind($("adminLoginOverlay"),"click",function(e){if(e.target===this)this.classList.remove("show")});
-  safeBind($("adminLoginOk"),"click",function(){
-    var entered=$("adminPassInput").value;
-    var ok=safeHash(entered)===ADMIN_HASH;
-    console.log("admin check:",entered,ok?"OK":"FAIL");
-    if(ok){
-      $("adminLoginOverlay").classList.remove("show");
-      $("adminPassInput").value="";
-      openAdminPanel();
+async function resolveOrder(transactionId, action){
+  try {
+    const tData = await supabaseFetch("transactions?id=eq." + transactionId);
+    if(!tData || !tData.length) return;
+    const t = tData[0];
+    
+    await supabaseFetch("transactions?id=eq." + transactionId, {
+      method: "PATCH",
+      body: JSON.stringify({ status: action === "approve" ? "approved" : "rejected" })
+    });
+    
+    if(action === "approve") {
+      const uData = await supabaseFetch("users?id=eq." + t.user_id);
+      if(uData && uData.length > 0) {
+        const user = uData[0];
+        if(t.type === "buy") {
+          await supabaseFetch("users?id=eq." + user.id, { method: "PATCH", body: JSON.stringify({ tokens: user.tokens + t.tokens }) });
+        }
+      }
+      toast("✓ تایید شد");
     } else {
-      SFX.error();toast("رمز اشتباه است",true);
+      if(t.type === "sell") {
+        const uData = await supabaseFetch("users?id=eq." + t.user_id);
+        if(uData && uData.length > 0) {
+          const user = uData[0];
+          await supabaseFetch("users?id=eq." + user.id, { method: "PATCH", body: JSON.stringify({ tokens: user.tokens + t.tokens }) });
+        }
+      }
+      toast("✗ رد شد");
     }
-  });
-  safeBind($("adminClose"),"click",function(){SFX.nav();$("adminPanel").style.display="none"});
-  safeBind($("adminTabs"),"click",function(e){
-    var b=e.target.closest("button");if(!b)return;
-    SFX.click();
-    [].forEach.call(this.children,function(c){c.classList.remove("on")});
-    b.classList.add("on");
-    var tab=b.dataset.tab;
-    $("adminOrders").style.display=(tab==="orders")?"block":"none";
-    $("adminUsers").style.display=(tab==="users")?"block":"none";
-  });
+    
+    renderAdminOrders();
+    refreshUserData();
+    SFX.coin();
+  } catch(err) { toast("خطا در انجام عملیات", true); }
 }
 
-/* ===== GAME HELPERS ===== */
+// ================== GAME HELPERS ==================
 var G={MIN:10};
-Object.defineProperty(G,"u",{get:function(){return me()}});
+Object.defineProperty(G,"u",{get:function(){return currentUser}});
 G.$=function(i){return document.getElementById(i)};
 G.fmt=function(n){return Number(n||0).toLocaleString("en-US",{maximumFractionDigits:2})};
-G.save=function(){saveDB()};
-G.show=function(){renderAll()};
 G.rnd=function(n){
   try{var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}
   catch(e){return Math.floor(Math.random()*n)}
 };
 G.betVal=function(p){return parseInt(digitsOnly(G.$(p+"bet").value),10)||0};
-G.take=function(p){
-  var u=me();if(!u)return 0;
+G.take=async function(p){
+  if(!currentUser) return 0;
   var b=G.betVal(p);
   if(b<G.MIN){SFX.error();toast("حداقل شرط "+G.MIN+" توکن است",true);return 0}
-  if(b>u.tokens){SFX.error();toast("موجودی کافی نیست",true);return 0}
-  u.tokens-=b;saveDB();renderAll();SFX.bet();return b
+  if(b>currentUser.tokens){SFX.error();toast("موجودی کافی نیست",true);return 0}
+  
+  try {
+    // کم کردن موجودی از سرور
+    await supabaseFetch("users?id=eq." + currentUser.id, {
+      method: "PATCH",
+      body: JSON.stringify({ tokens: currentUser.tokens - b })
+    });
+    currentUser.tokens -= b;
+    renderAll();
+    SFX.bet();
+    return b;
+  } catch(err) { return 0; }
 };
-G.pay=function(x){x=Math.floor(x);var u=me();if(u&&x>0){u.tokens+=x;saveDB();renderAll()}return x};
+G.pay=async function(x){
+  x=Math.floor(x);
+  if(currentUser && x>0){
+    try {
+      await supabaseFetch("users?id=eq." + currentUser.id, {
+        method: "PATCH",
+        body: JSON.stringify({ tokens: currentUser.tokens + x })
+      });
+      currentUser.tokens += x;
+      renderAll();
+    } catch(err) {}
+  }
+  return x;
+};
 G.result=function(p,t,win){var r=G.$(p+"res");if(r){r.textContent=t;r.className="res "+(win?"win":"lose")}};
 G.seg=function(id,cb,can){
   var el=G.$(id);if(!el)return;
@@ -886,20 +965,16 @@ G.mount=function(id,p){
     try{
       var c=e.target.closest("[data-b]");if(!c)return;
       SFX.click();
-      var v=c.dataset.b,cur=G.betVal(p),u=me();
+      var v=c.dataset.b,cur=G.betVal(p),u=currentUser;
       var n=v==="h"?Math.floor(cur/2):v==="d"?cur*2:v==="m"?Math.floor(u?u.tokens:0):Number(v);
       G.$(p+"bet").value=Math.max(0,n);
     }catch(err){console.error(err)}
   });
 };
 
-/* ===== WHEEL - RTP 60% ===== */
-/* Distribution: 12×0, 4×0.5, 2×1, 1×2, 1×3 = 20 slots
-   EV = (12*0 + 4*0.5 + 2*1 + 1*2 + 1*3) / 20 = (0+2+2+2+3)/20 = 9/20 = 45% ... too low
-   Better: 10×0, 4×0.5, 3×1, 2×2, 1×5 = 20
-   EV = (0+2+3+4+5)/20 = 14/20 = 70% ... ok
-   For 60%: 12×0, 4×0.5, 2×1, 1×2, 1×3 = 20 → EV = 9/20 = 45% (too low)
-   Try: 11×0, 4×0.5, 2×1, 2×2, 1×4 = 20 → EV = (0+2+2+4+4)/20 = 12/20 = 60% ✓ */
+// ================== بازی‌ها ==================
+// (کدهای بازی دقیقاً مثل قبل با RTP پایین)
+
 (function(){
 var SEG=[0,0,0,0,0,0,0,0,0,0,0,2,0.5,0.5,0.5,0.5,1,1,2,4];
 var N=SEG.length,A=360/N,cur=0,busy=false;
@@ -925,18 +1000,18 @@ function tick(){f.clearRect(0,0,700,700);parts=parts.filter(function(p){return p
   f.globalAlpha=1;if(parts.length)requestAnimationFrame(tick);else run=false}
 
 G.mount("w_betBox","w_");
-safeBind(G.$("w_go"),"click",function(){
+G.$("w_go").addEventListener("click", async function(){
   if(busy)return;
-  var b=G.take("w_");if(!b)return;
+  var b=await G.take("w_");if(!b)return;
   busy=true;var btn=this;btn.disabled=true;
   var rs=G.$("w_res");rs.className="res";rs.textContent="در حال چرخش...";
   var stage=G.$("w_stage");stage.classList.add("spin");
   var i=G.rnd(N),mid=i*A+A/2,rot=cur+360*7+(((360-mid-cur)%360)+360)%360;cur=rot;
   cv.style.transform="rotate("+rot+"deg)";
   var tt=setInterval(function(){SFX.tick()},Math.max(90,3600/28));
-  setTimeout(function(){
+  setTimeout(async function(){
     clearInterval(tt);stage.classList.remove("spin");
-    var m=SEG[i],p=G.pay(b*m);
+    var m=SEG[i],p=await G.pay(b*m);
     if(m>1){G.result("w_","برد! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);burst(m>=4?160:70);SFX.win();}
     else if(m===1)G.result("w_","ضریب 1x - شرط برگشت",true);
     else{G.result("w_",m===0?"باخت  |  -"+G.fmt(b)+" توکن":"ضریب "+m+"x  |  -"+G.fmt(b-p)+" توکن",false);SFX.lose();}
@@ -945,27 +1020,26 @@ safeBind(G.$("w_go"),"click",function(){
 });
 })();
 
-/* ===== MINES - RTP 60% ===== */
 (function(){
 var DIA='<svg viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3l3 18M15 3l-3 18"/></svg>',BOMB='<svg viewBox="0 0 24 24"><circle cx="11" cy="14" r="7"/><path d="M15 9l3-3M18 3v3M21 6h-3"/></svg>';
 var T=25,mines=[],opened=0,bet=0,live=false,M=5;
-var RTP=0.60; /* ← کاهش RTP */
+var RTP=0.60;
 function mult(k){var v=RTP;for(var i=0;i<k;i++)v*=(T-i)/(T-M-i);return v}
 function ui(){var m=mult(opened);G.$("m_cm").textContent=m.toFixed(2)+"x";G.$("m_nm").textContent=(live&&opened<T-M)?mult(opened+1).toFixed(2)+"x":"-";G.$("m_cv").textContent=G.fmt(Math.floor(bet*m));G.$("m_cash").disabled=!(live&&opened>0)}
 function build(){var g=G.$("m_grid");if(!g)return;g.innerHTML="";for(var i=0;i<T;i++){var c=document.createElement("button");c.type="button";c.className="cell off";c.dataset.i=i;g.appendChild(c)}}
 function end(){live=false;G.$("m_start").disabled=false;G.$("m_mc").disabled=false;document.querySelectorAll(".cell").forEach(function(c){c.classList.add("off")});ui()}
 function reveal(){document.querySelectorAll(".cell").forEach(function(c){var i=+c.dataset.i;if(!c.classList.contains("safe")&&!c.classList.contains("bomb")){var b=mines.indexOf(i)>-1;c.innerHTML=b?BOMB:DIA;c.classList.add(b?"bomb":"dim")}})}
 G.mount("m_betBox","m_");build();
-safeBind(G.$("m_start"),"click",function(){
+G.$("m_start").addEventListener("click", async function(){
   if(live)return;
-  var b=G.take("m_");if(!b)return;
+  var b=await G.take("m_");if(!b)return;
   bet=b;M=+G.$("m_mc").value;opened=0;mines=[];
   while(mines.length<M){var r=G.rnd(T);if(mines.indexOf(r)<0)mines.push(r)}
   live=true;G.$("m_start").disabled=true;G.$("m_mc").disabled=true;build();
   document.querySelectorAll(".cell").forEach(function(c){c.classList.remove("off")});
   G.$("m_res").className="res";G.$("m_res").textContent="خانه‌ها را باز کن";ui();
 });
-safeBind(G.$("m_grid"),"click",function(e){
+G.$("m_grid").addEventListener("click", async function(e){
   var c=e.target.closest(".cell");if(!c||!live||c.classList.contains("safe")||c.classList.contains("bomb"))return;
   var i=+c.dataset.i;
   if(mines.indexOf(i)>-1){
@@ -973,22 +1047,20 @@ safeBind(G.$("m_grid"),"click",function(e){
     G.result("m_","انفجار!  |  -"+G.fmt(bet)+" توکن",false);SFX.bomb();end();return;
   }
   c.innerHTML=DIA;c.classList.add("safe");opened++;SFX.tick2();ui();
-  if(opened===T-M){var p=G.pay(bet*mult(opened));G.result("m_","همه الماس‌ها!  |  +"+G.fmt(p-bet)+" توکن",true);SFX.bigwin();reveal();end()}
+  if(opened===T-M){var p=await G.pay(bet*mult(opened));G.result("m_","همه الماس‌ها!  |  +"+G.fmt(p-bet)+" توکن",true);SFX.bigwin();reveal();end()}
 });
-safeBind(G.$("m_cash"),"click",function(){
+G.$("m_cash").addEventListener("click", async function(){
   if(!live||!opened)return;
-  var p=G.pay(bet*mult(opened));G.result("m_","برداشت  |  +"+G.fmt(p-bet)+" توکن",p>=bet);
+  var p=await G.pay(bet*mult(opened));G.result("m_","برداشت  |  +"+G.fmt(p-bet)+" توکن",p>=bet);
   (p>=bet?SFX.win:SFX.lose)();reveal();end();
 });
 })();
 
-/* ===== PLINKO - RTP 70% ===== */
 (function(){
-/* کاهش ضرایب برای RTP ~70% */
 var TB=[
-  [3,1.5,1.0,0.7,0.4],   /* low */
-  [7,2.5,1.0,0.5,0.3],   /* med */
-  [15,3.5,1.0,0.3,0.2]   /* high */
+  [3,1.5,1.0,0.7,0.4],
+  [7,2.5,1.0,0.5,0.3],
+  [15,3.5,1.0,0.3,0.2]
 ];
 var BN=[1,8,28,56,70,56,28,8,1];
 var risk=1,cnt=1,R=8,W=640,S=62,CX=W/2,TOP0=60,DY=58,balls=[],fl=[];
@@ -1014,17 +1086,19 @@ function loop(){
   for(var i=balls.length-1;i>=0;i--){
     var b=balls[i];b.t+=.08;
     if(b.t>=b.w.length-1){
-      var m=b.mul[b.k],p=G.pay(b.bet*m),q=b.q;fl[b.k]=1;q.left--;q.won+=p;
-      if(m>1)SFX.coin();
-      if(q.n===1){
-        if(m>1){G.result("p_","ضریب "+m+"x  |  +"+G.fmt(p-b.bet)+" توکن",true);SFX.win()}
-        else{G.result("p_","ضریب "+m+"x  |  -"+G.fmt(b.bet-p)+" توکن",false);SFX.lose()}
-        pBusy=false;
-      } else if(q.left===0){
-        var d=q.won-q.cost;
-        G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0);
-        (d>=0?SFX.win:SFX.lose)();pBusy=false;
-      }
+      var m=b.mul[b.k],q=b.q;fl[b.k]=1;q.left--;
+      G.pay(b.bet*m).then(p=>{ q.won+=p;
+        if(m>1)SFX.coin();
+        if(q.n===1){
+          if(m>1){G.result("p_","ضریب "+m+"x  |  +"+G.fmt(p-b.bet)+" توکن",true);SFX.win()}
+          else{G.result("p_","ضریب "+m+"x  |  -"+G.fmt(b.bet-p)+" توکن",false);SFX.lose()}
+          pBusy=false;
+        } else if(q.left===0){
+          var d=q.won-q.cost;
+          G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0);
+          (d>=0?SFX.win:SFX.lose)();pBusy=false;
+        }
+      });
       balls.splice(i,1);continue;
     }
     var s=Math.floor(b.t),fr=b.t-s,a=b.w[s],z=b.w[s+1];
@@ -1035,12 +1109,18 @@ function loop(){
 G.mount("p_betBox","p_");stats();
 G.seg("p_risk",function(d){risk=+d.r;MUL=tab(risk);stats()},function(){return !pBusy});
 G.seg("p_n",function(d){cnt=+d.n},function(){return !pBusy});
-safeBind(G.$("p_drop"),"click",function(){
+G.$("p_drop").addEventListener("click", async function(){
   if(pBusy){SFX.error();toast("توپ‌ها هنوز در حال سقوط هستند",true);return}
-  var u=me(),b=G.betVal("p_");if(!u)return;
+  var b=G.betVal("p_");
   if(b<G.MIN){SFX.error();return toast("حداقل شرط "+G.MIN+" توکن است",true)}
-  if(b*cnt>u.tokens){SFX.error();return toast("موجودی برای "+cnt+" توپ کافی نیست",true)}
-  u.tokens-=b*cnt;saveDB();renderAll();SFX.bet();
+  if(b*cnt>currentUser.tokens){SFX.error();return toast("موجودی برای "+cnt+" توپ کافی نیست",true)}
+  
+  var totalBet = b*cnt;
+  await G.take("p_"); // این خودش چک میکنه
+  // برای اطمینان از کم شدن دقیق
+  await supabaseFetch("users?id=eq." + currentUser.id, { method: "PATCH", body: JSON.stringify({ tokens: currentUser.tokens - totalBet + b }) });
+  currentUser.tokens -= totalBet - b; 
+  
   pBusy=true;
   var lockCnt=cnt,lockMUL=tab(risk),lockBet=b;
   var q={n:lockCnt,left:lockCnt,won:0,cost:lockBet*lockCnt};
@@ -1058,17 +1138,16 @@ safeBind(G.$("p_drop"),"click",function(){
 loop();
 })();
 
-/* ===== CUPS - RTP 60% ===== */
 (function(){
 var W=[].slice.call(document.querySelectorAll("#c_stage .cupwrap"));if(!W.length)return;
 var slot=[0,1,2],balls=[],state="idle",bet=0,mode=1;
-function mult(){return mode===1?1.8:0.9}  /* RTP: 1-ball: 1.8/3=60%, 2-ball: 0.9*2/3=60% */
+function mult(){return mode===1?1.8:0.9}
 function place(){W.forEach(function(w,i){w.style.transform="translateX("+slot[i]*100+"%)"})}
 function lift(i,on){W[i].classList.toggle("up",on)}
 function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
 async function start(){
   if(state!=="idle")return;
-  var b=G.take("c_");if(!b)return;
+  var b=await G.take("c_");if(!b)return;
   bet=b;state="busy";G.$("c_go").disabled=true;
   var rs=G.$("c_res");rs.className="res";
   W.forEach(function(w,i){w.classList.remove("has","won");lift(i,false)});
@@ -1087,7 +1166,8 @@ async function start(){
 }
 async function pick(i){
   if(state!=="pick")return;state="busy";
-  var win=balls.indexOf(i)>-1,p=win?G.pay(bet*mult()):0;
+  var win=balls.indexOf(i)>-1;
+  var p = win ? await G.pay(bet*mult()) : 0;
   lift(i,true);SFX.cup();await wait(550);
   W.forEach(function(w,k){lift(k,true)});
   if(win){W[i].classList.add("won");G.result("c_","درست حدس زدی!  |  +"+G.fmt(p-bet)+" توکن",true);SFX.win()}
@@ -1096,15 +1176,13 @@ async function pick(i){
 }
 G.mount("c_betBox","c_");place();
 G.seg("c_mode",function(d){mode=+d.m;G.$("c_x").textContent=mult()+"x";G.$("c_p").textContent=(mode===1?"33.3":"66.7")+"%"},function(){return state==="idle"});
-safeBind(G.$("c_go"),"click",start);
-safeBind(G.$("c_stage"),"click",function(e){var w=e.target.closest(".cupwrap");if(w)pick(W.indexOf(w))});
+G.$("c_go").addEventListener("click",start);
+G.$("c_stage").addEventListener("click",function(e){var w=e.target.closest(".cupwrap");if(w)pick(W.indexOf(w))});
 })();
 
-/* ===== CRASH - RTP 25% ===== */
 (function(){
 var cv=G.$("k_cv");if(!cv)return;
 var x=cv.getContext("2d"),W=640,H=380,K=.15,st="idle",bet=0,cp=1,t0=0,cashed=0,auto=0,hist=[];
-/* RTP 25%: cp = 1/(u) where u uniform. Cap at 1000 */
 function mAt(t){return t<1?t:Math.exp(K*(t-1))}function tOf(c){return c<=1?c:1+Math.log(c)/K}
 var ST=[];for(var q=0;q<45;q++)ST.push([Math.random()*W,Math.random()*H,Math.random()*1.4+.4]);
 function rocket(X,Y,ang){
@@ -1136,7 +1214,7 @@ function draw(t,m,dead){
   x.font="800 20px sans-serif";x.fillStyle="rgba(255,255,255,.7)";var lb=dead?"سقوط!":cashed?"برداشت شد در "+cashed.toFixed(2)+"x":"";if(lb)x.fillText(lb,W/2,H/2+30)
 }
 function rh(){var h=G.$("k_hist");if(h)h.innerHTML=hist.slice(0,8).map(function(v){return '<span style="color:'+(v>=2?"#22e4ff":"#ff5d73")+'">'+v.toFixed(2)+'x</span>'}).join("")}
-function cash(m){cashed=m;var p=G.pay(bet*m);G.result("k_","برداشت در "+m.toFixed(2)+"x  |  +"+G.fmt(p-bet)+" توکن",true);G.$("k_btn").disabled=true;SFX.win()}
+async function cash(m){cashed=m;var p=await G.pay(bet*m);G.result("k_","برداشت در "+m.toFixed(2)+"x  |  +"+G.fmt(p-bet)+" توکن",true);G.$("k_btn").disabled=true;SFX.win()}
 function frame(now){
   if(st!=="run")return;
   var t=(now-t0)/1000,m=mAt(t);
@@ -1146,42 +1224,24 @@ function frame(now){
   draw(t,m,false);requestAnimationFrame(frame)
 }
 G.mount("k_betBox","k_");draw(0,0,false);
-safeBind(G.$("k_btn"),"click",function(){
+G.$("k_btn").addEventListener("click", async function(){
   if(st==="run"){if(!cashed){var m=Math.floor(mAt((performance.now()-t0)/1000)*100)/100;if(m<cp&&m>=1.5)cash(m)}return}
-  var b=G.take("k_");if(!b)return;bet=b;
+  var b=await G.take("k_");if(!b)return;bet=b;
   var v=G.$("k_auto").value.replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)});auto=parseFloat(v)||0;if(auto>0)auto=Math.max(1.5,auto);
-  /* RTP 25% = crash point = 1/u * 0.25 → but that gives too many crashes below 1.5
-     Better formula: cp = 0.25 / u, but cap ≥ 1.01 for game to start
-     Actually to get RTP 25% with house edge: crash point = 1/u where u uniform(0,1) gives RTP=100%
-     To reduce to 25%: crash point = 1/u * 0.25 does NOT work directly for player EV.
-     
-     Player EV: chooses cash-out at X. Crash at cp. Win if X < cp.
-     If cp = K/u (u uniform), then P(cp > X) = P(u < K/X) = K/X (for X > K)
-     Player EV = X * K/X = K. So RTP = K. For 25%, K = 0.25. ✓
-     But if X < K, cp is always > X... no wait cp = K/u, cp is min when u=1: cp=K. So cp ≥ K always.
-     That means for X < K, player always wins (but wins tiny). For X=1.5, player wins only if cp > 1.5 → K/u > 1.5 → u < K/1.5 = 0.1667. So 16.67% chance of winning 1.5x, else lose 1x bet. EV = 0.1667*1.5 = 0.25 ✓
-     Great. So K = 0.25 is correct.
-  */
   var u=G.rnd(1e9)/1e9;cp=Math.min(1000,Math.max(1.01,0.25/Math.max(u,0.000001)));
-  /* Round to 2 decimals */
   cp=Math.floor(cp*100)/100;
   cashed=0;st="run";G.$("k_res").className="res";G.$("k_res").textContent="موشک از 0.00x در حال پرواز...";t0=performance.now();requestAnimationFrame(frame);
 });
 })();
 
-/* ===== SLOTS - RTP 60% ===== */
 (function(){
-/* Symbols with weights and payouts adjusted for RTP 60% */
-/* Original: 3-of-a-kind pays 5,10,20,40,100,300 with weights 30,24,18,14,9,5
-   Two cherries = 1x
-   For 60% RTP, reduce payouts significantly */
 var SY=[
-  ["🍒",30,3],   /* p=(0.30)^3=0.027, pay 3 */
-  ["🍋",24,5],   /* p=(0.24)^3=0.0138, pay 5 */
-  ["🔔",18,10],  /* p=(0.18)^3=0.0058, pay 10 */
-  ["⭐",14,20],  /* p=(0.14)^3=0.00274, pay 20 */
-  ["💎",9,60],   /* p=(0.09)^3=0.000729, pay 60 */
-  ["7️⃣",5,200]  /* p=(0.05)^3=0.000125, pay 200 */
+  ["🍒",30,3],
+  ["🍋",24,5],
+  ["🔔",18,10],
+  ["⭐",14,20],
+  ["💎",9,60],
+  ["7️⃣",5,200]
 ];
 var busy=false;
 var R=[0,1,2].map(function(i){return G.$("s_r"+i)});
@@ -1189,14 +1249,13 @@ if(!R[0])return;
 function pick(){var r=G.rnd(100),a=0;for(var i=0;i<6;i++){a+=SY[i][1];if(r<a)return i}return 0}
 var rtp=0,pw=0;
 SY.forEach(function(s){var p=Math.pow(s[1]/100,3);rtp+=p*s[2];pw+=p});
-/* Two cherries: 3 positions, prob = C(3,2) * 0.30^2 * 0.70 = 3*0.09*0.70 = 0.189, pay 0.6 */
 var p2=3*0.30*0.30*0.70;rtp+=p2*0.6;pw+=p2;
 G.$("s_rtp").textContent=(rtp*100).toFixed(1)+"%";
 G.$("s_pw").textContent=(pw*100).toFixed(1)+"%";
 G.$("s_pay").innerHTML=SY.map(function(s){return "<div>"+s[0]+s[0]+s[0]+"<br><b class='num'>"+s[2]+"x</b></div>"}).join("")+"<div>🍒🍒<br><b class='num'>0.6x</b></div>";
 G.mount("s_betBox","s_");
-safeBind(G.$("s_go"),"click",async function(){
-  var btn=this;if(busy)return;var b=G.take("s_");if(!b)return;
+G.$("s_go").addEventListener("click",async function(){
+  var btn=this;if(busy)return;var b=await G.take("s_");if(!b)return;
   busy=true;btn.disabled=true;
   var f=[pick(),pick(),pick()],rs=G.$("s_res");rs.className="res";rs.textContent="در حال چرخش...";
   G.$("s_slot").classList.remove("win");
@@ -1206,8 +1265,8 @@ safeBind(G.$("s_go"),"click",async function(){
   clearInterval(iv);
   var m=0;
   if(f[0]===f[1]&&f[1]===f[2])m=SY[f[0]][2];
-  else if(f.filter(function(v){return v===0}).length===2)m=0.6; /* two cherries = 0.6x */
-  var p=G.pay(b*m);
+  else if(f.filter(function(v){return v===0}).length===2)m=0.6;
+  var p=await G.pay(b*m);
   if(m>1){G.result("s_","جایزه! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);G.$("s_slot").classList.add("win");(m>=60?SFX.bigwin:SFX.win)()}
   else if(m>0)G.result("s_","دو گیلاس! "+m+"x برگشت",false);
   else {G.result("s_","باخت  |  -"+G.fmt(b)+" توکن",false);SFX.lose()}
@@ -1215,16 +1274,75 @@ safeBind(G.$("s_go"),"click",async function(){
 });
 })();
 
-try{
-  loadDB();
-  bind();
-  renderTicker();
-  var saved=localStorage.getItem(SESSION_KEY);
-  if(saved&&db.users[saved])startSession(saved);
-}catch(e){
-  console.error("boot error:",e);
-  try{$("btnLogin").onclick=doLogin;$("btnRegister").onclick=doRegister}catch(_){}
+// ================== INIT ==================
+function bind(){
+  $("btnLogin").addEventListener("click",doLogin);
+  $("btnRegister").addEventListener("click",doRegister);
+  $("btnLogout").addEventListener("click",logout);
+  $("payCard").addEventListener("click",function(){SFX.click();copy(CARD_NUMBER)});
+  $("buyAmount").addEventListener("input",updateBuyPrice);
+  $("btnBuy").addEventListener("click",submitBuy);
+  $("sellAmount").addEventListener("input",updateSellPrice);
+  $("btnSell").addEventListener("click",submitSell);
+  $("sellAll").addEventListener("click",function(){SFX.click();if(currentUser){$("sellAmount").value=currentUser.tokens;updateSellPrice()}});
+  document.querySelectorAll(".chips[data-for] .chip").forEach(function(c){
+    c.addEventListener("click",function(){SFX.click();$("buyAmount").value=c.dataset.v;updateBuyPrice()});
+  });
+  document.addEventListener("click",function(e){
+    try{
+      var g=e.target.closest("[data-go]");
+      if(g){SFX.nav();return go(g.dataset.go)}
+      var cp=e.target.closest("[data-copy]");
+      if(cp){SFX.click();return copy(cp.dataset.copy)}
+      if(e.target.closest("[data-close]"))return closeModal();
+      
+      var res=e.target.closest("[data-resolve]");
+      if(res){var parts=res.dataset.resolve.split("|");resolveOrder(parts[0],parts[1]);return}
+      var la=e.target.closest("[data-loginas]");
+      if(la){adminLoginAs(la.dataset.loginas);return}
+      var at=e.target.closest("[data-addtokens]");
+      if(at){adminAddTokens(at.dataset.addtokens);return}
+    }catch(err){console.error(err)}
+  });
+  $("msgOverlay").addEventListener("click",function(e){if(e.target===this)closeModal()});
+  $("btnAdmin").addEventListener("click",function(){
+    SFX.click();
+    if(currentUser && currentUser.username === 'admin') {
+      openAdminPanel();
+    } else {
+      $("adminLoginOverlay").classList.add("show");
+    }
+  });
+  $("adminLoginOverlay").addEventListener("click",function(e){if(e.target===this)this.classList.remove("show")});
+  $("adminLoginOk").addEventListener("click",function(){
+    var entered=$("adminPassInput").value;
+    if(entered === 'admin123'){
+      $("adminLoginOverlay").classList.remove("show");
+      $("adminPassInput").value="";
+      openAdminPanel();
+    } else {
+      SFX.error();toast("رمز اشتباه است",true);
+    }
+  });
+  $("adminClose").addEventListener("click",function(){SFX.nav();$("adminPanel").style.display="none"});
+  $("adminTabs").addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b)return;
+    SFX.click();
+    [].forEach.call(this.children,function(c){c.classList.remove("on")});
+    b.classList.add("on");
+    var tab=b.dataset.tab;
+    $("adminOrders").style.display=(tab==="orders")?"block":"none";
+    $("adminUsers").style.display=(tab==="users")?"block":"none";
+  });
 }
+
+function copy(t){try{navigator.clipboard.writeText(t).then(function(){toast("کپی شد")}).catch(function(){fallbackCopy(t)})}catch(e){fallbackCopy(t)}}
+function fallbackCopy(t){try{var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);toast("کپی شد")}catch(e){toast("کپی نشد",true)}}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderTicker();
+  bind();
+});
 </script>
 </body>
 </html>
