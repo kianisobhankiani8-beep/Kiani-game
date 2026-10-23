@@ -290,11 +290,11 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       </div>
       <div class="tile t-mines" data-go="mines" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="4" y="4" width="26" height="26" rx="7" fill="#2ee6c5"><animate attributeName="opacity" values=".9;.35;.9" dur="2.4s" repeatCount="indefinite"/></rect><rect x="34" y="4" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="4" y="34" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="34" y="34" width="26" height="26" rx="7" fill="#ff5d73"><animate attributeName="opacity" values="1;.5;1" dur="1.6s" repeatCount="indefinite"/></rect><circle cx="47" cy="47" r="5" fill="#12151f"/></svg>
-        <div><b>بازی انفجار</b><small>الماس بردار، بمب نه</small><span class="rtp num">RTP 60%</span></div>
+        <div><b>بازی انفجار</b><small>الماس بردار، بمب نه</small><span class="rtp num">RTP 45%</span></div>
       </div>
       <div class="tile big t-plinko" data-go="plinko" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none" fill="#fff"><circle cx="32" cy="12" r="3" opacity=".4"/><circle cx="22" cy="26" r="3" opacity=".4"/><circle cx="42" cy="26" r="3" opacity=".4"/><circle cx="12" cy="40" r="3" opacity=".4"/><circle cx="32" cy="40" r="3" opacity=".4"/><circle cx="52" cy="40" r="3" opacity=".4"/><circle r="5" fill="#22e4ff"><animateMotion dur="2.6s" repeatCount="indefinite" path="M32 2 L32 12 L22 26 L32 40 L32 58"/></circle></svg>
-        <div><b>بازی پلینکو</b><small>ریسک و تعداد توپ را خودت انتخاب کن</small><span class="rtp num">RTP 70%</span></div>
+        <div><b>بازی پلینکو</b><small>ریسک و تعداد توپ را خودت انتخاب کن</small><span class="rtp num">RTP ~۴۲%</span></div>
       </div>
       <div class="tile big t-crash" data-go="crash" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><path d="M4 58C24 56 40 44 54 12" fill="none" stroke="#ff9f43" stroke-width="5" stroke-linecap="round"/><circle r="6" fill="#ffd25a"><animateMotion dur="2.2s" repeatCount="indefinite" path="M4 58C24 56 40 44 54 12"/></circle></svg>
@@ -363,7 +363,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     </div>
     <div class="card">
       <div style="font-size:13px;font-weight:700">جدول ضرایب (20 خانه)</div>
-      <div class="tbl"><div>0x<br><b class="num">10</b></div><div>0.5x<br><b class="num">4</b></div><div>1x<br><b class="num">2</b></div><div>1.5x<br><b class="num">1</b></div><div>2x<br><b class="num">2</b></div><div>3x<br><b class="num">1</b></div><div>5x<br><b class="num">1</b></div></div>
+      <div class="tbl"><div>0x<br><b class="num">8</b></div><div>0.5x<br><b class="num">4</b></div><div>1x<br><b class="num">3</b></div><div>1.5x<br><b class="num">1</b></div><div>2x<br><b class="num">2</b></div><div>3x<br><b class="num">1</b></div><div>5x<br><b class="num">1</b></div><div>10x<br><b class="num">1</b></div></div>
     </div>
   </section>
 
@@ -380,7 +380,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <div class="field" style="margin-top:12px"><label>تعداد بمب</label><select id="m_mc"><option>3</option><option selected>5</option><option>8</option><option>12</option></select></div>
       <div class="mrow" style="margin-top:14px"><div><button class="btn gold" id="m_start" type="button">شروع</button></div><div><button class="btn green" id="m_cash" type="button" disabled>برداشت</button></div></div>
       <div class="info"><span>ضریب فعلی: <b class="num" id="m_cm">1.00x</b></span><span>ضریب بعدی: <b class="num" id="m_nm">-</b></span></div>
-      <div class="info"><span>بازگشت به بازیکن: <b class="num">60%</b></span><span>برداشت: <b class="num" id="m_cv">0</b> T</span></div>
+      <div class="info"><span>بازگشت به بازیکن: <b class="num">50%</b></span><span>برداشت: <b class="num" id="m_cv">0</b> T</span></div>
     </div>
   </section>
 
@@ -393,11 +393,10 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     <div class="res" id="p_res">توپ را رها کن</div>
     <canvas id="p_cv" width="640" height="640"></canvas>
     <div class="card">
-      <div class="field"><label>سطح ریسک (ضرایب)</label><div class="seg" id="p_risk"><button type="button" data-r="0">کم</button><button type="button" class="on" data-r="1">متوسط</button><button type="button" data-r="2">زیاد</button></div></div>
       <div class="field"><label>تعداد توپ در هر رها کردن</label><div class="seg" id="p_n"><button type="button" class="on" data-n="1">1</button><button type="button" data-n="3">3</button><button type="button" data-n="5">5</button><button type="button" data-n="10">10</button></div></div>
       <div id="p_betBox"></div>
       <button class="btn gold" id="p_drop" type="button" style="margin-top:14px">رها کردن توپ</button>
-      <div class="info"><span>بازگشت به بازیکن: <b class="num" id="p_rtp">70.0%</b></span><span>احتمال بردن (بالای 1x): <b class="num" id="p_pw">29%</b></span></div>
+      <div class="info"><span>بازگشت به بازیکن: <b class="num" id="p_rtp">42.0%</b></span><span>احتمال بردن (بالای 1x): <b class="num" id="p_pw">29%</b></span></div>
     </div>
   </section>
 
@@ -439,7 +438,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <div class="ctable"></div>
     </div>
     <div class="card">
-      <div class="field"><label>حالت بازی</label><div class="seg" id="c_mode"><button type="button" class="on" data-m="1">1 توپ<b>ضریب 2.1x</b></button><button type="button" data-m="2">2 توپ<b>ضریب 1.05x</b></button></div></div>
+      <div class="field"><label>حالت بازی</label><div class="seg" id="c_mode"><button type="button" class="on" data-m="1">1 توپ<b>ضریب 2.1x</b></button><button type="button" data-m="2">2 توپ<b>ضریب 1.4x</b></button></div></div>
       <div id="c_betBox" style="margin-top:12px"></div>
       <button class="btn gold" id="c_go" type="button" style="margin-top:14px">شروع بازی</button>
       <div class="info"><span>ضریب برد: <b class="num" id="c_x">2.1x</b></span><span>احتمال برد: <b class="num" id="c_p">33.3%</b></span></div>
@@ -599,7 +598,6 @@ async function doRegister(){
     const existing = await supabaseFetch("users?username=eq." + encodeURIComponent(u));
     if(existing.length > 0) { showLoading(false); SFX.error(); return toast("این نام کاربری قبلاً گرفته شده.",true) }
     
-    // فقط ستون‌هایی که در دیتابیس شما وجود دارد
     const newUser = await supabaseFetch("users", {
       method: "POST",
       body: JSON.stringify({ 
@@ -678,7 +676,7 @@ function renderAll(){
 }
 
 function renderTicker(){
-  var s="";for(var i=0;i<2;i++)s+='<em>WHEEL</em>RTP 87%<em>CUPS</em>x2.1<em>MINES</em>RTP 60%<em>PLINKO</em>RTP 70%<em>CRASH</em>RTP 25%<em>SLOTS</em>RTP 60%';
+  var s="";for(var i=0;i<2;i++)s+='<em>WHEEL</em>RTP 87%<em>CUPS</em>x2.1<em>MINES</em>RTP 50%<em>PLINKO</em>RTP 42%<em>CRASH</em>RTP 25%<em>SLOTS</em>RTP 60%';
   $("tick").innerHTML=s;
 }
 
@@ -942,9 +940,9 @@ G.mount=function(id,p){
 
 // ================== گردونه شانس ==================
 (function(){
-var SEG=[0, 0.5, 1, 0, 1.5, 0.5, 3, 0, 2, 0, 0.5, 1, 0, 5, 0, 0, 2, 0, 0, 0.5];
+var SEG=[0, 0.5, 1, 0, 1.5, 0.5, 3, 0, 2, 0, 0.5, 1, 0, 5, 0, 0, 2, 10, 1, 0.5];
 var N=SEG.length,A=360/N,cur=0,busy=false;
-var COL={"0":["#3a4066","#1c2033"],"0.5":["#4a5a92","#2a3563"],"1":["#3ee0c4","#0f766e"],"1.5":["#34d27b","#15803d"],"2":["#fbbf24","#b45309"],"3":["#fb923c","#c2410c"],"5":["#ff5d73","#991b1b"]};
+var COL={"0":["#3a4066","#1c2033"],"0.5":["#4a5a92","#2a3563"],"1":["#3ee0c4","#0f766e"],"1.5":["#34d27b","#15803d"],"2":["#fbbf24","#b45309"],"3":["#fb923c","#c2410c"],"5":["#ff5d73","#991b1b"],"10":["#ff2e93","#7c3aed"]};
 var cv=G.$("w_wheel");if(!cv)return;
 var x=cv.getContext("2d"),R=320;
 x.translate(R,R);
@@ -990,7 +988,7 @@ G.$("w_go").addEventListener("click", async function(){
 (function(){
 var DIA='<svg viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 3l3 18M15 3l-3 18"/></svg>',BOMB='<svg viewBox="0 0 24 24"><circle cx="11" cy="14" r="7"/><path d="M15 9l3-3M18 3v3M21 6h-3"/></svg>';
 var T=25,mines=[],opened=0,bet=0,live=false,M=5;
-var RTP=0.60;
+var RTP=0.50;
 function mult(k){var v=RTP;for(var i=0;i<k;i++)v*=(T-i)/(T-M-i);return v}
 function ui(){var m=mult(opened);G.$("m_cm").textContent=m.toFixed(2)+"x";G.$("m_nm").textContent=(live&&opened<T-M)?mult(opened+1).toFixed(2)+"x":"-";G.$("m_cv").textContent=G.fmt(Math.floor(bet*m));G.$("m_cash").disabled=!(live&&opened>0)}
 function build(){var g=G.$("m_grid");if(!g)return;g.innerHTML="";for(var i=0;i<T;i++){var c=document.createElement("button");c.type="button";c.className="cell off";c.dataset.i=i;g.appendChild(c)}}
@@ -1022,14 +1020,14 @@ G.$("m_cash").addEventListener("click", async function(){
 
 // ================== پلینکو ==================
 (function(){
-var TB=[[3,1.5,1.0,0.7,0.4],[7,2.5,1.0,0.5,0.3],[15,3.5,1.0,0.3,0.2]];
+var TB=[[3,2,1,0.5,0]];
 var BN=[1,8,28,56,70,56,28,8,1];
-var risk=1,cnt=1,R=8,W=640,S=62,CX=W/2,TOP0=60,DY=58,balls=[],fl=[];
-var MUL=TB[1].concat(TB[1].slice(0,4).reverse());
+var cnt=1,R=8,W=640,S=62,CX=W/2,TOP0=60,DY=58,balls=[],fl=[];
+var MUL=TB[0].concat(TB[0].slice(0,4).reverse());
 var pBusy=false;
 var c=G.$("p_cv");if(!c)return;
 var x=c.getContext("2d");
-function tab(r){var h=TB[r];return h.concat(h.slice(0,4).reverse())}
+function tab(){var h=TB[0];return h.concat(h.slice(0,4).reverse())}
 function stats(){var r=0,w=0;MUL.forEach(function(m,k){r+=m*BN[k]/256;if(m>1)w+=BN[k]/256});G.$("p_rtp").textContent=(r*100).toFixed(1)+"%";G.$("p_pw").textContent=Math.round(w*100)+"%"}
 function sx(k){return CX+(k-4)*S}
 function col(m){return m>=10?"#fbbf24":m>=3?"#8b5cf6":m>1?"#22c55e":"#ef4444"}
@@ -1058,7 +1056,6 @@ function loop(){
   draw();requestAnimationFrame(loop)
 }
 G.mount("p_betBox","p_");stats();
-G.seg("p_risk",function(d){risk=+d.r;MUL=tab(risk);stats()},function(){return !pBusy});
 G.seg("p_n",function(d){cnt=+d.n},function(){return !pBusy});
 G.$("p_drop").addEventListener("click", async function(){
   if(pBusy){SFX.error();toast("توپ‌ها هنوز در حال سقوط هستند",true);return}
@@ -1072,7 +1069,7 @@ G.$("p_drop").addEventListener("click", async function(){
     currentUser.tokens -= totalBet - b;
   } catch(e){}
   pBusy=true;
-  var lockCnt=cnt,lockMUL=tab(risk),lockBet=b;
+  var lockCnt=cnt,lockMUL=tab(),lockBet=b;
   var q={n:lockCnt,left:lockCnt,won:0,cost:lockBet*lockCnt};
   for(var i=0;i<lockCnt;i++){
     (function(idx){
@@ -1092,7 +1089,7 @@ loop();
 (function(){
 var W=[].slice.call(document.querySelectorAll("#c_stage .cupwrap"));if(!W.length)return;
 var slot=[0,1,2],balls=[],state="idle",bet=0,mode=1;
-function mult(){return mode===1?2.1:1.05}
+function mult(){return mode===1?2.1:1.4}
 function place(){W.forEach(function(w,i){w.style.transform="translateX("+slot[i]*100+"%)"})}
 function lift(i,on){W[i].classList.toggle("up",on)}
 function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
@@ -1167,16 +1164,16 @@ async function cash(m){cashed=m;var p=await G.pay(bet*m);G.result("k_","بردا
 function frame(now){
   if(st!=="run")return;
   var t=(now-t0)/1000,m=mAt(t);
-  if(!cashed&&auto>1&&auto<cp&&m>=auto)cash(auto);
+  if(!cashed&&auto>=1&&auto<cp&&m>=auto)cash(auto);
   if(m>=cp){st="idle";draw(tOf(cp),cp,true);hist.unshift(cp);rh();if(!cashed){G.result("k_","سقوط در "+cp.toFixed(2)+"x  |  -"+G.fmt(bet)+" توکن",false);SFX.bomb()}var b=G.$("k_btn");b.disabled=false;b.textContent="شروع پرواز";return}
-  if(!cashed)G.$("k_btn").textContent=m<1.5?"برداشت از 1.50x":"برداشت  "+G.fmt(Math.floor(bet*Math.floor(m*100)/100))+" T";
+  if(!cashed)G.$("k_btn").textContent="برداشت  "+G.fmt(Math.floor(bet*Math.floor(m*100)/100))+" T";
   draw(t,m,false);requestAnimationFrame(frame)
 }
 G.mount("k_betBox","k_");draw(0,0,false);
 G.$("k_btn").addEventListener("click", async function(){
-  if(st==="run"){if(!cashed){var m=Math.floor(mAt((performance.now()-t0)/1000)*100)/100;if(m<cp&&m>=1.5)cash(m)}return}
+  if(st==="run"){if(!cashed){var m=Math.floor(mAt((performance.now()-t0)/1000)*100)/100;if(m<cp&&m>=1.0)cash(m)}return}
   var b=await G.take("k_");if(!b)return;bet=b;
-  var v=G.$("k_auto").value.replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)});auto=parseFloat(v)||0;if(auto>0)auto=Math.max(1.5,auto);
+  var v=G.$("k_auto").value.replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)});auto=parseFloat(v)||0;if(auto>0)auto=Math.max(1.0,auto);
   var u=G.rnd(1e9)/1e9;cp=Math.min(1000,Math.max(1.01,0.25/Math.max(u,0.000001)));
   cp=Math.floor(cp*100)/100;
   cashed=0;st="run";G.$("k_res").className="res";G.$("k_res").textContent="موشک از 0.00x در حال پرواز...";t0=performance.now();requestAnimationFrame(frame);
