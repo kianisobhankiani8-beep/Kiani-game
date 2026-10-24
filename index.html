@@ -286,11 +286,11 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       </div>
       <div class="tile t-cups" data-go="cups" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><g class="cb1"><path d="M5 20h15l-2 30H7z" fill="#2ee6c5"/></g><g class="cb2"><path d="M24 20h15l-2 30H26z" fill="#22e4ff"/></g><g class="cb3"><path d="M43 20h15l-2 30H45z" fill="#2ee6c5"/></g><circle cx="31.5" cy="55" r="3.5" fill="#fff"/></svg>
-        <div><b>توپ زیر لیوان</b><small>1 یا 2 توپ، با ضریب متفاوت</small><span class="rtp num">1.8x - 0.9x</span></div>
+        <div><b>توپ زیر لیوان</b><small>توپ زیر لیوان را پیدا کن</small><span class="rtp num">x2.1</span></div>
       </div>
       <div class="tile t-mines" data-go="mines" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none"><rect x="4" y="4" width="26" height="26" rx="7" fill="#2ee6c5"><animate attributeName="opacity" values=".9;.35;.9" dur="2.4s" repeatCount="indefinite"/></rect><rect x="34" y="4" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="4" y="34" width="26" height="26" rx="7" fill="#fff" opacity=".12"/><rect x="34" y="34" width="26" height="26" rx="7" fill="#ff5d73"><animate attributeName="opacity" values="1;.5;1" dur="1.6s" repeatCount="indefinite"/></rect><circle cx="47" cy="47" r="5" fill="#12151f"/></svg>
-        <div><b>بازی انفجار</b><small>الماس بردار، بمب نه</small><span class="rtp num">RTP 45%</span></div>
+        <div><b>بازی انفجار</b><small>الماس بردار، بمب نه</small><span class="rtp num">RTP 50%</span></div>
       </div>
       <div class="tile big t-plinko" data-go="plinko" role="button">
         <svg class="tg" viewBox="0 0 64 64" style="stroke:none" fill="#fff"><circle cx="32" cy="12" r="3" opacity=".4"/><circle cx="22" cy="26" r="3" opacity=".4"/><circle cx="42" cy="26" r="3" opacity=".4"/><circle cx="12" cy="40" r="3" opacity=".4"/><circle cx="32" cy="40" r="3" opacity=".4"/><circle cx="52" cy="40" r="3" opacity=".4"/><circle r="5" fill="#22e4ff"><animateMotion dur="2.6s" repeatCount="indefinite" path="M32 2 L32 12 L22 26 L32 40 L32 58"/></circle></svg>
@@ -438,7 +438,6 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
       <div class="ctable"></div>
     </div>
     <div class="card">
-      <div class="field"><label>حالت بازی</label><div class="seg" id="c_mode"><button type="button" class="on" data-m="1">1 توپ<b>ضریب 2.1x</b></button><button type="button" data-m="2">2 توپ<b>ضریب 1.4x</b></button></div></div>
       <div id="c_betBox" style="margin-top:12px"></div>
       <button class="btn gold" id="c_go" type="button" style="margin-top:14px">شروع بازی</button>
       <div class="info"><span>ضریب برد: <b class="num" id="c_x">2.1x</b></span><span>احتمال برد: <b class="num" id="c_p">33.3%</b></span></div>
@@ -772,6 +771,7 @@ async function submitSell(){
 
   showLoading(true);
   try {
+    // کسر توکن هنگام درخواست برداشت
     await supabaseFetch("users?id=eq." + currentUser.id, {method: "PATCH",body: JSON.stringify({ tokens: currentUser.tokens - amt })});
     await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: currentUser.id, type: "sell", tokens: amt, card_number: card, status: "pending" })});
     await refreshUserData();
@@ -868,11 +868,16 @@ async function resolveOrder(transactionId, action){
       const uData = await supabaseFetch("users?id=eq." + t.user_id);
       if(uData && uData.length > 0) {
         const user = uData[0];
-        if(t.type === "buy") { await supabaseFetch("users?id=eq." + user.id, { method: "PATCH", body: JSON.stringify({ tokens: user.tokens + t.tokens }) }); }
+        if(t.type === "buy") {
+          // خرید: توکن‌ها اضافه می‌شوند
+          await supabaseFetch("users?id=eq." + user.id, { method: "PATCH", body: JSON.stringify({ tokens: user.tokens + t.tokens }) });
+        }
+        // فروش: توکن‌ها از قبل کسر شده‌اند، کاری لازم نیست
       }
       toast("✓ تایید شد");
     } else {
       if(t.type === "sell") {
+        // فروش رد شده: توکن‌ها را برگردان
         const uData = await supabaseFetch("users?id=eq." + t.user_id);
         if(uData && uData.length > 0) {
           const user = uData[0];
@@ -1085,44 +1090,114 @@ G.$("p_drop").addEventListener("click", async function(){
 loop();
 })();
 
-// ================== توپ زیر لیوان ==================
+// ================== توپ زیر لیوان (نسخه اصلاح‌شده) ==================
 (function(){
-var W=[].slice.call(document.querySelectorAll("#c_stage .cupwrap"));if(!W.length)return;
-var slot=[0,1,2],balls=[],state="idle",bet=0,mode=1;
-function mult(){return mode===1?2.1:1.4}
-function place(){W.forEach(function(w,i){w.style.transform="translateX("+slot[i]*100+"%)"})}
-function lift(i,on){W[i].classList.toggle("up",on)}
-function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+var W = [].slice.call(document.querySelectorAll("#c_stage .cupwrap"));
+if(!W.length) return;
+
+var slot = [0, 1, 2];
+var ballSlot = 1;
+var state = "idle";
+var bet = 0;
+var MULT = 2.1;
+
+function place(){
+  W.forEach(function(w, i){ w.style.transform = "translateX(" + slot[i] * 100 + "%)" });
+}
+function lift(i, on){ W[i].classList.toggle("up", on) }
+function wait(ms){ return new Promise(function(r){ setTimeout(r, ms) }) }
+
+function randomizeBallSlot(){
+  ballSlot = G.rnd(3);
+}
+
 async function start(){
-  if(state!=="idle")return;
-  var b=await G.take("c_");if(!b)return;
-  bet=b;state="busy";G.$("c_go").disabled=true;
-  var rs=G.$("c_res");rs.className="res";
-  W.forEach(function(w,i){w.classList.remove("has","won");lift(i,false)});
-  slot=[0,1,2];place();
-  balls=[];while(balls.length<mode){var r=G.rnd(3);if(balls.indexOf(r)<0)balls.push(r)}
-  balls.forEach(function(i){W[i].classList.add("has")});
-  rs.textContent=mode===1?"تماشا کن، توپ اینجاست":"تماشا کن، دو توپ اینجاست";
-  await wait(350);balls.forEach(function(i){lift(i,true);SFX.cup()});await wait(1100);
-  balls.forEach(function(i){lift(i,false);SFX.cup()});await wait(500);
-  rs.textContent="در حال جابجایی...";
-  for(var n=0;n<9;n++){var a=G.rnd(3),cc=(a+1+G.rnd(2))%3,ia=slot.indexOf(a),ic=slot.indexOf(cc);slot[ia]=cc;slot[ic]=a;place();SFX.tick();await wait(430)}
-  rs.textContent="یک لیوان را انتخاب کن";state="pick";
+  if(state !== "idle") return;
+  var b = await G.take("c_");
+  if(!b) return;
+
+  bet = b;
+  state = "busy";
+  G.$("c_go").disabled = true;
+
+  var rs = G.$("c_res");
+  rs.className = "res";
+
+  W.forEach(function(w, i){
+    w.classList.remove("has", "won");
+    lift(i, false);
+  });
+
+  slot = [0, 1, 2];
+  place();
+
+  randomizeBallSlot();
+  W[ballSlot].classList.add("has");
+
+  rs.textContent = "تماشا کن، توپ اینجاست";
+  await wait(400);
+  lift(ballSlot, true);
+  SFX.cup();
+  await wait(1000);
+  lift(ballSlot, false);
+  SFX.cup();
+  await wait(400);
+
+  rs.textContent = "در حال جابجایی...";
+
+  for(var n = 0; n < 9; n++){
+    var a = G.rnd(3);
+    var b = G.rnd(3);
+    while(b === a) b = G.rnd(3);
+
+    var ia = slot.indexOf(a);
+    var ib = slot.indexOf(b);
+    slot[ia] = b;
+    slot[ib] = a;
+
+    place();
+    SFX.tick();
+    await wait(380);
+  }
+
+  rs.textContent = "یک لیوان را انتخاب کن";
+  state = "pick";
 }
+
 async function pick(i){
-  if(state!=="pick")return;state="busy";
-  var win=balls.indexOf(i)>-1;
-  var p = win ? await G.pay(bet*mult()) : 0;
-  lift(i,true);SFX.cup();await wait(550);
-  W.forEach(function(w,k){lift(k,true)});
-  if(win){W[i].classList.add("won");G.result("c_","درست حدس زدی!  |  +"+G.fmt(p-bet)+" توکن",true);SFX.win()}
-  else {G.result("c_","اشتباه بود  |  -"+G.fmt(bet)+" توکن",false);SFX.lose()}
-  await wait(900);state="idle";G.$("c_go").disabled=false;
+  if(state !== "pick") return;
+  state = "busy";
+
+  var chosenBall = (slot[i] === ballSlot);
+  var win = chosenBall;
+
+  lift(i, true);
+  SFX.cup();
+  await wait(500);
+  W.forEach(function(w, k){ lift(k, true) });
+
+  if(win){
+    var p = await G.pay(bet * MULT);
+    W[i].classList.add("won");
+    G.result("c_", "درست حدس زدی!  |  +" + G.fmt(p - bet) + " توکن", true);
+    SFX.win();
+  } else {
+    G.result("c_", "اشتباه بود  |  -" + G.fmt(bet) + " توکن", false);
+    SFX.lose();
+  }
+
+  await wait(900);
+  state = "idle";
+  G.$("c_go").disabled = false;
 }
-G.mount("c_betBox","c_");place();
-G.seg("c_mode",function(d){mode=+d.m;G.$("c_x").textContent=mult()+"x";G.$("c_p").textContent=(mode===1?"33.3":"66.7")+"%"},function(){return state==="idle"});
-G.$("c_go").addEventListener("click",start);
-G.$("c_stage").addEventListener("click",function(e){var w=e.target.closest(".cupwrap");if(w)pick(W.indexOf(w))});
+
+G.mount("c_betBox", "c_");
+place();
+G.$("c_go").addEventListener("click", start);
+G.$("c_stage").addEventListener("click", function(e){
+  var w = e.target.closest(".cupwrap");
+  if(w) pick(W.indexOf(w));
+});
 })();
 
 // ================== کرش ==================
