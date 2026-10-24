@@ -536,53 +536,34 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp
 function fmt(n){return Number(n||0).toLocaleString("en-US")}
 function digitsOnly(s){return String(s).replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)}).replace(/[٠-٩]/g,function(d){return "٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/\D/g,"")}
 function toast(m,err){var t=$("toast");if(!t)return;t.textContent=m;t.className="toast show"+(err?" err":"");clearTimeout(t._t);t._t=setTimeout(function(){t.className="toast"},2800)}
-function buzz(){try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
 function showLoading(show){$("loadingScreen").style.display = show ? "grid" : "none"}
 
-var AC=null;
-function ac(){if(!AC){try{var Ctx=window.AudioContext||window.webkitAudioContext;if(Ctx)AC=new Ctx()}catch(e){}}return AC}
-function tone(freq,dur,type,vol,slide){
-  var c=ac();if(!c)return;
-  try{
-    if(c.state==="suspended")c.resume();
-    var o=c.createOscillator(),g=c.createGain();
-    o.type=type||"sine";o.frequency.setValueAtTime(freq,c.currentTime);
-    if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(1,slide),c.currentTime+dur);
-    g.gain.setValueAtTime(0.0001,c.currentTime);
-    g.gain.exponentialRampToValueAtTime(vol||0.12,c.currentTime+0.015);
-    g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+dur);
-    o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur+0.02);
-  }catch(e){}
-}
 var SFX={
-  click:function(){tone(700,0.06,"square",0.05,900)},
-  nav:function(){tone(380,0.08,"triangle",0.09,560)},
-  bet:function(){tone(520,0.1,"sine",0.1,680)},
-  win:function(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){tone(f,0.18,"triangle",0.13)},i*90)})},
-  bigwin:function(){[523,659,784,1047,1319,1568].forEach(function(f,i){setTimeout(function(){tone(f,0.22,"triangle",0.15)},i*100)})},
-  lose:function(){tone(330,0.18,"sawtooth",0.1,180)},
-  tick:function(){tone(1400,0.03,"square",0.04)},
-  tick2:function(){tone(1800,0.04,"square",0.05)},
-  cup:function(){tone(260,0.09,"triangle",0.1,200)},
-  drop:function(){tone(600,0.08,"sine",0.09,380)},
-  bomb:function(){tone(180,0.45,"sawtooth",0.2,60)},
-  coin:function(){tone(1046,0.09,"square",0.08,1318)},
-  error:function(){tone(200,0.16,"square",0.12,150)}
+  click:function(){},
+  nav:function(){},
+  bet:function(){},
+  win:function(){},
+  bigwin:function(){},
+  lose:function(){},
+  tick:function(){},
+  tick2:function(){},
+  cup:function(){},
+  drop:function(){},
+  bomb:function(){},
+  coin:function(){},
+  error:function(){}
 };
-function unlockAudio(){var c=ac();if(c&&c.state==="suspended")c.resume()}
-document.addEventListener("pointerdown",unlockAudio);
-document.addEventListener("touchstart",unlockAudio);
 
 async function doLogin(){
   const u=$("authUser").value.trim().toLowerCase();
   const p=$("authPass").value;
-  if(!u||!p){SFX.error();return toast("نام و رمز را وارد کنید.",true)}
+  if(!u||!p){return toast("نام و رمز را وارد کنید.",true)}
   showLoading(true);
   try {
     const data = await supabaseFetch("users?username=eq." + encodeURIComponent(u));
-    if(!data || data.length===0) { showLoading(false); SFX.error(); return toast("حسابی با این نام پیدا نشد.",true) }
+    if(!data || data.length===0) { showLoading(false); return toast("حسابی با این نام پیدا نشد.",true) }
     const user = data[0];
-    if(user.password_hash !== p) { showLoading(false); SFX.error(); return toast("رمز عبور اشتباه است.",true) }
+    if(user.password_hash !== p) { showLoading(false); return toast("رمز عبور اشتباه است.",true) }
     await startSession(user);
   } catch (err) { console.error(err); showLoading(false); toast("خطا در ارتباط با سرور", true); }
 }
@@ -590,12 +571,12 @@ async function doLogin(){
 async function doRegister(){
   const u=$("authUser").value.trim().toLowerCase();
   const p=$("authPass").value;
-  if(!/^[a-z0-9_]{3,24}$/.test(u)){SFX.error();return toast("نام کاربری: 3 تا 24 حرف انگلیسی، عدد یا _",true)}
-  if(p.length<6){SFX.error();return toast("رمز عبور حداقل 6 کاراکتر باشد.",true)}
+  if(!/^[a-z0-9_]{3,24}$/.test(u)){return toast("نام کاربری: 3 تا 24 حرف انگلیسی، عدد یا _",true)}
+  if(p.length<6){return toast("رمز عبور حداقل 6 کاراکتر باشد.",true)}
   showLoading(true);
   try {
     const existing = await supabaseFetch("users?username=eq." + encodeURIComponent(u));
-    if(existing.length > 0) { showLoading(false); SFX.error(); return toast("این نام کاربری قبلاً گرفته شده.",true) }
+    if(existing.length > 0) { showLoading(false); return toast("این نام کاربری قبلاً گرفته شده.",true) }
     
     const newUser = await supabaseFetch("users", {
       method: "POST",
@@ -608,11 +589,10 @@ async function doRegister(){
       prefer: "return=representation"
     });
     
-    if(!newUser || !newUser[0]) { showLoading(false); SFX.error(); return toast("خطا در ساخت حساب",true); }
+    if(!newUser || !newUser[0]) { showLoading(false); return toast("خطا در ساخت حساب",true); }
     try {
       await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: newUser[0].id, type: "buy", tokens: WELCOME_TOKENS, status: "approved" })});
     } catch(e) { console.error("Transaction log error:", e); }
-    SFX.coin();
     showLoading(false);
     showModal('<div class="okring">'+CHECK+'</div><h3>ثبت‌نام موفق</h3><p>'+WELCOME_TOKENS+' توکن هدیه به حساب شما اضافه شد.</p><p style="color:var(--gold);font-weight:700;margin-bottom:4px">حالا از پنل ورود وارد شوید.</p><button class="btn" type="button" data-close="1">باشه</button>');
   } catch(err) {
@@ -627,7 +607,7 @@ async function doRegister(){
 async function startSession(user){
   currentUser = user; shownBal = 0;
   $("authScreen").style.display="none"; $("app").style.display="flex"; $("authPass").value="";
-  renderAll(); go("home"); SFX.win(); showLoading(false);
+  renderAll(); go("home"); showLoading(false);
 }
 
 async function refreshUserData(){
@@ -643,7 +623,7 @@ function logout(){
     if(currentUser){ $("adminPanel").style.display = "none"; refreshUserData(); go("home"); toast("برگشتی به حساب ادمین"); return; }
   }
   currentUser = null; $("app").style.display="none"; $("authScreen").style.display="flex";
-  $("authUser").value = ""; $("authPass").value = ""; SFX.nav();
+  $("authUser").value = ""; $("authPass").value = "";
 }
 
 function go(v){
@@ -704,8 +684,8 @@ function updateSellPrice(){var v=digitsOnly($("sellAmount").value);$("sellAmount
 async function submitBuy(){
   if(!currentUser) return;
   var amt=Number(digitsOnly($("buyAmount").value)),trk=$("buyTracking").value.trim();
-  if(!amt||amt<MIN_BUY){SFX.error();return toast("حداقل خرید ۵۰ توکن است",true)}
-  if(trk.length<4){SFX.error();return toast("کد رهگیری را وارد کنید",true)}
+  if(!amt||amt<MIN_BUY){return toast("حداقل خرید ۵۰ توکن است",true)}
+  if(trk.length<4){return toast("کد رهگیری را وارد کنید",true)}
 
   function showBuySuccess(){
     showModal(
@@ -733,7 +713,6 @@ async function submitBuy(){
     await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: currentUser.id, type: "buy", tokens: amt, tracking_code: trk, status: "pending" })});
     $("buyTracking").value="";
   } catch(err) { console.error(err); }
-  SFX.coin();
   showLoading(false);
   showBuySuccess();
 }
@@ -741,9 +720,9 @@ async function submitBuy(){
 async function submitSell(){
   if(!currentUser) return;
   var card=digitsOnly($("sellCard").value), amt=Number(digitsOnly($("sellAmount").value));
-  if(card.length!==16){SFX.error();return toast("شماره کارت را کامل وارد کنید",true)}
-  if(!amt||amt<1){SFX.error();return toast("تعداد توکن را وارد کنید",true)}
-  if(amt > currentUser.tokens){SFX.error();return toast("موجودی کافی نیست",true)}
+  if(card.length!==16){return toast("شماره کارت را کامل وارد کنید",true)}
+  if(!amt||amt<1){return toast("تعداد توکن را وارد کنید",true)}
+  if(amt > currentUser.tokens){return toast("موجودی کافی نیست",true)}
 
   function showSellSuccess(){
     showModal(
@@ -771,20 +750,18 @@ async function submitSell(){
 
   showLoading(true);
   try {
-    // کسر توکن هنگام درخواست برداشت
     await supabaseFetch("users?id=eq." + currentUser.id, {method: "PATCH",body: JSON.stringify({ tokens: currentUser.tokens - amt })});
     await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: currentUser.id, type: "sell", tokens: amt, card_number: card, status: "pending" })});
     await refreshUserData();
     $("sellCard").value=""; $("sellAmount").value=""; $("sellReceive").textContent="0 تومان";
   } catch(err) { console.error(err); }
-  SFX.coin();
   showLoading(false);
   showSellSuccess();
 }
 
 async function openAdminPanel(){
   $("adminPanel").style.display="block";
-  await renderAdminOrders(); await renderAdminUsers(); SFX.win();
+  await renderAdminOrders(); await renderAdminUsers();
   var activeTab=document.querySelector("#adminTabs button.on");
   var tab=activeTab?activeTab.dataset.tab:"orders";
   $("adminOrders").style.display=(tab==="orders")?"block":"none";
@@ -832,7 +809,7 @@ async function adminLoginAs(userId){
     currentUser = data[0];
     $("adminPanel").style.display="none";
     renderAll(); go("home");
-    toast("وارد حساب "+currentUser.username+" شدی"); SFX.coin();
+    toast("وارد حساب "+currentUser.username+" شدی");
   } catch(err) { toast("خطا", true); }
 }
 
@@ -854,7 +831,7 @@ async function adminAddTokens(userId){
       await supabaseFetch("transactions", {method: "POST",body: JSON.stringify({ user_id: user.id, type: n>0?"buy":"sell", tokens: Math.abs(n), status: "approved" })});
     } catch(e) { console.error(e); }
     toast((n>0?"+"+n:" "+n)+" توکن برای "+user.username);
-    renderAdminUsers(); refreshUserData(); SFX.coin();
+    renderAdminUsers(); refreshUserData();
   } catch(err) { toast("خطا", true); }
 }
 
@@ -869,15 +846,12 @@ async function resolveOrder(transactionId, action){
       if(uData && uData.length > 0) {
         const user = uData[0];
         if(t.type === "buy") {
-          // خرید: توکن‌ها اضافه می‌شوند
           await supabaseFetch("users?id=eq." + user.id, { method: "PATCH", body: JSON.stringify({ tokens: user.tokens + t.tokens }) });
         }
-        // فروش: توکن‌ها از قبل کسر شده‌اند، کاری لازم نیست
       }
       toast("✓ تایید شد");
     } else {
       if(t.type === "sell") {
-        // فروش رد شده: توکن‌ها را برگردان
         const uData = await supabaseFetch("users?id=eq." + t.user_id);
         if(uData && uData.length > 0) {
           const user = uData[0];
@@ -886,7 +860,7 @@ async function resolveOrder(transactionId, action){
       }
       toast("✗ رد شد");
     }
-    renderAdminOrders(); refreshUserData(); SFX.coin();
+    renderAdminOrders(); refreshUserData();
   } catch(err) { toast("خطا در انجام عملیات", true); }
 }
 
@@ -899,11 +873,11 @@ G.betVal=function(p){return parseInt(digitsOnly(G.$(p+"bet").value),10)||0};
 G.take=async function(p){
   if(!currentUser) return 0;
   var b=G.betVal(p);
-  if(b<G.MIN){SFX.error();toast("حداقل شرط "+G.MIN+" توکن است",true);return 0}
-  if(b>currentUser.tokens){SFX.error();toast("موجودی کافی نیست",true);return 0}
+  if(b<G.MIN){toast("حداقل شرط "+G.MIN+" توکن است",true);return 0}
+  if(b>currentUser.tokens){toast("موجودی کافی نیست",true);return 0}
   try {
     await supabaseFetch("users?id=eq." + currentUser.id, {method: "PATCH",body: JSON.stringify({ tokens: currentUser.tokens - b })});
-    currentUser.tokens -= b; renderAll(); SFX.bet(); return b;
+    currentUser.tokens -= b; renderAll(); return b;
   } catch(err) { return 0; }
 };
 G.pay=async function(x){
@@ -922,8 +896,7 @@ G.seg=function(id,cb,can){
   el.addEventListener("click",function(e){
     try{
       var b=e.target.closest("button");if(!b)return;
-      if(can&&!can()){SFX.error();toast("صبر کن تا دور فعلی تموم بشه",true);return}
-      SFX.click();
+      if(can&&!can()){toast("صبر کن تا دور فعلی تموم بشه",true);return}
       [].forEach.call(this.children,function(c){c.classList.remove("on")});
       b.classList.add("on");cb(b.dataset);
     }catch(err){console.error(err)}
@@ -935,7 +908,6 @@ G.mount=function(id,p){
   el.addEventListener("click",function(e){
     try{
       var c=e.target.closest("[data-b]");if(!c)return;
-      SFX.click();
       var v=c.dataset.b,cur=G.betVal(p),u=currentUser;
       var n=v==="h"?Math.floor(cur/2):v==="d"?cur*2:v==="m"?Math.floor(u?u.tokens:0):Number(v);
       G.$(p+"bet").value=Math.max(0,n);
@@ -977,13 +949,12 @@ G.$("w_go").addEventListener("click", async function(){
   var stage=G.$("w_stage");stage.classList.add("spin");
   var i=G.rnd(N),mid=i*A+A/2,rot=cur+360*7+(((360-mid-cur)%360)+360)%360;cur=rot;
   cv.style.transform="rotate("+rot+"deg)";
-  var tt=setInterval(function(){SFX.tick()},Math.max(90,3600/28));
   setTimeout(async function(){
-    clearInterval(tt);stage.classList.remove("spin");
+    stage.classList.remove("spin");
     var m=SEG[i],p=await G.pay(b*m);
-    if(m>1){G.result("w_","برد! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);burst(m>=5?160:70);SFX.win();}
+    if(m>1){G.result("w_","برد! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);burst(m>=5?160:70);}
     else if(m===1)G.result("w_","ضریب 1x - شرط برگشت",true);
-    else{G.result("w_",m===0?"باخت  |  -"+G.fmt(b)+" توکن":"ضریب "+m+"x  |  -"+G.fmt(b-p)+" توکن",false);SFX.lose();}
+    else{G.result("w_",m===0?"باخت  |  -"+G.fmt(b)+" توکن":"ضریب "+m+"x  |  -"+G.fmt(b-p)+" توکن",false);}
     busy=false;btn.disabled=false;
   },5300);
 });
@@ -1012,14 +983,14 @@ G.$("m_start").addEventListener("click", async function(){
 G.$("m_grid").addEventListener("click", async function(e){
   var c=e.target.closest(".cell");if(!c||!live||c.classList.contains("safe")||c.classList.contains("bomb"))return;
   var i=+c.dataset.i;
-  if(mines.indexOf(i)>-1){ c.innerHTML=BOMB;c.classList.add("bomb");reveal(); G.result("m_","انفجار!  |  -"+G.fmt(bet)+" توکن",false);SFX.bomb();end();return; }
-  c.innerHTML=DIA;c.classList.add("safe");opened++;SFX.tick2();ui();
-  if(opened===T-M){var p=await G.pay(bet*mult(opened));G.result("m_","همه الماس‌ها!  |  +"+G.fmt(p-bet)+" توکن",true);SFX.bigwin();reveal();end()}
+  if(mines.indexOf(i)>-1){ c.innerHTML=BOMB;c.classList.add("bomb");reveal(); G.result("m_","انفجار!  |  -"+G.fmt(bet)+" توکن",false);end();return; }
+  c.innerHTML=DIA;c.classList.add("safe");opened++;ui();
+  if(opened===T-M){var p=await G.pay(bet*mult(opened));G.result("m_","همه الماس‌ها!  |  +"+G.fmt(p-bet)+" توکن",true);reveal();end()}
 });
 G.$("m_cash").addEventListener("click", async function(){
   if(!live||!opened)return;
   var p=await G.pay(bet*mult(opened));G.result("m_","برداشت  |  +"+G.fmt(p-bet)+" توکن",p>=bet);
-  (p>=bet?SFX.win:SFX.lose)();reveal();end();
+  reveal();end();
 });
 })();
 
@@ -1049,9 +1020,8 @@ function loop(){
     if(b.t>=b.w.length-1){
       var m=b.mul[b.k],q=b.q;fl[b.k]=1;q.left--;
       G.pay(b.bet*m).then(p=>{ q.won+=p;
-        if(m>1)SFX.coin();
-        if(q.n===1){if(m>1){G.result("p_","ضریب "+m+"x  |  +"+G.fmt(p-b.bet)+" توکن",true);SFX.win()}else{G.result("p_","ضریب "+m+"x  |  -"+G.fmt(b.bet-p)+" توکن",false);SFX.lose()}pBusy=false}
-        else if(q.left===0){var d=q.won-q.cost;G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0);(d>=0?SFX.win:SFX.lose)();pBusy=false}
+        if(q.n===1){if(m>1){G.result("p_","ضریب "+m+"x  |  +"+G.fmt(p-b.bet)+" توکن",true)}else{G.result("p_","ضریب "+m+"x  |  -"+G.fmt(b.bet-p)+" توکن",false)}pBusy=false}
+        else if(q.left===0){var d=q.won-q.cost;G.result("p_","مجموع "+q.n+" توپ  |  "+(d>=0?"+":"-")+G.fmt(Math.abs(d))+" توکن",d>=0);pBusy=false}
       });
       balls.splice(i,1);continue;
     }
@@ -1063,10 +1033,10 @@ function loop(){
 G.mount("p_betBox","p_");stats();
 G.seg("p_n",function(d){cnt=+d.n},function(){return !pBusy});
 G.$("p_drop").addEventListener("click", async function(){
-  if(pBusy){SFX.error();toast("توپ‌ها هنوز در حال سقوط هستند",true);return}
+  if(pBusy){toast("توپ‌ها هنوز در حال سقوط هستند",true);return}
   var b=G.betVal("p_");
-  if(b<G.MIN){SFX.error();return toast("حداقل شرط "+G.MIN+" توکن است",true)}
-  if(b*cnt>currentUser.tokens){SFX.error();return toast("موجودی برای "+cnt+" توپ کافی نیست",true)}
+  if(b<G.MIN){return toast("حداقل شرط "+G.MIN+" توکن است",true)}
+  if(b*cnt>currentUser.tokens){return toast("موجودی برای "+cnt+" توپ کافی نیست",true)}
   var totalBet = b*cnt;
   await G.take("p_");
   try {
@@ -1081,7 +1051,6 @@ G.$("p_drop").addEventListener("click", async function(){
       setTimeout(function(){
         var p=[];for(var j=0;j<R;j++)p.push(G.rnd(2));
         balls.push({path:p,k:p.reduce(function(a,v){return a+v},0),w:wps(p),t:0,x:CX,y:TOP0-40,bet:lockBet,mul:lockMUL,q:q});
-        SFX.drop();
       },idx*220);
     })(i);
   }
@@ -1090,7 +1059,7 @@ G.$("p_drop").addEventListener("click", async function(){
 loop();
 })();
 
-// ================== توپ زیر لیوان (نسخه اصلاح‌شده) ==================
+// ================== توپ زیر لیوان (اصلاح‌شده) ==================
 (function(){
 var W = [].slice.call(document.querySelectorAll("#c_stage .cupwrap"));
 if(!W.length) return;
@@ -1122,6 +1091,7 @@ async function start(){
 
   var rs = G.$("c_res");
   rs.className = "res";
+  rs.textContent = "";
 
   W.forEach(function(w, i){
     w.classList.remove("has", "won");
@@ -1137,10 +1107,8 @@ async function start(){
   rs.textContent = "تماشا کن، توپ اینجاست";
   await wait(400);
   lift(ballSlot, true);
-  SFX.cup();
   await wait(1000);
   lift(ballSlot, false);
-  SFX.cup();
   await wait(400);
 
   rs.textContent = "در حال جابجایی...";
@@ -1156,7 +1124,6 @@ async function start(){
     slot[ib] = a;
 
     place();
-    SFX.tick();
     await wait(380);
   }
 
@@ -1168,11 +1135,10 @@ async function pick(i){
   if(state !== "pick") return;
   state = "busy";
 
-  var chosenBall = (slot[i] === ballSlot);
-  var win = chosenBall;
+  var ballIndex = slot.indexOf(ballSlot);
+  var win = (i === ballIndex);
 
   lift(i, true);
-  SFX.cup();
   await wait(500);
   W.forEach(function(w, k){ lift(k, true) });
 
@@ -1180,10 +1146,8 @@ async function pick(i){
     var p = await G.pay(bet * MULT);
     W[i].classList.add("won");
     G.result("c_", "درست حدس زدی!  |  +" + G.fmt(p - bet) + " توکن", true);
-    SFX.win();
   } else {
     G.result("c_", "اشتباه بود  |  -" + G.fmt(bet) + " توکن", false);
-    SFX.lose();
   }
 
   await wait(900);
@@ -1235,12 +1199,12 @@ function draw(t,m,dead){
   x.font="800 20px sans-serif";x.fillStyle="rgba(255,255,255,.7)";var lb=dead?"سقوط!":cashed?"برداشت شد در "+cashed.toFixed(2)+"x":"";if(lb)x.fillText(lb,W/2,H/2+30)
 }
 function rh(){var h=G.$("k_hist");if(h)h.innerHTML=hist.slice(0,8).map(function(v){return '<span style="color:'+(v>=2?"#22e4ff":"#ff5d73")+'">'+v.toFixed(2)+'x</span>'}).join("")}
-async function cash(m){cashed=m;var p=await G.pay(bet*m);G.result("k_","برداشت در "+m.toFixed(2)+"x  |  +"+G.fmt(p-bet)+" توکن",true);G.$("k_btn").disabled=true;SFX.win()}
+async function cash(m){cashed=m;var p=await G.pay(bet*m);G.result("k_","برداشت در "+m.toFixed(2)+"x  |  +"+G.fmt(p-bet)+" توکن",true);G.$("k_btn").disabled=true}
 function frame(now){
   if(st!=="run")return;
   var t=(now-t0)/1000,m=mAt(t);
   if(!cashed&&auto>=1&&auto<cp&&m>=auto)cash(auto);
-  if(m>=cp){st="idle";draw(tOf(cp),cp,true);hist.unshift(cp);rh();if(!cashed){G.result("k_","سقوط در "+cp.toFixed(2)+"x  |  -"+G.fmt(bet)+" توکن",false);SFX.bomb()}var b=G.$("k_btn");b.disabled=false;b.textContent="شروع پرواز";return}
+  if(m>=cp){st="idle";draw(tOf(cp),cp,true);hist.unshift(cp);rh();if(!cashed){G.result("k_","سقوط در "+cp.toFixed(2)+"x  |  -"+G.fmt(bet)+" توکن",false)}var b=G.$("k_btn");b.disabled=false;b.textContent="شروع پرواز";return}
   if(!cashed)G.$("k_btn").textContent="برداشت  "+G.fmt(Math.floor(bet*Math.floor(m*100)/100))+" T";
   draw(t,m,false);requestAnimationFrame(frame)
 }
@@ -1276,15 +1240,15 @@ G.$("s_go").addEventListener("click",async function(){
   G.$("s_slot").classList.remove("win");
   R.forEach(function(r){r.classList.add("spin")});
   var iv=setInterval(function(){R.forEach(function(r){if(r.classList.contains("spin"))r.firstElementChild.textContent=SY[G.rnd(6)][0]})},70);
-  for(var i=0;i<3;i++){await new Promise(function(r){setTimeout(r,i?650:1000)});R[i].classList.remove("spin");R[i].firstElementChild.textContent=SY[f[i]][0];SFX.tick2()}
+  for(var i=0;i<3;i++){await new Promise(function(r){setTimeout(r,i?650:1000)});R[i].classList.remove("spin");R[i].firstElementChild.textContent=SY[f[i]][0]}
   clearInterval(iv);
   var m=0;
   if(f[0]===f[1]&&f[1]===f[2])m=SY[f[0]][2];
   else if(f.filter(function(v){return v===0}).length===2)m=0.6;
   var p=await G.pay(b*m);
-  if(m>1){G.result("s_","جایزه! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);G.$("s_slot").classList.add("win");(m>=60?SFX.bigwin:SFX.win)()}
+  if(m>1){G.result("s_","جایزه! ضریب "+m+"x  |  +"+G.fmt(p-b)+" توکن",true);G.$("s_slot").classList.add("win")}
   else if(m>0)G.result("s_","دو گیلاس! "+m+"x برگشت",false);
-  else {G.result("s_","باخت  |  -"+G.fmt(b)+" توکن",false);SFX.lose()}
+  else {G.result("s_","باخت  |  -"+G.fmt(b)+" توکن",false)}
   busy=false;btn.disabled=false;
 });
 })();
@@ -1306,21 +1270,21 @@ function bind(){
   $("btnLogin").addEventListener("click",doLogin);
   $("btnRegister").addEventListener("click",doRegister);
   $("btnLogout").addEventListener("click",logout);
-  $("payCard").addEventListener("click",function(){SFX.click();copy(CARD_NUMBER)});
+  $("payCard").addEventListener("click",function(){copy(CARD_NUMBER)});
   $("buyAmount").addEventListener("input",updateBuyPrice);
   $("btnBuy").addEventListener("click",submitBuy);
   $("sellAmount").addEventListener("input",updateSellPrice);
   $("btnSell").addEventListener("click",submitSell);
-  $("sellAll").addEventListener("click",function(){SFX.click();if(currentUser){var fr=currentUser.tokens||0;$("sellAmount").value=fr;updateSellPrice()}});
+  $("sellAll").addEventListener("click",function(){if(currentUser){var fr=currentUser.tokens||0;$("sellAmount").value=fr;updateSellPrice()}});
   document.querySelectorAll(".chips[data-for] .chip").forEach(function(c){
-    c.addEventListener("click",function(){SFX.click();$("buyAmount").value=c.dataset.v;updateBuyPrice()});
+    c.addEventListener("click",function(){$("buyAmount").value=c.dataset.v;updateBuyPrice()});
   });
   document.addEventListener("click",function(e){
     try{
       var g=e.target.closest("[data-go]");
-      if(g){SFX.nav();return go(g.dataset.go)}
+      if(g){return go(g.dataset.go)}
       var cp=e.target.closest("[data-copy]");
-      if(cp){SFX.click();return copy(cp.dataset.copy)}
+      if(cp){return copy(cp.dataset.copy)}
       if(e.target.closest("[data-close]"))return closeModal();
       var res=e.target.closest("[data-resolve]");
       if(res){var parts=res.dataset.resolve.split("|");resolveOrder(parts[0],parts[1]);return}
@@ -1332,7 +1296,6 @@ function bind(){
   });
   $("msgOverlay").addEventListener("click",function(e){if(e.target===this)closeModal()});
   $("btnAdmin").addEventListener("click",function(){
-    SFX.click();
     if(currentUser && currentUser.username === 'admin') { openAdminPanel(); }
     else { $("adminLoginOverlay").classList.add("show"); }
   });
@@ -1340,12 +1303,11 @@ function bind(){
   $("adminLoginOk").addEventListener("click",function(){
     var entered=$("adminPassInput").value;
     if(entered === ADMIN_PASSWORD){ $("adminLoginOverlay").classList.remove("show"); $("adminPassInput").value=""; openAdminPanel(); }
-    else { SFX.error();toast("رمز اشتباه است",true); }
+    else { toast("رمز اشتباه است",true); }
   });
-  $("adminClose").addEventListener("click",function(){SFX.nav();$("adminPanel").style.display="none"});
+  $("adminClose").addEventListener("click",function(){$("adminPanel").style.display="none"});
   $("adminTabs").addEventListener("click",function(e){
     var b=e.target.closest("button");if(!b)return;
-    SFX.click();
     [].forEach.call(this.children,function(c){c.classList.remove("on")});
     b.classList.add("on");
     var tab=b.dataset.tab;
