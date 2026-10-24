@@ -475,7 +475,7 @@ svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-l
     <div class="khist" id="k_hist"></div>
     <div class="card">
       <div id="k_betBox"></div>
-      <div class="field" style="margin-top:12px"><label>برداشت خودکار (ضریب) - خالی = دستی</label><input id="k_auto" inputmode="decimal" value="2.00"></div>
+      <div class="field" style="margin-top:12px"><label>برداشت خودکار (ضریب) - خالی = دستی</label><input id="k_auto" inputmode="decimal" value="1.50"></div>
       <button class="btn gold" id="k_btn" type="button" style="margin-top:14px">شروع پرواز</button>
       <div class="info"><span>بازگشت به بازیکن: <b class="num">25%</b></span><span>بیشترین ضریب: <b class="num">1000x</b></span></div>
     </div>
@@ -1059,13 +1059,14 @@ G.$("p_drop").addEventListener("click", async function(){
 loop();
 })();
 
-// ================== توپ زیر لیوان (اصلاح‌شده) ==================
+// ================== توپ زیر لیوان (اصلاح نهایی) ==================
 (function(){
 var W = [].slice.call(document.querySelectorAll("#c_stage .cupwrap"));
 if(!W.length) return;
 
+// slot[i] = موقعیت فعلی لیوان i (0=چپ, 1=وسط, 2=راست)
 var slot = [0, 1, 2];
-var ballSlot = 1;
+var ballCup = 1;          // ایندکس لیوانی که توپ زیرشه (ثابت می‌مونه)
 var state = "idle";
 var bet = 0;
 var MULT = 2.1;
@@ -1076,8 +1077,9 @@ function place(){
 function lift(i, on){ W[i].classList.toggle("up", on) }
 function wait(ms){ return new Promise(function(r){ setTimeout(r, ms) }) }
 
-function randomizeBallSlot(){
-  ballSlot = G.rnd(3);
+// توپ رو به خود لیوان می‌چسبونه (نه به موقعیت)
+function setBallOnCup(cupIndex){
+  W.forEach(function(w, i){ w.classList.toggle("has", i === cupIndex) });
 }
 
 async function start(){
@@ -1093,6 +1095,7 @@ async function start(){
   rs.className = "res";
   rs.textContent = "";
 
+  // ریست کامل: همه لیوان‌ها پایین، توپ برداشته میشه
   W.forEach(function(w, i){
     w.classList.remove("has", "won");
     lift(i, false);
@@ -1101,18 +1104,22 @@ async function start(){
   slot = [0, 1, 2];
   place();
 
-  randomizeBallSlot();
-  W[ballSlot].classList.add("has");
+  // انتخاب تصادفی لیوانِ توپ‌دار
+  ballCup = G.rnd(3);
+  setBallOnCup(ballCup);          // توپ می‌ره زیر لیوانِ انتخاب‌شده
 
   rs.textContent = "تماشا کن، توپ اینجاست";
   await wait(400);
-  lift(ballSlot, true);
+
+  // نمایش توپ (بلند کردن لیوانِ توپ‌دار)
+  lift(ballCup, true);
   await wait(1000);
-  lift(ballSlot, false);
+  lift(ballCup, false);
   await wait(400);
 
   rs.textContent = "در حال جابجایی...";
 
+  // جابجایی: فقط موقعیت لیوان‌ها عوض میشه، توپ به لیوانش چسبیده
   for(var n = 0; n < 9; n++){
     var a = G.rnd(3);
     var b = G.rnd(3);
@@ -1131,20 +1138,20 @@ async function start(){
   state = "pick";
 }
 
-async function pick(i){
+async function pick(cupIndex){
   if(state !== "pick") return;
   state = "busy";
 
-  var ballIndex = slot.indexOf(ballSlot);
-  var win = (i === ballIndex);
+  // برنده = همون لیوانی که توپ زیرشه
+  var win = (cupIndex === ballCup);
 
-  lift(i, true);
+  lift(cupIndex, true);
   await wait(500);
-  W.forEach(function(w, k){ lift(k, true) });
+  W.forEach(function(w, k){ lift(k, true) });   // همه باز میشن تا تقلب مشخص نشه
 
   if(win){
     var p = await G.pay(bet * MULT);
-    W[i].classList.add("won");
+    W[cupIndex].classList.add("won");
     G.result("c_", "درست حدس زدی!  |  +" + G.fmt(p - bet) + " توکن", true);
   } else {
     G.result("c_", "اشتباه بود  |  -" + G.fmt(bet) + " توکن", false);
@@ -1213,7 +1220,9 @@ G.$("k_btn").addEventListener("click", async function(){
   if(st==="run"){if(!cashed){var m=Math.floor(mAt((performance.now()-t0)/1000)*100)/100;if(m<cp&&m>=1.0)cash(m)}return}
   var b=await G.take("k_");if(!b)return;bet=b;
   var v=G.$("k_auto").value.replace(/[۰-۹]/g,function(d){return "۰۱۲۳۴۵۶۷۸۹".indexOf(d)});auto=parseFloat(v)||0;if(auto>0)auto=Math.max(1.0,auto);
-  var u=G.rnd(1e9)/1e9;cp=Math.min(1000,Math.max(1.01,0.25/Math.max(u,0.000001)));
+  // کاهش ضریب انفجار (سخت‌تر شدن سقوط)
+  var u=G.rnd(1e9)/1e9;
+  cp=Math.min(1000,Math.max(1.01,0.45/Math.max(u,0.000001)));
   cp=Math.floor(cp*100)/100;
   cashed=0;st="run";G.$("k_res").className="res";G.$("k_res").textContent="موشک از 0.00x در حال پرواز...";t0=performance.now();requestAnimationFrame(frame);
 });
