@@ -659,6 +659,67 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
   #hokm-screen .seat .av{width:36px;height:36px;font-size:17px}
   #hokm-screen #hand{bottom:12px}
 }
+
+/* ---- comments ---- */
+#cmtText{width:100%;min-height:84px;resize:none;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:18px;color:#fff;padding:14px;outline:none;font-family:var(--font);font-size:14px;line-height:1.9;direction:rtl;text-align:right;box-sizing:border-box}
+#cmtText:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,228,255,.25)}
+.cmtRow{display:flex;align-items:center;gap:12px;margin:10px 0 16px}.cmtRow small{color:var(--muted);font-size:12px;min-width:48px}.cmtRow .btn{width:auto;flex:1;padding:12px}
+.cmt{display:flex;gap:10px;padding:12px;border-radius:20px;background:var(--panel);border:1px solid var(--line);margin-bottom:10px;animation:fade .4s ease both}
+.cmtAv{width:38px;height:38px;border-radius:13px;flex:none;display:grid;place-items:center;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--blue),var(--violet))}
+.cmtB{flex:1;min-width:0}.cmtH{display:flex;align-items:center;gap:8px}.cmtH b{font-size:13.5px}.cmtH small{color:var(--muted);font-size:11px}
+.cmtB p{margin:6px 0 0;font-size:13.5px;line-height:1.9;word-break:break-word;white-space:pre-wrap}
+.cmtDel{margin-inline-start:auto;border:0;background:rgba(255,255,255,.08);color:var(--muted);width:24px;height:24px;border-radius:8px;font-size:11px;cursor:pointer}
+.cmtHint{text-align:center;color:var(--muted);font-size:11px;margin-top:6px}
+/* ---- last trick ---- */
+#hokm-screen #lastBtn{position:absolute;right:10px;bottom:118px;z-index:14;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--gold);background:#000a;color:#fff;font-size:19px;display:none;cursor:pointer;padding:0}
+#hokm-screen #lastOv{position:absolute;inset:0;z-index:40;display:none;place-items:center;background:rgba(5,3,18,.74);backdrop-filter:blur(4px)}
+#hokm-screen #lastOv.on{display:grid}
+#hokm-screen #lastOv .lbox{padding:18px 16px;border-radius:22px;border:1.5px solid var(--gold);background:linear-gradient(160deg,#2a1252,#0d0822);text-align:center;max-width:92%}
+#hokm-screen #lastOv h4{margin:0 0 12px;color:var(--gold);font-size:16px}
+#hokm-screen #lastOv .lrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#hokm-screen #lastOv .lc{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11px;color:#fff}
+#hokm-screen #lastOv .lc .hokm-card{--w:52px;position:relative}
+#hokm-screen #lastOv .lc.win .hokm-card{box-shadow:0 0 0 3px var(--gold),0 0 18px var(--gold)}
+#hokm-screen #lastOv .lc.win span{color:var(--gold);font-weight:900}
+#hokm-screen #lastOv small{display:block;margin-top:12px;color:#9aa;font-size:11px}
+</style>
+
+<style id="royalPackCSS">
+/* ===== پک سلطنتی تک‌پیک (طراحی زنده) ===== */
+.royalBackPv,html[data-royal-back] #hokm-screen .back,html[data-royal-back] #hokm-screen .fan>*{
+ background:
+  linear-gradient(115deg,transparent 38%,rgba(255,244,190,.65) 50%,transparent 62%) 15% 0/300% 100% no-repeat,
+  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 106%22 width=%22100%22 height=%22106%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23fff6c0%22/%3E%3Cstop offset=%22.5%22 stop-color=%22%23e9bd55%22/%3E%3Cstop offset=%221%22 stop-color=%22%239a6a10%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22p%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%236a26c0%22/%3E%3Cstop offset=%221%22 stop-color=%22%231a0838%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d=%22M50 4C44 16 12 38 12 62c0 13 10 21 21 19 5-1 8-3 11-6-1 10-5 19-13 25h38c-8-6-12-15-13-25 3 3 6 5 11 6 11 2 21-6 21-19C88 38 56 16 50 4z%22 fill=%22url(%23g)%22/%3E%3Cpath d=%22M50 4C44 16 12 38 12 62c0 13 10 21 21 19 5-1 8-3 11-6-1 10-5 19-13 25h38c-8-6-12-15-13-25 3 3 6 5 11 6 11 2 21-6 21-19C88 38 56 16 50 4z%22 transform=%22translate(50 56) scale(.82) translate(-50 -56)%22 fill=%22url(%23p)%22/%3E%3Cpath d=%22M35 67L33 47l9 8 8-14 8 14 9-8-2 20z%22 fill=%22url(%23g)%22/%3E%3Crect x=%2235%22 y=%2267%22 width=%2230%22 height=%225%22 rx=%221.5%22 fill=%22url(%23g)%22/%3E%3Ccircle cx=%2233%22 cy=%2246%22 r=%222.4%22 fill=%22%23ff5a7a%22/%3E%3Ccircle cx=%2250%22 cy=%2240%22 r=%222.8%22 fill=%22%236ee7ff%22/%3E%3Ccircle cx=%2267%22 cy=%2246%22 r=%222.4%22 fill=%22%23ff5a7a%22/%3E%3C/svg%3E") center/66% auto no-repeat,
+  repeating-linear-gradient(45deg,rgba(233,189,85,.17) 0 1px,transparent 1px 6px),
+  repeating-linear-gradient(-45deg,rgba(233,189,85,.17) 0 1px,transparent 1px 6px),
+  radial-gradient(circle at 50% 38%,#4b1c8c,#14072f 80%);
+ border-color:#e9bd55;
+ box-shadow:inset 0 0 0 1.5px #2a0e55,inset 0 0 0 2.5px rgba(233,189,85,.85),0 2px 0 #000a,0 4px 8px #000a;
+ animation:royalBackSheen 4.2s ease-in-out infinite}
+@keyframes royalBackSheen{0%,20%{background-position:15% 0,center,0 0,0 0,0 0}70%,100%{background-position:85% 0,center,0 0,0 0,0 0}}
+.royalTablePv,html[data-royal-table] #hokm-screen #felt{
+ background:
+  linear-gradient(120deg,transparent 40%,rgba(255,236,160,.30) 50%,transparent 60%) 10% 0/300% 100% no-repeat,
+  url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 106%22 width=%22100%22 height=%22106%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23fff6c0%22/%3E%3Cstop offset=%22.5%22 stop-color=%22%23e9bd55%22/%3E%3Cstop offset=%221%22 stop-color=%22%239a6a10%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22p%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%236a26c0%22/%3E%3Cstop offset=%221%22 stop-color=%22%231a0838%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d=%22M50 4C44 16 12 38 12 62c0 13 10 21 21 19 5-1 8-3 11-6-1 10-5 19-13 25h38c-8-6-12-15-13-25 3 3 6 5 11 6 11 2 21-6 21-19C88 38 56 16 50 4z%22 fill=%22url(%23g)%22/%3E%3Cpath d=%22M50 4C44 16 12 38 12 62c0 13 10 21 21 19 5-1 8-3 11-6-1 10-5 19-13 25h38c-8-6-12-15-13-25 3 3 6 5 11 6 11 2 21-6 21-19C88 38 56 16 50 4z%22 transform=%22translate(50 56) scale(.82) translate(-50 -56)%22 fill=%22url(%23p)%22/%3E%3Cpath d=%22M35 67L33 47l9 8 8-14 8 14 9-8-2 20z%22 fill=%22url(%23g)%22/%3E%3Crect x=%2235%22 y=%2267%22 width=%2230%22 height=%225%22 rx=%221.5%22 fill=%22url(%23g)%22/%3E%3Ccircle cx=%2233%22 cy=%2246%22 r=%222.4%22 fill=%22%23ff5a7a%22/%3E%3Ccircle cx=%2250%22 cy=%2240%22 r=%222.8%22 fill=%22%236ee7ff%22/%3E%3Ccircle cx=%2267%22 cy=%2246%22 r=%222.4%22 fill=%22%23ff5a7a%22/%3E%3C/svg%3E") center/34% auto no-repeat,
+  repeating-conic-gradient(from 0deg at 50% 50%,rgba(233,189,85,.08) 0 7deg,transparent 7deg 14deg),
+  radial-gradient(ellipse at 50% 38%,#4a1a8c 0,#220a4d 45%,#0a0320 100%);
+ animation:royalTableSheen 7s ease-in-out infinite}
+html[data-royal-table] #hokm-screen #felt{
+ box-shadow:inset 0 0 60px #000b,inset 0 0 26px rgba(233,189,85,.12),inset 0 -6px 14px #fff1;
+ animation:royalTableSheen 7s ease-in-out infinite,royalTablePulse 3.6s ease-in-out infinite}
+@keyframes royalTableSheen{0%,15%{background-position:10% 0,center,0 0,0 0}75%,100%{background-position:90% 0,center,0 0,0 0}}
+@keyframes royalTablePulse{50%{box-shadow:inset 0 0 60px #000b,inset 0 0 34px rgba(233,189,85,.42),inset 0 -6px 14px #fff1}}
+.packIt{position:relative;overflow:hidden;border-radius:26px;padding:16px 12px 14px;margin-bottom:16px;text-align:center;background:linear-gradient(160deg,#2a0e55,#0d0624 70%);border:1.5px solid #e9bd55;box-shadow:0 0 28px rgba(233,189,85,.35),0 14px 30px rgba(0,0,0,.5);animation:pop .5s both,packGlow 3.4s ease-in-out infinite}
+.packIt::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 35%,rgba(255,236,160,.16) 50%,transparent 65%);background-size:250% 100%;animation:sweep 5s linear infinite}
+@keyframes packGlow{50%{box-shadow:0 0 44px rgba(233,189,85,.6),0 14px 30px rgba(0,0,0,.5)}}
+.packTag{position:relative;display:inline-block;font-size:10.5px;font-weight:900;padding:3px 12px;border-radius:999px;background:linear-gradient(135deg,#ffe27a,#e0a030);color:#2a1a02;margin-bottom:10px}
+.packPv{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 12px}
+.packPv .pkAv{width:92px;height:92px;flex:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.55))}
+.royalBackPv{width:58px;height:84px;border-radius:9px;border:2px solid #e9bd55;flex:none}
+.royalTablePv{width:92px;height:92px;border-radius:50%;border:5px solid #1a1030;flex:none;box-shadow:inset 0 0 0 2px #e9bd55,0 8px 16px rgba(0,0,0,.5)}
+.packIt b{position:relative;display:block;font-size:15px;color:#ffe27a}
+.packIt small{position:relative;display:block;color:#cbbcf5;font-size:11.5px;margin:4px 0 10px;line-height:1.7}
+.packIt .sb{position:relative}
 </style>
 </head>
 <body>
@@ -716,6 +777,10 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
         <svg class="art" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hgShop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#ff2e93"/></linearGradient></defs><path d="M22 23v-4a10 10 0 0 1 20 0v4" fill="none" stroke="#ffd45a" stroke-width="3.4" stroke-linecap="round"/><path d="M9 23h46l-3 36H12z" fill="url(#hgShop)" stroke="#fff" stroke-opacity=".35" stroke-width="1.2" stroke-linejoin="round"/><polygon points="32,32 41,42 32,54 23,42" fill="#22e4ff"/><path d="M23 42h18M32 32l-4 10 4 12 4-12-4-10" stroke="#fff" stroke-opacity=".6" fill="none"/></svg>
         <b>فروشگاه</b><small>آواتار، میز، پشت کارت</small>
       </div>
+      <div class="hubTile cmtTile" style="--tc:#22c55e;grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:14px 18px;text-align:right" onclick="go('rating')" role="button">
+        <svg class="art" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width:48px;height:48px;margin:0;flex:none;animation:none"><path d="M10 14h44a4 4 0 0 1 4 4v22a4 4 0 0 1-4 4H32l-12 10v-10h-10a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z" fill="#22c55e"/><circle cx="22" cy="29" r="3" fill="#fff"/><circle cx="32" cy="29" r="3" fill="#fff"/><circle cx="42" cy="29" r="3" fill="#fff"/></svg>
+        <div><b>نظرات و امتیاز</b><small>نظرت رو بنویس و به بازی نمره بده</small></div>
+      </div>
     </div>
   </section>
 
@@ -763,6 +828,13 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
         <span class="star" data-val="5">★</span>
       </div>
       <button class="btn" id="btnSubmitRating">ثبت نمره</button>
+    </div>
+    <div class="card" id="cmtCard">
+      <h3>نظرات بازیکنان <span id="cmtCount" style="margin-inline-start:auto;font-size:12px;color:var(--muted);font-weight:700">۰</span></h3>
+      <textarea id="cmtText" maxlength="200" placeholder="نظرت درباره بازی رو بنویس..."></textarea>
+      <div class="cmtRow"><small id="cmtCnt">۰/۲۰۰</small><button class="btn" id="btnCmt" type="button">ارسال نظر</button></div>
+      <div id="cmtList"></div>
+      <div id="cmtHint" class="cmtHint" style="display:none">نظرات فعلاً فقط روی همین دستگاه ذخیره می‌شود</div>
     </div>
   </section>
 
@@ -818,6 +890,8 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
     </div></div>
     <div id="hand"></div>
     <div id="toast"></div>
+    <button id="lastBtn" type="button" onclick="showLastTrick()" title="دست قبل">👁</button>
+    <div id="lastOv" onclick="this.classList.remove('on')"><div class="lbox"><h4>دست قبل</h4><div class="lrow" id="lastRow"></div><small id="lastWin"></small></div></div>
 
     <div id="hokm-modeOv">
       <div class="modeBox">
@@ -849,7 +923,7 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
       <div id="betBoxOff" style="display:none">
         <p>مبلغ ورودی هر نفر (توکن)</p>
         <div class="row" id="amtsOff"></div>
-        <div class="bet" id="betNoteOff"></div>
+        <div class="bet" id="betInfoOff"></div>
         <div id="warnOff"></div>
       </div>
       <button class="go" id="startOff">شروع بازی</button>
@@ -865,7 +939,7 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
         <p>مبلغ ورودی هر بازیکن (توکن)</p>
         <div class="row betTiers" id="amtsOn"></div>
         <div class="taxNote">
-          💰 <b>قانون جکپات:</b> هر ۴ بازیکن مبلغ ورودی رو می‌ذارن وسط. تیم برنده کل جکپات رو می‌بره.<br>
+          💰 <b>قانون جکپات:</b> مبلغ ورودی هر ۴ صندلی حساب می‌شه. تیم برنده جکپات رو می‌بره (سهم بات سوخته می‌شه).<br>🚪 <b>لفت = باخت:</b> اگر بازیکنی وسط بازی خارج بشه، تیمش درجا می‌بازه و جایزه به تیم حریف می‌رسه.<br>👥 <b>صف:</b> با ۲ نفر، ۲ بات؛ با ۳ نفر، ۱ بات اضافه می‌شه. با ۱ نفر میز تشکیل نمی‌شه و ورودی پس داده می‌شه.<br>
           💸 <b>مالیات ۲۰٪:</b> از کل جکپات کم می‌شه (درآمد سازنده) و ۸۰٪ به تیم برنده می‌رسه.
         </div>
         <div id="warnOn"></div>
@@ -1116,7 +1190,7 @@ function go(v){
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.go===v));
   if(v==="sell")$("sellBal").textContent=fmt(currentUser?currentUser.tokens:0);
   if(v==="history")renderHistory();
-  if(v==="rating")renderRating();
+  if(v==="rating"){renderRating();try{cmtLoad()}catch(e){}}
   if(v==="profile"){ if($("myUid")) $("myUid").textContent = userUid(currentUser); try{renderProfile()}catch(e){} }
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -1326,6 +1400,7 @@ const Wallet = {
 };
 
 const HokmCFG={amounts:[50,100,250,500],tricksToWin:7};
+const OFF_BET_MULT=1.6, OFF_BET_OPP_WIN=0.7; // ضریب جایزه و شانس برد حریف در آفلاین شرطی
 const MODES={1:{n:1,mult:1.5,lv:1,label:'تک دور'},3:{n:3,mult:2.3,lv:3,label:'سه دور'},7:{n:7,mult:3.3,lv:3,label:'هفت دور'}};
 const TH=[
  {id:'night',n:'شب طلایی',ic:'♠',mk:'♠',av:['👤','🤴','🧙','🥷'],dc:['✨','⭐','✨','⭐','✨','⭐']},
@@ -1434,12 +1509,16 @@ function buildAmtsOff(){
   $h('amtsOff').innerHTML='';
   HokmCFG.amounts.forEach(a=>{const b=document.createElement('button');b.textContent=fmtH(a);b.className=(a===stakeOff?'on ':'')+(a>BALoff?'low':'');
     b.onclick=()=>{stakeOff=a;buildAmtsOff();warnH('warnOff',a>BALoff?NOFUND:'')};$h('amtsOff').appendChild(b)});
-  const m=MODES[roundsOff],w=Math.round(stakeOff*m.mult);
-  $h('betNoteOff').innerHTML=`${m.label}: در صورت برد <b>${m.mult} برابر</b> می‌شود.<br>مثلاً ورود با <b>${fmtH(stakeOff)}</b> توکن ⟵ دریافت <b>${fmtH(w)}</b> توکن.<br>در صورت باخت، توکن ورودی از دست می‌رود.`;
+  const m=MODES[roundsOff],w=Math.round(stakeOff*OFF_BET_MULT);
+  const bi=$h('betInfoOff');if(bi)bi.innerHTML=`ضریب شرطی آفلاین: <b>×${OFF_BET_MULT}</b><br>جایزه برد با ورودی ${fmtH(stakeOff)}: <b style="color:var(--gold)">${fmtH(w)}</b> توکن`;
 }
-$h('mFreeOff').onclick=()=>{modeOff='free';$h('mFreeOff').className='on';$h('mBetOff').className='';$h('betBoxOff').style.display='none'};
-$h('mBetOff').onclick=()=>{modeOff='bet';$h('mBetOff').className='on';$h('mFreeOff').className='';$h('betBoxOff').style.display='block';buildAmtsOff();warnH('warnOff',stakeOff>BALoff?NOFUND:'')};
+$h('mFreeOff').onclick=()=>{modeOff='free';{const r=$h('rdsOff');if(r){r.style.display='';if(r.previousElementSibling)r.previousElementSibling.style.display=''}}$h('mFreeOff').className='on';$h('mBetOff').className='';$h('betBoxOff').style.display='none'};
+$h('mBetOff').onclick=()=>{modeOff='bet';{const r=$h('rdsOff');if(r){r.style.display='none';if(r.previousElementSibling)r.previousElementSibling.style.display='none'}}$h('mBetOff').className='on';$h('mFreeOff').className='';$h('betBoxOff').style.display='block';buildAmtsOff();warnH('warnOff',stakeOff>BALoff?NOFUND:'')};
 
+/* آفلاین شرطی با ضریب ثابت و شانس اعلام‌شده */
+(function(){
+  modeOn='free';
+})();
 $h('startOff').onclick = async () => {
   if(modeOff==='bet'){
     BALoff = await Wallet.balance();
@@ -1491,6 +1570,15 @@ function offStop(){
   const t=$h('offTmr');if(t)t.style.display='none';
 }
 function offLeaveOk(){
+  if(isOnlineMode&&OG&&(OG.n===2||(OG.room.stake||0)>0)&&!OG.over){
+    const pp=OG.viewPub||OG.pub;
+    if(!pp||pp.phase!=='over'){
+      const bet=(OG.room&&OG.room.stake)>0;
+      if(!confirm('⚠️ اگر خارج (لفت) بدهید بازنده حساب می‌شوید'+(bet?' و توکن ورودی شما کسر می‌شود و به حریف می‌رسد':'')+'. خارج می‌شوید؟'))return false;
+      ogForfeit(OG.mySeat);
+      return true;
+    }
+  }
   if(!OFFACT||isOnlineMode)return true;
   return confirm(modeOff==='bet'?'اگر الان خارج شوید توکن شرط از دست می‌رود. خارج می‌شوید؟':'بازی نیمه‌کاره رها می‌شود. خارج می‌شوید؟');
 }
@@ -1507,7 +1595,7 @@ async function dealOne(p,card){
   const e=document.createElement('div');e.className='fly back';f.appendChild(e);
   const x0=fr.width/2-15,y0=fr.height/2-21,x1=sr.left-fr.left+sr.width/2-15,y1=sr.top-fr.top+sr.height/2-21;
   e.style.left=x0+'px';e.style.top=y0+'px';
-  try{await e.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${x1-x0}px,${y1-y0}px) rotate(200deg)`}],{duration:230,easing:'ease-out'}).finished}catch(_){await sleep(230)}
+  try{await e.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${x1-x0}px,${y1-y0}px) rotate(200deg)`}],{duration:75,easing:'linear'}).finished}catch(_){await sleep(75)}
   e.remove();if(g!==OFFG)return;
   S.hands[p].push(card);
   if(p===0){sortH(S.hands[0]);renderHand()}else renderFan(p);
@@ -1515,26 +1603,43 @@ async function dealOne(p,card){
 
 function startMatchOffline(rounds){
   offStop();OFFACT=true;
-  const m=MODES[rounds];
-  M={...m,w:[0,0],r:1,need:Math.floor(m.n/2)+1,hk:Math.random()*4|0};
+  let m=MODES[rounds];
+  let fav=null;
+  if(modeOff==='bet'){m={...MODES[1],mult:OFF_BET_MULT,label:'تک دور'};fav=Math.random()<OFF_BET_OPP_WIN?1:0} // تیم مورد حمایت قرعه
+  M={...m,w:[0,0],r:1,need:Math.floor(m.n/2)+1,hk:Math.random()*4|0,fav};
   playRoundOffline();
 }
 
 async function playRoundOffline(){
-  const g=OFFG,d=deck(),hk=M.hk;
-  S={hands:[[],[],[],[]],trick:[],tricks:[0,0],trump:null,hakem:hk,turn:-1,seen:new Set(),playing:false};
+  const g=OFFG,hk=M.hk;let d=deck();
+  if(M.fav!=null){ // ترتیب پخش: ۵ کارت اول حاکم، بعد دور به دور تا ۱۳ تایی شدن
+    const cnt=[0,0,0,0],order=[];for(let i=0;i<5;i++){order.push(hk);cnt[hk]++}
+    while(cnt.some(c=>c<13))for(let k=0;k<4;k++){const q=(hk+k)%4;if(cnt[q]<13){order.push(q);cnt[q]++}}
+    const hi=d.filter(c=>c.v>=11),lo=d.filter(c=>c.v<11);
+    const favSeats=M.fav===0?[0,2]:[1,3];
+    const posF=[],posO=[];order.forEach((q,i)=>(favSeats.includes(q)?posF:posO).push(i));
+    const sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+    sh(posF);sh(posO);
+    const out=new Array(52),giveF=hi.slice(0,11),restHi=hi.slice(11);
+    const queue=[...giveF,...sh(lo.slice())];let qi=0;
+    posF.forEach(i=>{out[i]=queue[qi++]});
+    const rest=sh([...restHi,...queue.slice(qi)]);let ri=0;
+    posO.forEach(i=>{out[i]=rest[ri++]});
+    d=out;
+  }
+  S={hands:[[],[],[],[]],trick:[],tricks:[0,0],trump:null,hakem:hk,turn:-1,seen:new Set(),playing:false};lastBtnShow(false);
   setTrump(null);renderScore();$h('trick').innerHTML='';$h('hand').innerHTML='';
   [1,2,3].forEach(renderFan);mark(-1);
   document.querySelectorAll('#hokm-screen .seat').forEach(e=>e.classList.toggle('hk',+e.id[1]===hk));
   $h('deck').style.display='block';
   let ix=0;
   toastH((M.n>1?`دور ${M.r} از ${M.n} — `:'')+(hk===0?'شما حاکم هستید':'حاکم: بازیکن '+['شما','۲','۳','۴'][hk]),1500);
-  await sleep(1700);if(g!==OFFG)return;
-  for(let i=0;i<5;i++){await dealOne(hk,d[ix++]);if(g!==OFFG)return;await sleep(60)}
-  if(hk===0){await chooseTrumpUI()}else{await sleep(900);S.trump=bestSuit(S.hands[hk])}
+  await sleep(250);if(g!==OFFG)return;
+  for(let i=0;i<5;i++){await dealOne(hk,d[ix++]);if(g!==OFFG)return;}
+  if(hk===0){await chooseTrumpUI()}else{S.trump=bestSuit(S.hands[hk])}
   if(g!==OFFG)return;
   setTrump(S.trump);
-  toastH('حکم: '+SU[S.trump]);await sleep(700);if(g!==OFFG)return;
+  toastH('حکم: '+SU[S.trump],650);if(g!==OFFG)return;
   while(S.hands.some(h=>h.length<13)){
     for(let k=0;k<4;k++){
       const p=(hk+k)%4;
@@ -1625,7 +1730,7 @@ async function loopOffline(g){
     drawTrick();p===0?renderHand():renderFan(p);
     if(S.trick.length<4)continue;
     mark(-1);await sleep(900);if(g!==OFFG)return;
-    const w=winnerOf();S.tricks[team(w)]++;renderScore();
+    const w=winnerOf();S.last={t:S.trick.map(x=>({p:x.p,c:x.c})),w};lastBtnShow(true);S.tricks[team(w)]++;renderScore();
     await collectAnim(w,team(w)===0);if(g!==OFFG)return;
     S.trick=[];$h('trick').innerHTML='';S.turn=w;
     if(S.tricks[0]>=HokmCFG.tricksToWin||S.tricks[1]>=HokmCFG.tricksToWin)return roundEndOffline(S.tricks[0]>S.tricks[1]);
@@ -1656,6 +1761,72 @@ async function finishOffline(won){
   }
   $h('endT').textContent=won?'🎉 تیم شما برنده شد':'تیم شما باخت';$h('endP').innerHTML=detail;
   $h('end').classList.remove('h');refreshBalH();
+}
+
+
+/* ---------- COMMENTS ---------- */
+let cmtLastAt=0;
+function cmtAgo(iso){const s=Math.max(0,(Date.now()-new Date(iso).getTime())/1000);if(!isFinite(s)||s<60)return 'همین الان';if(s<3600)return pfa(Math.floor(s/60))+' دقیقه پیش';if(s<86400)return pfa(Math.floor(s/3600))+' ساعت پیش';return pfa(Math.floor(s/86400))+' روز پیش'}
+function cmtLocal(){try{return JSON.parse(localStorage.getItem('kiani_comments')||'[]')}catch(e){return[]}}
+async function cmtLoad(){
+  const box=$('cmtList');if(!box)return;
+  let rows,local=false;
+  try{rows=await supabaseFetch('comments?select=id,user_id,username,text,created_at&order=created_at.desc&limit=40')}
+  catch(e){local=true;rows=cmtLocal()}
+  rows=rows||[];
+  $('cmtHint').style.display=local?'block':'none';
+  $('cmtCount').textContent=pfa(rows.length);
+  if(!rows.length){box.innerHTML='<div class="empty">هنوز نظری ثبت نشده؛ اولین نفر باش 💬</div>';return}
+  box.innerHTML=rows.map(r=>{
+    const can=currentUser&&(r.user_id===currentUser.id||currentUser.is_admin);
+    return '<div class="cmt"><div class="cmtAv">'+esc((r.username||'?').charAt(0).toUpperCase())+'</div><div class="cmtB"><div class="cmtH"><b>'+esc(r.username||'بازیکن')+'</b><small>'+cmtAgo(r.created_at)+'</small>'+(can?'<button type="button" class="cmtDel" data-cid="'+esc(r.id)+'" aria-label="حذف">✕</button>':'')+'</div><p>'+esc(r.text)+'</p></div></div>';
+  }).join('');
+}
+async function cmtSubmit(){
+  if(!currentUser)return toast('لطفاً وارد شوید',true);
+  const ta=$('cmtText'),text=ta.value.trim().slice(0,200);
+  if(text.length<2)return toast('نظر خیلی کوتاه است',true);
+  if(Date.now()-cmtLastAt<15000)return toast('چند ثانیه صبر کن و دوباره بفرست',true);
+  const btn=$('btnCmt');btn.disabled=true;
+  try{
+    await supabaseFetch('comments',{method:'POST',body:JSON.stringify({user_id:currentUser.id,username:currentUser.username,text})});
+  }catch(e){
+    const l=cmtLocal();l.unshift({id:'l'+Date.now(),user_id:currentUser.id,username:currentUser.username,text,created_at:new Date().toISOString()});
+    try{localStorage.setItem('kiani_comments',JSON.stringify(l.slice(0,40)))}catch(_){}
+  }
+  cmtLastAt=Date.now();ta.value='';$('cmtCnt').textContent=pfa(0)+'/'+pfa(200);btn.disabled=false;
+  try{SFX.win()}catch(e){}toast('نظرت ثبت شد 💬');cmtLoad();
+}
+async function cmtDelete(id){
+  if(!id)return;
+  try{
+    if(String(id).charAt(0)==='l'){localStorage.setItem('kiani_comments',JSON.stringify(cmtLocal().filter(x=>String(x.id)!==String(id))))}
+    else await supabaseFetch('comments?id=eq.'+encodeURIComponent(id),{method:'DELETE'});
+  }catch(e){toast('حذف نشد',true)}
+  cmtLoad();
+}
+function cmtBind(){
+  const ta=$('cmtText');if(!ta)return;
+  ta.addEventListener('input',()=>{$('cmtCnt').textContent=pfa(ta.value.length)+'/'+pfa(200)});
+  $('btnCmt').addEventListener('click',cmtSubmit);
+  $('cmtList').addEventListener('click',e=>{const b=e.target.closest('.cmtDel');if(b&&confirm('این نظر حذف شود؟'))cmtDelete(b.dataset.cid)});
+}
+
+/* ---------- LAST TRICK (دست قبل) ---------- */
+function lastBtnShow(on){const b=$h('lastBtn');if(b)b.style.display=on?'block':'none'}
+function showLastTrick(){
+  const L=OFFACT?S.last:((OG&&OG.lastT)||null);
+  if(!L||!L.t||!L.t.length)return toastH('هنوز دستی بازی نشده');
+  const row=$h('lastRow');row.innerHTML='';
+  L.t.forEach(x=>{
+    const box=document.createElement('div');box.className='lc'+(x.p===L.w?' win':'');
+    box.appendChild(cardEl(x.c));
+    const nm=document.createElement('span');const se=$h('s'+x.p);nm.textContent=(se&&se.querySelector('.nm')?se.querySelector('.nm').textContent:'');
+    box.appendChild(nm);row.appendChild(box);
+  });
+  const ws=$h('s'+L.w),wn=ws&&ws.querySelector('.nm')?ws.querySelector('.nm').textContent:'';
+  $h('lastWin').textContent=wn?('برنده دست: '+wn+' — برای بستن لمس کن'):'برای بستن لمس کن';
+  const ov=$h('lastOv');ov.classList.add('on');clearTimeout(ov._t);ov._t=setTimeout(()=>ov.classList.remove('on'),4500);
 }
 
 /* ======================= ONLINE (Multiplayer) ======================= */
@@ -2040,6 +2211,7 @@ function bind(){
     s.addEventListener("click", () => setStars(parseInt(s.dataset.val)));
   });
   $("btnSubmitRating").addEventListener("click", submitRating);
+  cmtBind();
   
   $("adminBtn").addEventListener("click", () => {
     $("settingsOverlay").classList.remove("show");
@@ -2257,10 +2429,12 @@ async function joinOnlineRoom(roomId){
   const me=ps.find(p=>p.profile_id===currentUser.id); if(!me)return toast('تو عضو این بازی نیستی',true);
   const n=room.mode==='1v1'?2:4;
   const humans=ps.filter(p=>!p.is_bot).sort((a,b)=>a.seat-b.seat);
-  OG={room,n,mySeat:me.seat,host:humans[0].profile_id===currentUser.id,pub:null,hands:null,queue:[],busy:false,chs:[],over:false};
+  lastBtnShow(false);OG={room,n,mySeat:me.seat,host:humans[0].profile_id===currentUser.id,hostId:humans[0].profile_id,pub:null,hands:null,queue:[],busy:false,chs:[],over:false};
   try{openHokmScreen()}catch(e){}
   ['partyOv','lobbyOnline','lobby1v1','hokm-modeOv','end'].forEach(i=>{const e=$h(i)||$(i);if(e)e.classList.add('h')});
   $h('rnd').textContent=n===2?'تک‌به‌تک آنلاین':'حکم ۲ به ۲'; $h('trick').innerHTML=''; $h('hand').innerHTML='';
+  if(n===2||(room.stake||0)>0){try{await ogLeaveNotice(room.stake||0,n)}catch(e){console.warn('leave notice',e);const ln=$h('leaveNotice');if(ln)ln.remove()}}
+  if(!OG||OG.room.id!==roomId)return;
   if(OG.host){
     if(n===4){
       const used=new Set(ps.map(p=>p.seat)),rows=[];
@@ -2269,7 +2443,7 @@ async function joinOnlineRoom(roomId){
     }
     await db.from('game_rooms').update({status:'playing'}).eq('id',roomId);
   }
-  await ogNames(); ogChatInit();
+  await ogNames(); ogChatInit(); ogPresenceInit();
   const stateCh=db.channel('og_st_'+roomId).on('postgres_changes',{event:'*',schema:'public',table:'hokm_state',filter:'room_id=eq.'+roomId},p=>p.new&&ogApply(p.new));
   OG.chs.push(stateCh);
   const stateReady=await ogWaitSubscribed(stateCh);
@@ -2281,8 +2455,104 @@ async function joinOnlineRoom(roomId){
     if(!moveReady)toast('اتصال حرکت‌ها در حال بازیابی است...',true);
     await ogHostStart();
   } else {
-    for(let i=0;i<20&&!OG.pub;i++){const {data}=await db.from('hokm_state').select('*').eq('room_id',roomId).maybeSingle(); if(data){ogApply(data);break} await sleep(500)}
+    for(let i=0;i<40&&!OG.pub;i++){const {data}=await db.from('hokm_state').select('*').eq('room_id',roomId).maybeSingle(); if(data){ogApply(data);break} await sleep(500)}
   }
+}
+/* ---- حضور بازیکنان و تبدیل بازیکن قطع‌شده به بات ---- */
+async function ogPresenceInit(){
+  if(!OG)return;
+  const roomId=OG.room.id, uid=currentUser.id;
+  const ch=db.channel('og_presence_'+roomId,{config:{presence:{key:uid}}});
+  OG.presence=ch; OG.chs.push(ch); OG.presenceReady=false; OG.offlineTimers=OG.offlineTimers||{};
+  const check=()=>{if(!OG||OG.room.id!==roomId||!OG.presenceReady)return;if(OG.host)ogCheckOfflinePlayers();else ogScheduleHostTakeover()};
+  ch.on('presence',{event:'sync'},check).on('presence',{event:'leave'},evt=>{
+    const meta=(evt&&evt.leftPresences)||[];
+    meta.forEach(x=>{const id=x.user_id||x.id;if(id&&OG&&OG.host)ogScheduleBot(id,6500)});
+    check();
+  });
+  ch.subscribe(async status=>{
+    if(status==='SUBSCRIBED'&&OG&&OG.room.id===roomId){
+      try{await ch.track({user_id:uid,seat:OG.mySeat,online_at:Date.now()});OG.presenceReady=true;check()}catch(e){console.warn('presence track',e)}
+    }
+  });
+}
+function ogScheduleHostTakeover(){
+  if(!OG||OG.host||OG.hostTakeoverTimer)return;
+  OG.hostTakeoverTimer=setTimeout(async()=>{
+    if(!OG)return;OG.hostTakeoverTimer=null;if(OG.host)return;
+    const online=ogPresenceIds(),candidates=(OG.players||[]).filter(p=>!p.is_bot&&p.profile_id&&online.has(p.profile_id)).sort((a,b)=>a.seat-b.seat);
+    const elected=candidates[0];
+    if(!elected||elected.profile_id!==currentUser.id)return;
+    try{
+      const {data,error}=await db.from('hokm_state').select('*').eq('room_id',OG.room.id).maybeSingle();
+      if(error||!data||!data.pub)return;
+      OG.host=true;OG.hostId=currentUser.id;if(OG.hostTakeoverTimer){clearTimeout(OG.hostTakeoverTimer);OG.hostTakeoverTimer=null}OG.pub=data.pub;OG.hands=data.hands;OG.deck=(data.pub.deck||[]).slice();OG.over=data.pub.phase==='over';
+      if(!OG.over){toastH('اتصال میزبان قطع شد؛ بازی ادامه پیدا می‌کند',1800);ogTick();ogCheckOfflinePlayers()}
+    }catch(e){console.warn('host takeover',e)}
+  },6500);
+}
+function ogPresenceIds(){
+  const out=new Set(); if(!OG||!OG.presence)return out;
+  const state=OG.presence.presenceState()||{};
+  Object.values(state).flat().forEach(x=>{if(x&&(x.user_id||x.id))out.add(x.user_id||x.id)});
+  return out;
+}
+function ogScheduleBot(uid,delay=6500){
+  if(!OG||!OG.host||!uid||uid===currentUser.id)return;
+  if(OG.offlineTimers[uid])clearTimeout(OG.offlineTimers[uid]);
+  OG.offlineTimers[uid]=setTimeout(()=>ogReplaceOfflinePlayer(uid),delay);
+}
+async function ogCheckOfflinePlayers(){
+  if(!OG||!OG.host||!OG.presenceReady)return;
+  const online=ogPresenceIds();
+  const humans=(OG.players||[]).filter(p=>!p.is_bot&&p.profile_id&&p.profile_id!==currentUser.id);
+  humans.forEach(p=>{if(!online.has(p.profile_id))ogScheduleBot(p.profile_id,15000);else if(OG.offlineTimers[p.profile_id]){clearTimeout(OG.offlineTimers[p.profile_id]);delete OG.offlineTimers[p.profile_id]}});
+}
+async function ogReplaceOfflinePlayer(uid){
+  if(!OG||!OG.host||OG.over)return;
+  delete OG.offlineTimers[uid];
+  if(ogPresenceIds().has(uid))return;
+  const p=(OG.players||[]).find(x=>x.profile_id===uid&&!x.is_bot);if(!p)return;
+  if(OG.n===2||(OG.room.stake||0)>0)return ogForfeit(p.seat);
+  const {data,error}=await db.from('game_players').update({is_bot:true,bot_name:'بات جایگزین'}).eq('room_id',OG.room.id).eq('seat',p.seat).eq('profile_id',uid).select();
+  if(error||!data||!data.length)return;
+  Object.assign(p,{is_bot:true,bot_name:'بات جایگزین'});
+  await ogNames();
+  if(OG.pub&&OG.pub.turn===p.seat)ogTick();
+  toastH('بازیکن خارج شد؛ بات ادامه بازی را انجام می‌دهد',1800);
+}
+/* ---- لفت در تک‌به‌تک: باخت فوری + واریز جایزه به برنده ---- */
+async function ogForfeit(loserSeat){
+  if(!OG||OG.forfeiting||!(OG.n===2||(OG.room.stake||0)>0))return;
+  OG.forfeiting=true;
+  const room=OG.room,roomId=room.id,winSeat=1-ogTeam(loserSeat); // winSeat = شماره‌ی تیم برنده
+  try{
+    // فقط یک نفر می‌تواند بازی را ببندد (جلوگیری از واریز دوباره)
+    const {data:claim}=await db.from('game_rooms').update({status:'finished',winning_team:winSeat}).eq('id',roomId).eq('status','playing').select().maybeSingle();
+    if(!claim)return;
+    OG.over=true;
+    const {data:st}=await db.from('hokm_state').select('*').eq('room_id',roomId).maybeSingle();
+    const old=(st&&st.pub)||OG.pub||{};
+    const pub=Object.assign({hakem:0,turn:-1,trick:[],trump:null,tricks:[0,0]},old,{phase:'over',winner:winSeat,turn:-1,trick:[],collect:null,forfeit:true,forfeitSeat:loserSeat});
+    OG.pub=pub;
+    await db.from('hokm_state').upsert({room_id:roomId,pub,hands:(st&&st.hands)||OG.hands||[[],[]],updated_at:new Date().toISOString()});
+    await handleOnlinePayout(Object.assign({},room,claim,{status:'finished',winning_team:winSeat}));
+  }catch(e){console.warn('forfeit',e)}
+}
+function ogLeaveNotice(stake,n){
+  return new Promise(res=>{
+    const hs=$h('hokm-screen');if(!hs)return res();
+    const d=document.createElement('div');d.id='leaveNotice';
+    d.style.cssText='position:absolute;inset:0;z-index:60;display:grid;place-items:center;padding:20px;background:rgba(5,3,18,.93);backdrop-filter:blur(6px);text-align:center;direction:rtl';
+    d.innerHTML='<div style="max-width:340px;padding:24px 18px;border-radius:22px;border:2px solid #ff4d6d;background:linear-gradient(160deg,#2a1252,#0d0822);box-shadow:0 0 40px rgba(255,77,109,.35)">'
+      +'<div style="font-size:44px">⚠️</div>'
+      +'<div style="font-size:17px;font-weight:900;color:#ffd45a;margin:8px 0 10px">قانون خروج از بازی</div>'
+      +'<div style="font-size:14px;line-height:2;color:#fff">اگر در حین بازی لفت بدهید، <b style="color:#ff6b81">'+(n===4?'تیم شما بازنده حساب می‌شود':'بازنده حساب می‌شوید')+'</b>'
+      +(stake>0?' و <b style="color:#ff6b81">توکن ورودی شما کسر می‌شود</b> و به حساب برنده واریز می‌گردد':'')+'.</div>'
+      +'<div style="margin-top:14px;font-size:13px;color:#22e4ff">بازی تا <b id="lnT" style="font-size:22px">'+pfa(5)+'</b> ثانیه دیگر شروع می‌شود</div></div>';
+    hs.appendChild(d);
+    let left=5;const iv=setInterval(()=>{left--;const t=$h('lnT');if(t)t.textContent=pfa(Math.max(left,0));if(left<=0){clearInterval(iv);d.remove();res()}},1000);
+  });
 }
 /* ---- host engine ---- */
 const ogBot=seat=>OG.players.find(p=>p.seat===seat)?.is_bot;
@@ -2291,7 +2561,7 @@ async function ogSave(){await db.from('hokm_state').upsert({room_id:OG.room.id,p
 async function ogHostStart(){
   const hk=Math.random()*OG.n|0; OG.deck=ogShuffle(); OG.hands=Array.from({length:OG.n},()=>[]);
   OG.hands[hk]=OG.deck.splice(0,5);
-  OG.pub={phase:'trump',hakem:hk,trump:null,turn:hk,trick:[],tricks:[0,0],collect:null,winner:null};
+  OG.pub={phase:'trump',hakem:hk,trump:null,turn:hk,trick:[],tricks:[0,0],collect:null,winner:null,deck:OG.deck.slice()};
   await ogSave(); ogTick();
 }
 function ogLegalOf(hand,trick){if(!trick.length)return hand;const ls=trick[0].card.s;const f=hand.filter(c=>c.s===ls);return f.length?f:hand}
@@ -2339,7 +2609,7 @@ async function ogHandle(m){
   if(m.kind==='trump'&&p.phase==='trump'&&m.seat===p.hakem){
     p.trump=m.payload.s; OG.hands[p.hakem]=OG.hands[p.hakem].concat(OG.deck.splice(0,8));
     for(let k=0;k<OG.n;k++)if(k!==p.hakem)OG.hands[k]=OG.deck.splice(0,13);
-    p.phase='play'; p.turn=p.hakem; p.turnStartedAt=Date.now(); await ogSave(); return ogTick();
+    p.deck=OG.deck.slice(); p.phase='play'; p.turn=p.hakem; p.turnStartedAt=Date.now(); await ogSave(); return ogTick();
   }
   if(m.kind!=='card'||p.phase!=='play'||m.seat!==p.turn||p.trick.length>=OG.n)return;
   const c=m.payload.card,h=OG.hands[m.seat],i=h.findIndex(x=>x.s===c.s&&x.v===c.v);
@@ -2350,7 +2620,7 @@ async function ogHandle(m){
   // is also the scoring side; the higher legal card wins (trump beats non-trump).
   p.turn=-1;
   await ogSave();
-  await sleep(OG.n===2?450:1000);
+  await sleep(OG.n===2?220:350);
   let w;
   if(OG.n===2){
     const first=p.trick[0],second=p.trick[1];
@@ -2365,7 +2635,7 @@ async function ogHandle(m){
   p.lastTrickWinner=w;
   p.collectSeq=(Number(p.collectSeq)||0)+1;
   await ogSave();
-  await sleep(OG.n===2?900:750);
+  await sleep(OG.n===2?450:400);
   p.collect=null;
   p.trick=[];
   p.turn=w;
@@ -2375,8 +2645,8 @@ async function ogHandle(m){
     p.winner=p.tricks[0]>=7?0:1;
     OG.over=true;
     await ogSave();
-    const {data:room}=await db.from('game_rooms').update({status:'finished',winning_team:p.winner}).eq('id',OG.room.id).select().single();
-    if(room)await handleOnlinePayout(room);
+    const {data:rd}=await db.from('game_rooms').update({status:'finished',winning_team:p.winner}).eq('id',OG.room.id).select().maybeSingle();
+    await handleOnlinePayout(Object.assign({},OG.room,rd||{},{status:'finished',winning_team:p.winner}));
     return;
   }
   await ogSave();
@@ -2414,6 +2684,7 @@ function ogApply(row){
   }
   const tr=$h('trick');tr.innerHTML='';
   p.trick.forEach(t=>{const e=cardEl(t.card);e.className+=' p'+ogRel(t.seat);tr.appendChild(e)});
+  if(p.collect!=null&&p.trick&&p.trick.length){OG.lastT={t:p.trick.map(x=>({p:ogRel(x.seat),c:x.card})),w:ogRel(p.collect)};lastBtnShow(true)}
   if(p.collect!=null && !(prev&&prev.collect===p.collect&&prev.tricks[0]===p.tricks[0]&&prev.tricks[1]===p.tricks[1]&&prev.trick.length===0)){
     collectAnim(ogRel(p.collect),ogTeam(p.collect)===myT);
   }
@@ -2429,7 +2700,7 @@ function ogApply(row){
   if(p.phase==='over'){
     const won=p.winner===myT;
     $h('endT').textContent=won?'🏆 برنده شدی!':'😕 باختی';
-    $h('endP').textContent=`نتیجه: ${p.tricks[myT]} - ${p.tricks[1-myT]}`;
+    $h('endP').textContent=p.forfeit?(won?'بازیکنی از تیم حریف خارج شد و شما برنده شدید'+((OG.room&&OG.room.stake>0)?' — جایزه به حساب شما واریز شد':''):(p.forfeitSeat===OG.mySeat?'شما از بازی خارج شدید و بازنده حساب شدید':'هم‌تیمی شما از بازی خارج شد و تیم شما بازنده شد')):`نتیجه: ${p.tricks[myT]} - ${p.tricks[1-myT]}`;
     $h('chatBtn').style.display='none';$h('chatPanel').style.display='none';
     setTimeout(()=>$h('end').classList.remove('h'),900);
     setTimeout(async()=>{try{await refreshUserData();refreshBalH()}catch(e){}},3500);
@@ -2516,6 +2787,20 @@ const AV_DEF={
   a13:{c:['#ffeeaa','#b8800f'],bg:['#5a1c8a','#14052e']},
   bot:{c:['#b6c2e6','#4b587f'],bg:['#1b2442','#080d1f'],art:'a4'}
 };
+/* آواتار زنده پک سلطنتی */
+AV_DEF.a14={c:['#fff3b0','#e9a21c'],bg:['#4b1c8c','#0a0420']};
+AV_ART.a14=u=>{
+  const sp='M50 4C44 16 12 38 12 62c0 13 10 21 21 19 5-1 8-3 11-6-1 10-5 19-13 25h38c-8-6-12-15-13-25 3 3 6 5 11 6 11 2 21-6 21-19C88 38 56 16 50 4z',T='translate(13.6 12.4) scale(.375)';
+  let rays='';for(let i=0;i<12;i++){const a=i*Math.PI/6;rays+=`<polygon points="32,32 ${(32+60*Math.cos(a-.12)).toFixed(1)},${(32+60*Math.sin(a-.12)).toFixed(1)} ${(32+60*Math.cos(a+.12)).toFixed(1)},${(32+60*Math.sin(a+.12)).toFixed(1)}"/>`}
+  const star='M0-3L.8-.8 3 0 .8.8 0 3-.8.8-3 0-.8-.8z';
+  const spk=(x,y,b)=>`<g transform="translate(${x} ${y})"><path d="${star}" fill="#fff"><animate attributeName="opacity" values="0;1;0" dur="2.4s" begin="${b}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" values=".3;1.1;.3" dur="2.4s" begin="${b}s" repeatCount="indefinite"/></path></g>`;
+  return `<defs><linearGradient id="${u}x" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff6c0"/><stop offset=".5" stop-color="#e9bd55"/><stop offset="1" stop-color="#9a6a10"/></linearGradient><linearGradient id="${u}y" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a26c0"/><stop offset="1" stop-color="#1a0838"/></linearGradient><radialGradient id="${u}z" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe9a0" stop-opacity=".9"/><stop offset="1" stop-color="#ffe9a0" stop-opacity="0"/></radialGradient><clipPath id="${u}k"><path d="${sp}" transform="${T}"/></clipPath></defs>`
+  +`<g fill="#ffd45a" opacity=".17"><animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="16s" repeatCount="indefinite"/>${rays}</g>`
+  +`<circle cx="32" cy="33" r="24" fill="url(#${u}z)"><animate attributeName="opacity" values=".3;.8;.3" dur="3s" repeatCount="indefinite"/></circle>`
+  +`<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -1.4;0 0" dur="3.2s" repeatCount="indefinite"/>`
+  +`<g transform="${T}"><path d="${sp}" fill="url(#${u}x)"/><path d="${sp}" transform="translate(50 56) scale(.82) translate(-50 -56)" fill="url(#${u}y)"/><path d="M35 67L33 47l9 8 8-14 8 14 9-8-2 20z" fill="url(#${u}x)"/><rect x="35" y="67" width="30" height="5" rx="1.5" fill="url(#${u}x)"/><circle cx="33" cy="46" r="2.4" fill="#ff5a7a"/><circle cx="50" cy="40" r="2.8" fill="#6ee7ff"/><circle cx="67" cy="46" r="2.4" fill="#ff5a7a"/></g>`
+  +`<g clip-path="url(#${u}k)"><rect x="-30" y="0" width="10" height="70" fill="#fff" opacity=".6" transform="skewX(-22)"><animate attributeName="x" values="-30;90;90" keyTimes="0;.45;1" dur="3.8s" repeatCount="indefinite"/></rect></g></g>`
+  +spk(15,22,0)+spk(50,17,.8)+spk(49,49,1.6)+spk(17,47,.4)};
 function avHTML(id){
   const d=AV_DEF[id]||AV_DEF.a0,art=AV_ART[d.art||id]||AV_ART.a0,u='av'+(++_avN);
   return `<svg viewBox="0 0 64 64" ${SVGNS}><defs><linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${d.c[0]}"/><stop offset=".5" stop-color="${d.c[1]}"/><stop offset="1" stop-color="${d.c[0]}"/></linearGradient><radialGradient id="${u}b" cx=".35" cy=".25" r=".95"><stop offset="0" stop-color="${d.bg[0]}"/><stop offset="1" stop-color="${d.bg[1]}"/></radialGradient><clipPath id="${u}c"><circle cx="32" cy="32" r="26.5"/></clipPath></defs><circle cx="32" cy="32" r="31.5" fill="url(#${u}r)"/><circle cx="32" cy="32" r="28.4" fill="#0a0916"/><circle cx="32" cy="32" r="26.8" fill="url(#${u}b)"/><g clip-path="url(#${u}c)">${art(u)}</g><circle cx="32" cy="32" r="26.8" fill="none" stroke="url(#${u}r)" stroke-width=".9" opacity=".8"/><path d="M11 22A24 24 0 0 1 30 8" stroke="#fff" stroke-opacity=".4" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
@@ -2535,10 +2820,8 @@ const MISSIONS=[
   {id:'sp3',g:'bet',t:'۳ بازی شرطی انجام بده',key:'sp',need:3,r:25,ic:'bag'},
   {id:'sw1',g:'bet',t:'۱ بازی شرطی ببر',key:'sw',need:1,r:20,ic:'medal'},
   {id:'sw3',g:'bet',t:'۳ بازی شرطی ببر',key:'sw',need:3,r:40,ic:'medal'},
-  {id:'c2',g:'chain',t:'۲ برد پیاپی در مود شرطی',key:'cb',need:2,r:15,ic:'fire'},
-  {id:'c3',g:'chain',t:'۳ برد پیاپی در مود شرطی',key:'cb',need:3,r:25,ic:'fire'},
-  {id:'c5',g:'chain',t:'۵ برد پیاپی در مود شرطی',key:'cb',need:5,r:50,ic:'fire'}];
-const newMis=d=>({d:d,played:0,wins:0,sp:0,sw:0,cs:0,cb:0,claimed:[]});
+];
+const newMis=d=>({d:d,played:0,wins:0,sp:0,sw:0,claimed:[]});
 const getMis=(u,day)=>(u.missions&&u.missions.d===day)?Object.assign(newMis(day),u.missions):newMis(day);
 const missionsReady=u=>{const m=getMis(u,todayStr());return MISSIONS.some(x=>(m[x.key]||0)>=x.need&&!(m.claimed||[]).includes(x.id))};
 const RAR=(p,slot)=>{
@@ -2557,6 +2840,7 @@ function applySkin(){
   const eq=currentUser.equipped||{},bk=BACKS.find(x=>x.id===eq.back),tb=TABLES.find(x=>x.id===eq.table);
   let st=document.getElementById('skinStyle'); if(!st){st=document.createElement('style');st.id='skinStyle';document.head.appendChild(st)}
   st.textContent=(bk&&bk.css?`#hokm-screen .back,#hokm-screen .fan>*{background:${bk.css}!important}`:'')+(tb&&tb.css?`#hokm-screen #felt{background:${tb.css}!important}`:'');
+  document.documentElement.toggleAttribute('data-royal-back',eq.back==='b7');document.documentElement.toggleAttribute('data-royal-table',eq.table==='t7');
   const a=$h('s0')&&$h('s0').querySelector('.av'); if(a&&(!OG||OG.over))a.innerHTML=avHTML(eq.avatar||'a0');
   setHeaderAvatar();
 }
@@ -2577,13 +2861,12 @@ async function renderProfile(){
     const got=BADGES.filter(b=>b.ok(u)).length;
     const hon=[];
     if(rank)hon.push(['🏅','رتبه کلی در بین بازیکنان','#'+fmt(rank)]);
-    hon.push(['🔥','بهترین رشته برد',fmt(u.best_streak||0)+' برد پیاپی']);
-    if(u.week_prize_rank)hon.push(['🏆','رتبه هفتگی (آخرین هفته جایزه‌دار)','رتبه '+u.week_prize_rank]);
+      if(u.week_prize_rank)hon.push(['🏆','رتبه هفتگی (آخرین هفته جایزه‌دار)','رتبه '+u.week_prize_rank]);
     hon.push(['🎖️','مدال‌های کسب‌شده',got+' از '+BADGES.length]);
     hon.push(['🛍️','آیتم‌های خریداری‌شده',fmt((u.owned||[]).length)]);
     if(u.ref_count)hon.push(['🤝','دوستان دعوت‌شده',fmt(u.ref_count)]);
     box.innerHTML=`<div class="pfHead"><div class="pfAv">${avHTML(eqAv(u))}</div><div class="pfI"><b>${esc(u.username)}</b><div class="hpLv"><span>سطح ${lv}</span><span>${fmt(u.xp||0)} / ${fmt(nx)} XP</span></div><div class="bar"><i style="width:${pr}%"></i></div></div></div>
-    <div class="pfWin"><div class="ring" style="--p:${pct}"><i>${pct}٪</i></div><div class="pfS"><div><b>${fmt(g)}</b><small>بازی</small></div><div><b style="color:#4ade80">${fmt(w)}</b><small>برد</small></div><div><b style="color:#ff6b81">${fmt(l)}</b><small>باخت</small></div><div><b>${u.streak||0}</b><small>رشته فعلی</small></div></div></div>
+    <div class="pfWin"><div class="ring" style="--p:${pct}"><i>${pct}٪</i></div><div class="pfS"><div><b>${fmt(g)}</b><small>بازی</small></div><div><b style="color:#4ade80">${fmt(w)}</b><small>برد</small></div><div><b style="color:#ff6b81">${fmt(l)}</b><small>باخت</small></div></div></div>
     <div class="hbH">${IC.medal}<span>مدال‌ها</span><small>${got} از ${BADGES.length}</small></div><div class="bdgs">`+BADGES.map(b=>`<div class="bd${b.ok(u)?'':' lock'}">${medalSvg(b.t,b.g)}<span>${b.n}</span></div>`).join('')+`</div>
     <div class="hbH">${IC.trophy}<span>افتخارات</span></div>`+hon.map(h=>`<div class="honor"><span class="hi">${h[0]}</span>${h[1]}<b>${h[2]}</b></div>`).join('')+'<div style="height:12px"></div>';
   };
@@ -2625,9 +2908,6 @@ const BADGES=[
   {n:'۵۰ برد',t:'gold',g:'50',ok:u=>(u.wins||0)>=50},
   {n:'۱۰۰ برد',t:'gold',g:'100',ok:u=>(u.wins||0)>=100},
   {n:'۳۰۰ برد',t:'diamond',g:'300',ok:u=>(u.wins||0)>=300},
-  {n:'۳ برد پیاپی',t:'fire',g:'3',ok:u=>(u.best_streak||0)>=3},
-  {n:'۵ برد پیاپی',t:'fire',g:'fl',ok:u=>(u.best_streak||0)>=5},
-  {n:'۱۰ برد پیاپی',t:'fire',g:'10',ok:u=>(u.best_streak||0)>=10},
   {n:'سطح ۵',t:'star',g:'st',ok:u=>lvlOf(u.xp)>=5},
   {n:'سطح ۱۰',t:'star',g:'10',ok:u=>lvlOf(u.xp)>=10},
   {n:'سطح ۲۰',t:'diamond',g:'20',ok:u=>lvlOf(u.xp)>=20},
@@ -2649,10 +2929,10 @@ async function hubRank(){
   const me=currentUser,wk=weekId();
   settleWeekly();
   const [all0,wkl0]=await Promise.all([
-    supabaseFetch('users?select=id,username,xp,wins,games,best_streak,equipped&order=xp.desc&limit=20'),
+    supabaseFetch('users?select=id,username,xp,wins,games,equipped&order=xp.desc&limit=20'),
     supabaseFetch('users?select=id,username,week_xp,equipped&week_id=eq.'+wk+'&order=week_xp.desc&limit=10')]);
   const all=all0||[],wkl=wkl0||[];
-  let h=`<div class="stats"><div class="stat"><b>${fmt(me.wins||0)}</b><small>برد</small></div><div class="stat"><b>${fmt(me.games||0)}</b><small>بازی</small></div><div class="stat"><b>${me.best_streak||0}</b><small>بهترین رشته برد</small></div></div>`;
+  let h=`<div class="stats" style="grid-template-columns:repeat(2,1fr)"><div class="stat"><b>${fmt(me.wins||0)}</b><small>برد</small></div><div class="stat"><b>${fmt(me.games||0)}</b><small>بازی</small></div></div>`;
   h+=`<div class="hbH">${IC.medal}<span>نشان‌ها</span></div><div class="bdgs">`+BADGES.map(b=>`<div class="bd${b.ok(me)?'':' lock'}">${medalSvg(b.t,b.g)}<span>${b.n}</span></div>`).join('')+'</div>';
   h+=`<div class="hbH">${IC.trophy}<span>برترین‌های هفته</span><small>جایزه پایان هفته: ${WEEK_PRIZES.join(' / ')} توکن</small></div>`+(wkl.length?podium(wkl):'<div class="empty" style="padding:20px 0">این هفته هنوز کسی بازی نکرده</div>');
   h+=`<div class="hbH">${IC.user}<span>رتبه کلی</span><small>بر اساس XP</small></div>`+all.map((u,i)=>`<div class="rkRow${u.id===me.id?' me':''}">${rankBadge(i)}<div class="rkAv">${avHTML(eqAv(u))}</div><div class="g"><b>${esc(u.username)}</b><small>سطح ${lvlOf(u.xp)} · ${u.wins||0} برد</small></div><span class="xp">${fmt(u.xp||0)}</span></div>`).join('');
@@ -2663,11 +2943,7 @@ async function hubMis(){
   const row=x=>{const v=Math.min(m[x.key]||0,x.need),done=(m.claimed||[]).includes(x.id),ok=v>=x.need;
     return `<div class="msn${done?' done':''}"><div class="mi">${done?IC.check:IC[x.ic]}</div><div class="mt"><b>${x.t}</b><div class="bar"><i style="width:${v/x.need*100}%"></i></div><small>${v} / ${x.need} · پاداش ${x.r} ${coin(13)}</small></div>`+
       (done?`<button class="go ok" disabled>دریافت شد</button>`:`<button class="go" ${ok?'':'disabled'} onclick="claimMission('${x.id}')">${ok?'دریافت':'در جریان'}</button>`)+'</div>'};
-  const chain=MISSIONS.filter(x=>x.g==='chain').map(x=>{const v=Math.min(m.cb||0,x.need),done=(m.claimed||[]).includes(x.id),ok=v>=x.need;
-    let pips='';for(let k=1;k<=x.need;k++)pips+=`<i class="${k<=v?'on':''}"></i>`;
-    return `<div class="chn${done?' done':''}"><div class="chnTop"><div class="mi">${done?IC.check:IC.fire}</div><div class="mt"><b>${x.t}</b><small>${v} / ${x.need} · پاداش ${x.r} ${coin(13)}</small></div>`+
-      (done?`<button class="go ok" disabled>دریافت شد</button>`:`<button class="go" ${ok?'':'disabled'} onclick="claimMission('${x.id}')">${ok?'دریافت':'در جریان'}</button>`)+`</div><div class="pips">${pips}</div></div>`}).join('');
-  let h=`<div class="hbH">${IC.fire}<span>زنجیره برد</span><small>فقط مود شرطی</small></div><div class="mgrp" style="margin:-4px 2px 10px">رشته فعلی امروز: <b style="color:#fff">${m.cs||0}</b> برد پیاپی · با هر باخت شرطی رشته صفر می‌شود</div>`+chain;
+  let h='';
   h+=`<div class="hbH">${IC.target}<span>ماموریت‌های امروز</span><small>فقط بازی آنلاین</small></div>`+MISSIONS.filter(x=>x.g==='play').map(row).join('');
   h+=`<div class="hbH">${IC.bag}<span>ماموریت‌های شرطی</span><small>فقط مود شرطی</small></div>`+MISSIONS.filter(x=>x.g==='bet').map(row).join('');
   h+=`<div class="mgrp" style="text-align:center;margin-top:12px">همه ماموریت‌ها هر روز (نیمه‌شب به وقت ایران) ریست می‌شوند</div>`;
@@ -2729,10 +3005,29 @@ function shopTile(slot,it,prev,own,eq,arr){
 async function hubShop(){
   const u=currentUser,own=u.owned||[],eq=u.equipped||{};
   const sec=(title,ic,slot,arr,pv)=>`<div class="hbH">${IC[ic]}<span>${title}</span></div><div class="shopGrid">`+arr.map(it=>shopTile(slot,it,pv(it),own,eq,arr)).join('')+'</div>';
-  return `<div class="shopBal">${coin(20)}<span>موجودی شما</span><b>${fmt((u.tokens||0))}</b></div>`+
+  return `<div class="shopBal">${coin(20)}<span>موجودی شما</span><b>${fmt((u.tokens||0))}</b></div>`+packTile(own,eq)+
     sec('آواتار','user','avatar',AVATARS,i=>`<div class="pvAv">${avHTML(i.id)}</div>`)+
     sec('پشت کارت','back_card','back',BACKS,i=>`<div class="pvBack" style="--bk:${i.css||'repeating-linear-gradient(45deg,#1c3a9a 0 4px,#0a1a5a 4px 8px)'}"></div>`)+
     sec('میز بازی','table','table',TABLES,i=>`<div class="pvTable" style="--tb:${i.css||'radial-gradient(circle,#12843f,#052e17)'}"></div>`);
+}
+/* ---------- پک سلطنتی تک‌پیک: آواتار + پشت کارت + میز (۳۰۰۰ توکن) ---------- */
+const ROYAL_PACK={p:3000,items:{avatar:'a14',back:'b7',table:'t7'}};
+function packTile(own,eq){
+  const ids=Object.values(ROYAL_PACK.items),has=ids.every(x=>own.includes(x)),on=Object.keys(ROYAL_PACK.items).every(k=>eq[k]===ROYAL_PACK.items[k]);
+  const btn=has?(on?`<button class="sb on" type="button" disabled>${IC.check}<span>فعال</span></button>`:`<button class="sb use" type="button" onclick="shopEquipPack()">استفاده از پک</button>`):`<button class="sb buy" type="button" onclick="shopBuyPack()">${coin(15)}<span>${fmt(ROYAL_PACK.p)}</span></button>`;
+  return `<div class="packIt"><span class="packTag">✦ پک ویژه سلطنتی ✦</span><div class="packPv"><div class="pkAv">${avHTML('a14')}</div><div class="royalBackPv"></div><div class="royalTablePv"></div></div><b>پک تک‌پیک سلطنتی</b><small>آواتار + پشت کارت + میز بازی با طراحی زنده</small>${btn}</div>`;
+}
+async function shopBuyPack(){
+  const u=await hubMe(),own=u.owned||[],ids=Object.values(ROYAL_PACK.items);
+  if(ids.every(x=>own.includes(x)))return; if((u.tokens||0)<ROYAL_PACK.p)return toast('توکن کافی نیست',true);
+  const eq=Object.assign({},u.equipped||{},ROYAL_PACK.items);
+  await supabaseFetch('users?id=eq.'+u.id,{method:'PATCH',body:JSON.stringify({tokens:u.tokens-ROYAL_PACK.p,owned:own.concat(ids.filter(x=>!own.includes(x))),equipped:eq})});
+  toast('پک سلطنتی خریداری شد'); try{await refreshUserData();refreshBalH()}catch(e){} await hubMe(); applySkin(); hubOpen('shop',true);
+}
+async function shopEquipPack(){
+  const u=await hubMe(),eq=Object.assign({},u.equipped||{},ROYAL_PACK.items);
+  await supabaseFetch('users?id=eq.'+u.id,{method:'PATCH',body:JSON.stringify({equipped:eq})});
+  await hubMe(); applySkin(); hubOpen('shop',true);
 }
 async function shopBuy(slot,id){
   const u=await hubMe(),it=[...BACKS,...TABLES,...AVATARS].find(x=>x.id===id),own=u.owned||[];
@@ -2776,21 +3071,26 @@ async function handleOnlinePayout(room){
   try{
     const wt=room.winning_team,stake=room.stake||0; if(wt==null)return;
     const {data:players}=await db.from('game_players').select('*').eq('room_id',room.id);
-    const humans=(players||[]).filter(p=>!p.is_bot&&p.profile_id),winners=humans.filter(p=>p.team===wt);
-    const pot=stake*humans.length,feeRate=TAX_RATE,after=Math.floor(pot*(1-feeRate)),per=winners.length?Math.floor(after/winners.length):0;
+    const humans=(players||[]).filter(p=>!p.is_bot&&p.profile_id);
+    // جکپات بر اساس تعداد کل صندلی‌ها (بات هم یک سهم دارد)
+    const is1v1=room.mode==='1v1';
+    const pot=stake*(is1v1?2:4);
+    const after=Math.floor(pot*(1-TAX_RATE));      // بعد از ۲۰٪ مالیات
+    const per=Math.floor(after/(is1v1?1:2));       // سهم هر جایگاه تیم برنده؛ سهم بات می‌سوزد
     const day=todayStr(),wk=weekId();
     await settleWeekly();
     for(const p of humans){
-      const rows=await supabaseFetch('users?id=eq.'+p.profile_id); if(!rows||!rows.length)continue; const u=rows[0],win=p.team===wt,gain=win?30:10,patch={};
-      const m=getMis(u,day); m.played++; if(win)m.wins++;
-      if(stake>0){ m.sp++; if(win){m.sw++;m.cs++;m.cb=Math.max(m.cb,m.cs)} else m.cs=0; }
-      const st=win?(u.streak||0)+1:0;
-      Object.assign(patch,{games:(u.games||0)+1,wins:(u.wins||0)+(win?1:0),streak:st,best_streak:Math.max(u.best_streak||0,st),xp:(u.xp||0)+gain,week_xp:(u.week_id===wk?(u.week_xp||0):0)+gain,week_id:wk,missions:m});
-      if(stake>0){
-        const w=win?per:0;
-        if(w) patch.tokens=u.tokens+w;
+      const win=p.team===wt,gain=win?30:10;
+      for(let t=0;t<4;t++){
+        const rows=await supabaseFetch('users?id=eq.'+p.profile_id); if(!rows||!rows.length)break;
+        const u=rows[0];
+        const m=getMis(u,day); m.played++; if(win)m.wins++;
+        if(stake>0){ m.sp++; if(win)m.sw++; }
+        const patch={games:(u.games||0)+1,wins:(u.wins||0)+(win?1:0),xp:(u.xp||0)+gain,week_xp:(u.week_id===wk?(u.week_xp||0):0)+gain,week_id:wk,missions:m};
+        if(stake>0&&win) patch.tokens=(u.tokens||0)+per; // جایزه توکن در تک‌به‌تک و ۲ به ۲ شرطی
+        const ok=await supabaseFetch('users?id=eq.'+u.id+'&tokens=eq.'+u.tokens,{method:'PATCH',body:JSON.stringify(patch)});
+        if(ok&&ok.length)break;
       }
-      await supabaseFetch('users?id=eq.'+u.id,{method:'PATCH',body:JSON.stringify(patch)});
     }
   }catch(e){console.warn('payout',e)}
 }
@@ -2817,7 +3117,7 @@ function ogChatInit(){
   $h('chatBtn').style.display='block';
 }
 function ogChatToggle(){const p=$h('chatPanel');p.style.display=p.style.display==='flex'?'none':'flex'}
-{const _sm=showModeSelect; showModeSelect=function(){$h('chatBtn').style.display='none';$h('chatPanel').style.display='none';trumpStop();resetOppSeats();applySkin();return _sm.apply(this,arguments)}}
+{const _sm=showModeSelect; showModeSelect=function(){$h('chatBtn').style.display='none';$h('chatPanel').style.display='none';lastBtnShow(false);trumpStop();resetOppSeats();applySkin();return _sm.apply(this,arguments)}}
 {const _oh2=openHokmScreen; openHokmScreen=function(){const r=_oh2.apply(this,arguments);try{applySkin()}catch(e){}return r}}
 initSeatAvatars();
 const AVX=(()=>{const o={};
