@@ -907,7 +907,7 @@ html[data-royal-table] #hokm-screen #felt{
         </button>
         <button class="modeBtn online" id="btnMode1v1" type="button" style="background:linear-gradient(145deg,rgba(251,191,36,.12),rgba(251,191,36,.02))">
           <div class="mic" style="background:linear-gradient(145deg,#fbbf24,#b45309);color:#2a1a02">⚔️</div>
-          <div><b>تک‌به‌تک (1v1)</b><small>فقط دو نفره، بدون بات؛ حریف تصادفی</small></div>
+          <div><b>تک‌به‌تک (1v1)</b><small>دو نفره؛ حریف تصادفی</small></div>
         </button>
         <button class="backBtn" onclick="closeHokmScreen()">بازگشت</button>
       </div>
@@ -939,24 +939,24 @@ html[data-royal-table] #hokm-screen #felt{
         <p>مبلغ ورودی هر بازیکن (توکن)</p>
         <div class="row betTiers" id="amtsOn"></div>
         <div class="taxNote">
-          💰 <b>قانون جکپات:</b> مبلغ ورودی هر ۴ صندلی حساب می‌شه. تیم برنده جکپات رو می‌بره (سهم بات سوخته می‌شه).<br>🚪 <b>لفت = باخت:</b> اگر بازیکنی وسط بازی خارج بشه، تیمش درجا می‌بازه و جایزه به تیم حریف می‌رسه.<br>👥 <b>صف:</b> با ۲ نفر، ۲ بات؛ با ۳ نفر، ۱ بات اضافه می‌شه. با ۱ نفر میز تشکیل نمی‌شه و ورودی پس داده می‌شه.<br>
+          💰 <b>قانون جکپات:</b> مبلغ ورودی هر ۴ صندلی حساب می‌شه. تیم برنده جکپات رو می‌بره.<br>🚪 <b>لفت = باخت:</b> اگر بازیکنی وسط بازی خارج بشه، تیمش درجا می‌بازه و جایزه به تیم حریف می‌رسه.<br>
           💸 <b>مالیات ۲۰٪:</b> از کل جکپات کم می‌شه (درآمد سازنده) و ۸۰٪ به تیم برنده می‌رسه.
         </div>
         <div id="warnOn"></div>
       </div>
       <div id="matchingStatus" style="display:none;margin:10px 0;padding:10px;border-radius:12px;background:rgba(34,228,255,.1);border:1px solid var(--cyan);font-size:13px;line-height:1.7">
         <div>⏳ در حال جستجوی بازیکن... <b id="matchTimer" style="color:var(--cyan)">۳۰</b> ثانیه</div>
-        <div style="font-size:11.5px;color:var(--mut);margin-top:5px">اگر پلیر کافی پیدا نشود، با بات تکمیل می‌شود.</div>
+        
       </div>
       <button class="go" id="startOn">جستجوی بازیکن (۲ به ۲ تصادفی)</button>
       <div style="margin-top:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px dashed var(--gold2);font-size:11.5px;line-height:1.8;color:var(--mut)">
-        📝 <b style="color:var(--gold)">نکته:</b> برای شروع بازی حداقل <b>۲ بازیکن واقعی</b> لازم است. اگر تا ۳۰ ثانیه فقط ۲ یا ۳ نفر بودند، جاهای خالی با بات پر می‌شود. اگر فقط یک نفر باشد بازی شروع نمی‌شود و منتظر بازیکن بعدی می‌ماند.
+        📝 <b style="color:var(--gold)">نکته:</b> بعد از پیدا شدن بازیکنان، بازی خودکار شروع می‌شود.
       </div>
       <button class="backBtn" onclick="backToModeSelect()" style="margin-top:10px;width:100%;padding:11px;border-radius:14px;border:1.5px solid var(--gold2);background:var(--navy);color:var(--mut);font-family:inherit;font-size:13px;cursor:pointer;box-shadow:0 3px 0 #000a">بازگشت</button>
     </div></div>
 
     <div class="ov h" id="lobby1v1"><div class="box duel">
-      <div class="dlTitle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l9 9M20 4l-9 9M13 13l-2 2M11 13l2 2M3 21l4-4M21 21l-4-4M9 15l-4 4"/></svg><b>تک‌به‌تک آنلاین</b><span>۲ نفره · بدون بات</span></div>
+      <div class="dlTitle"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l9 9M20 4l-9 9M13 13l-2 2M11 13l2 2M3 21l4-4M21 21l-4-4M9 15l-4 4"/></svg><b>تک‌به‌تک آنلاین</b><span>۲ نفره</span></div>
       <div class="vsRow">
         <div class="vsP me"><div class="vsAv" id="dlMeAv"></div><b id="dlMeName">شما</b><small id="dlMeLv"></small></div>
         <div class="vsMid"><i>VS</i></div>
@@ -1261,6 +1261,9 @@ async function findUserByIdentifier(raw){
 
 // ------------- 1v1 Challenge Logic -------------
 let pvpMode = 'free';
+// بات‌های علنی تک‌به‌تک (فقط بازی غیرشرطی، بعد از چند ثانیه نبودن حریف)
+const BOT_NAMES = ['Arash','Saman','Pouya','Mehran','Kian','Babak','Ramin','Nima','Arman','Farhad'];
+const BOT_WAIT_SEC = 20;
 let pvpStake = 50;
 
 
@@ -1365,6 +1368,24 @@ async function startRandomPvpMatch() {
     }
   } catch(e) { console.warn("create room err:", e); }
 
+  // اگر حریفی پیدا نشد (فقط غیرشرطی)، بات علنی جایگزین می‌شود
+  async function fillBot() {
+    const rid = pvpWaitRoomId;
+    if (!randomPvpMatchActive || !rid) return;
+    try {
+      const { data: cur } = await db.from("game_players").select("seat").eq("room_id", rid);
+      if (cur && cur.length > 1) return; // یک نفر واقعی همین الان پیوسته
+      const nm = BOT_NAMES[Math.random() * BOT_NAMES.length | 0];
+      const { error } = await db.from("game_players").insert({ room_id: rid, profile_id: null, seat: 1, team: 1, is_bot: true, bot_name: nm });
+      if (error) return;
+      cleanup();
+      pvpWaitRoomId = null;
+      
+      isOnlineMode = true;
+      joinOnlineRoom(rid);
+    } catch (e) { console.warn("bot fill", e); }
+  }
+
   // هر 2 ثانیه اتاق‌های دیگه رو چک میکنیم
   const matchInterval = setInterval(tryMatch, 2000);
   const originalCleanup = cleanup;
@@ -1373,6 +1394,7 @@ async function startRandomPvpMatch() {
   randomPvpTimerId = setInterval(async () => {
     sec++;
     if (secEl) secEl.textContent = String(sec);
+    if (sec === BOT_WAIT_SEC) fillBot();
     if (sec % 15 === 0 && pvpWaitRoomId) db.from("game_rooms").update({ created_at: new Date().toISOString() }).eq("id", pvpWaitRoomId);
   }, 1000);
 }
@@ -1905,7 +1927,7 @@ async function fillWithBots() {
     if (data.status === "matched" && data.room_id) {
       $h('matchingStatus').style.display = 'none';
       $h('startOn').disabled = false;
-      toast("بات‌ها اضافه شدند — بازی عادلانه", 1800);
+      
       joinOnlineRoom(data.room_id);
     } else {
       toast("سرور مچ‌میکینگ در دسترس نیست", true);
@@ -2279,7 +2301,7 @@ async function partyRender(){
   let html='';
   for(let seat=0;seat<PSIZE;seat++){
     const p=ps.find(x=>x.seat===seat);
-    html+=`<div class="friendRow"><div class="inf"><b>${p?(p.is_bot?'بات':esc(um[p.profile_id]||'بازیکن')):'⏳ منتظر بازیکن...'}</b><small>${seat%2===0?'تیم ۱':'تیم ۲'}</small></div></div>`;
+    html+=`<div class="friendRow"><div class="inf"><b>${p?(p.is_bot?esc(p.bot_name||'بازیکن'):esc(um[p.profile_id]||'بازیکن')):'⏳ منتظر بازیکن...'}</b><small>${seat%2===0?'تیم ۱':'تیم ۲'}</small></div></div>`;
   }
   $h('partySlots').innerHTML=html;
   if(party.host && ps.length>=PSIZE) partyStart();
@@ -2295,7 +2317,7 @@ async function partyFillBots(){
   const ps=await partyPlayers(); const used=new Set(ps.map(p=>p.seat)); const rows=[];
   for(let seat=0;seat<PSIZE;seat++) if(!used.has(seat)) rows.push({room_id:party.roomId,profile_id:null,seat,team:seat%2,is_bot:true,bot_name:'بات '+(seat+1)});
   if(rows.length) await db.from('game_players').insert(rows);
-  toast('جاهای خالی با بات پر شد',1500);
+  
   party.starting=false; partyStart();
 }
 function partyWatch(){
@@ -2399,13 +2421,13 @@ async function startRandom2v2(){
       await db.from('game_players').insert({room_id:room.id,profile_id:currentUser.id,seat:0,team:0,is_bot:false});
       party={roomId:room.id,host:true,friendly:false,stake,createdAt:room.created_at};
     }
-    partyOpen('🎲 جستجوی بازی ۲ به ۲','اگر بازیکن کافی نشد، بعد از تایمر جاهای خالی با بات پر می‌شود.');
+    partyOpen('🎲 جستجوی بازی ۲ به ۲','لطفاً چند لحظه صبر کنید...');
     partyWatch(); partyRender();
     // تکرار جستجو تا وقتی وارد اتاق شویم؛ این بخش مشکل ساخته‌شدن هم‌زمان دو اتاق را پوشش می‌دهد.
     party.matchTimer=setInterval(()=>partyTryJoinWaitingRoom(),1500);
     party.timer=setInterval(async()=>{
-      sec--; if(!party)return; $h('partySec').textContent='⏳ '+pfa(Math.max(0,sec))+' ثانیه تا پر شدن با بات';
-      if(sec<=0){const ps=await partyPlayers();if(!party)return;if(ps.length<2){sec=30;$h('partySec').textContent='⏳ منتظر حداقل یک بازیکن دیگر... (با یک نفر بازی شروع نمی‌شود)';return}clearInterval(party.timer);party.timer=null;await partyFillBots()}
+      sec--; if(!party)return; $h('partySec').textContent='⏳ '+pfa(Math.max(0,sec))+' ثانیه تا شروع بازی';
+      if(sec<=0){const ps=await partyPlayers();if(!party)return;if(ps.length<2){sec=30;$h('partySec').textContent='⏳ در حال جستجوی بازیکن...';return}clearInterval(party.timer);party.timer=null;await partyFillBots()}
     },1000);
   }catch(e){toast('خطا: '+e.message,true);if(stake>0)Wallet.payout(stake);partyStop();$h('partyOv').classList.add('h');$h('lobbyOnline').classList.remove('h')}
 }
@@ -2514,12 +2536,12 @@ async function ogReplaceOfflinePlayer(uid){
   if(ogPresenceIds().has(uid))return;
   const p=(OG.players||[]).find(x=>x.profile_id===uid&&!x.is_bot);if(!p)return;
   if(OG.n===2||(OG.room.stake||0)>0)return ogForfeit(p.seat);
-  const {data,error}=await db.from('game_players').update({is_bot:true,bot_name:'بات جایگزین'}).eq('room_id',OG.room.id).eq('seat',p.seat).eq('profile_id',uid).select();
+  const {data,error}=await db.from('game_players').update({is_bot:true,bot_name:KIANI_BOTS[Math.random()*KIANI_BOTS.length|0]}).eq('room_id',OG.room.id).eq('seat',p.seat).eq('profile_id',uid).select();
   if(error||!data||!data.length)return;
-  Object.assign(p,{is_bot:true,bot_name:'بات جایگزین'});
+  Object.assign(p,{is_bot:true,bot_name:KIANI_BOTS[Math.random()*KIANI_BOTS.length|0]});
   await ogNames();
   if(OG.pub&&OG.pub.turn===p.seat)ogTick();
-  toastH('بازیکن خارج شد؛ بات ادامه بازی را انجام می‌دهد',1800);
+  
 }
 /* ---- لفت در تک‌به‌تک: باخت فوری + واریز جایزه به برنده ---- */
 async function ogForfeit(loserSeat){
@@ -2581,13 +2603,13 @@ function ogTick(){
   if(OG.turnClock){clearInterval(OG.turnClock);OG.turnClock=null}
   if(p.phase==='trump'&&ogBot(p.hakem)){
     const hk=p.hakem;
-    setTimeout(()=>{if(!OG||OG.over||OG.pub.phase!=='trump'||OG.pub.hakem!==hk)return;const c=[0,0,0,0];OG.hands[hk].forEach(x=>c[x.s]+=1+x.v/20);OG.queue.push({kind:'trump',seat:hk,payload:{s:c.indexOf(Math.max(...c))}});ogPump()},900);
+    setTimeout(()=>{if(!OG||OG.over||OG.pub.phase!=='trump'||OG.pub.hakem!==hk)return;OG.queue.push({kind:'trump',seat:hk,payload:{s:kb2Trump(hk)}});ogPump()},900);
   } else if(p.phase==='play'&&p.trick.length<OG.n&&p.turn>=0){
     const seat=p.turn,turnKey=OG.room.id+':'+p.turn+':'+p.trick.length+':'+p.tricks.join('-');
     OG.turnKey=turnKey;
     if(!p.turnStartedAt){p.turnStartedAt=Date.now();ogSave()}
     let left=Math.max(0,15-Math.floor((Date.now()-p.turnStartedAt)/1000));
-    const paint=()=>{const score=$h('score');if(score&&OG&&OG.turnKey===turnKey)score.textContent='⏱ '+pfa(left)+' ثانیه | '+(ogBot(seat)?'نوبت بات':'نوبت بازیکن')};
+    const paint=()=>{const score=$h('score');if(score&&OG&&OG.turnKey===turnKey)score.textContent='⏱ '+pfa(left)+' ثانیه | '+'نوبت بازیکن'};
     paint();
     OG.turnClock=setInterval(()=>{if(!OG||OG.turnKey!==turnKey){clearInterval(OG.turnClock);return}left=Math.max(0,15-Math.floor((Date.now()-p.turnStartedAt)/1000));paint()},250);
     OG.turnTimer=setTimeout(()=>{
@@ -3094,6 +3116,7 @@ async function handleOnlinePayout(room){
         if(stake>0){ m.sp++; if(win)m.sw++; }
         const patch={games:(u.games||0)+1,wins:(u.wins||0)+(win?1:0),xp:(u.xp||0)+gain,week_xp:(u.week_id===wk?(u.week_xp||0):0)+gain,week_id:wk,missions:m};
         if(stake>0&&win) patch.tokens=(u.tokens||0)+per; // جایزه توکن در تک‌به‌تک و ۲ به ۲ شرطی
+        if(room.mode==='1v1'&&(players||[]).some(x=>x.is_bot)){delete patch.week_xp;delete patch.week_id} // بازی با بات در رتبه هفتگی حساب نمی‌شود
         const ok=await supabaseFetch('users?id=eq.'+u.id+'&tokens=eq.'+u.tokens,{method:'PATCH',body:JSON.stringify(patch)});
         if(ok&&ok.length)break;
       }
@@ -3108,7 +3131,7 @@ async function ogNames(){
   for(let k=0;k<4;k++){const e=$h('s'+k);if(e)e.style.display=(OG.n===2&&(k===1||k===3))?'none':''}
   ps.forEach(p=>{const e=$h('s'+ogRel(p.seat)); if(!e)return; const u=um[p.profile_id];
     e.querySelector('.nm').textContent=p.profile_id===currentUser.id?'شما':(p.is_bot?(p.bot_name||'بات'):(u?u.username+' (سطح '+lvlOf(u.xp)+')':'بازیکن'));
-    e.querySelector('.av').innerHTML=avHTML(p.is_bot?'bot':eqAv(u))});
+    e.querySelector('.av').innerHTML=avHTML(p.is_bot?'bot:'+(p.bot_name||p.seat):eqAv(u))});
   OG.players=ps;try{duelSetup(ps,um)}catch(e){}
 }
 /* ---- chat ---- */
@@ -3179,7 +3202,7 @@ function duelSetup(ps,um){
   if(OG.n!==2){hs.dataset.mode='';if(h)h.remove();return}
   hs.dataset.mode='duel';
   const me=ps.find(p=>p.profile_id===currentUser.id)||{},op=ps.find(p=>p!==me)||{},ou=um[op.profile_id];
-  const D=OG.duel={stake:(OG.room&&OG.room.stake)||0,me:{n:currentUser.username,a:eqAv(currentUser),l:lvlOf(currentUser.xp)},op:{n:ou?ou.username:(op.bot_name||'حریف'),a:ou?eqAv(ou):'bot',l:ou?lvlOf(ou.xp):1}};
+  const D=OG.duel={stake:(OG.room&&OG.room.stake)||0,me:{n:currentUser.username,a:eqAv(currentUser),l:lvlOf(currentUser.xp)},op:{n:ou?ou.username:(op.bot_name||'حریف'),a:ou?eqAv(ou):'bot:'+(op.bot_name||'x'),l:ou?lvlOf(ou.xp):1}};
   if(!h){h=document.createElement('div');h.id='duelHud';hs.appendChild(h)}
   const pips=c=>'<div class="pips '+c+'">'+'<i></i>'.repeat(7)+'</div>';
   const side=(c,x)=>'<div class="dh '+c+'"><div class="dav">'+avHTML(x.a)+'</div><div class="dn"><b>'+esc(x.n)+'</b><small>سطح '+x.l+'</small></div></div>';
@@ -3196,6 +3219,299 @@ function duelIntro(D){const e=document.createElement('div');e.id='vsIntro';
 {const _a=ogApply;ogApply=function(){const x=_a.apply(this,arguments);try{duelHud()}catch(e){}return x}}
 {const _oh=openHokmScreen;openHokmScreen=function(){const r=_oh.apply(this,arguments);try{$h('hokm-screen').dataset.mode='';const h=$h('duelHud');if(h)h.remove()}catch(e){}return r}}
 initSeatAvatars();try{setHeaderAvatar()}catch(e){}
+
+
+/* ===== KIANI BOTS: 10 Iranian-named bot players (strong AI) ===== */
+
+const KIANI_BOTS = ['Arash','Siavash','Kourosh','Dariush','Babak','Pouya','Mehrdad','Shahriar','Farzad','Kamran'];
+/* DEMO_MODE = true: names shown without the "BOT" tag.
+   Use ONLY when everyone present knows these are bots and tokens are free (stage demo).
+   Set to false for any public / real-money use. */
+const DEMO_MODE = true;
+const kbName = () => KIANI_BOTS[Math.random() * KIANI_BOTS.length | 0] + (DEMO_MODE ? '' : ' · BOT');
+
+/* 1v1 matchmaking fallback uses this list */
+BOT_NAMES.length = 0; KIANI_BOTS.forEach(n => BOT_NAMES.push(n));
+
+/* 2v2 bot seats get Iranian names too */
+{
+  const _ins = db.from.bind(db);
+  db.from = function (t) {
+    const q = _ins(t);
+    if (t === 'game_players' && q.insert) {
+      const oi = q.insert.bind(q);
+      q.insert = function (rows) {
+        const fix = r => (r && r.is_bot ? Object.assign({}, r, { bot_name: kbName() }) : r);
+        return oi(Array.isArray(rows) ? rows.map(fix) : fix(rows));
+      };
+    }
+    return q;
+  };
+}
+
+/* ---- card memory (every played card is recorded) ---- */
+{
+  const _h = ogHandle;
+  ogHandle = async function (m) {
+    try {
+      if (m && m.kind === 'card' && OG && OG.pub && m.seat === OG.pub.turn && m.payload && m.payload.card) {
+        (OG.seen = OG.seen || new Set()).add(m.payload.card.s * 20 + m.payload.card.v);
+      }
+    } catch (e) {}
+    return _h.apply(this, arguments);
+  };
+}
+
+/* ---- strong bot: card counting + trump control + partner support ---- */
+function kbMaster(seat, c) {
+  const seen = OG.seen || new Set(), hand = OG.hands[seat];
+  for (let v = c.v + 1; v <= 14; v++)
+    if (!seen.has(c.s * 20 + v) && !hand.some(x => x.s === c.s && x.v === v)) return false;
+  return true;
+}
+function kbTrumpsLeft(seat) { // unseen trumps not in my hand
+  const tr = OG.pub.trump, seen = OG.seen || new Set();
+  let n = 0;
+  for (let v = 2; v <= 14; v++) if (!seen.has(tr * 20 + v) && !OG.hands[seat].some(x => x.s === tr && x.v === v)) n++;
+  return n;
+}
+ogBotCard = function (seat) {
+  const p = OG.pub, tr = p.trump, t = p.trick, hand = OG.hands[seat];
+  const L = ogLegalOf(hand, t).slice().sort((a, b) => a.v - b.v);
+  const nonTr = L.filter(c => c.s !== tr), trs = L.filter(c => c.s === tr);
+  const suitCnt = s => hand.filter(c => c.s === s).length;
+  const partner = OG.n === 4 ? (seat + 2) % 4 : -1;
+
+  /* leading */
+  if (!t.length) {
+    const masters = nonTr.filter(c => kbMaster(seat, c));
+    if (masters.length) return masters[masters.length - 1];
+    if (trs.length && kbMaster(seat, trs[trs.length - 1]) && kbTrumpsLeft(seat) > 0) return trs[trs.length - 1];
+    if (nonTr.length) { // lead low from longest non-trump suit
+      let b = nonTr[0];
+      nonTr.forEach(c => { if (suitCnt(c.s) > suitCnt(b.s) || (suitCnt(c.s) === suitCnt(b.s) && c.v < b.v)) b = c; });
+      return b;
+    }
+    return trs[0];
+  }
+
+  /* following */
+  let best = t[0];
+  t.forEach(x => { if (ogBeats(x.card, best.card)) best = x; });
+  const last = t.length === OG.n - 1;
+  if (best.seat === partner) {
+    const strong = best.card.s === tr || kbMaster(seat, best.card) || best.card.v >= 13 || last;
+    if (strong) return nonTr.length ? nonTr[0] : L[0]; // don't waste cards on partner's win
+  }
+  const win = L.filter(c => ogBeats(c, best.card));
+  if (win.length) {
+    if (last) return win[0]; // cheapest winning card
+    const ls = t[0].card.s;
+    const cheapNonTr = win.filter(c => c.s !== tr);
+    return cheapNonTr.length ? cheapNonTr[cheapNonTr.length - 1] : win[0];
+  }
+  /* cannot win: dump lowest card from the shortest non-trump suit */
+  if (nonTr.length) {
+    let b = nonTr[0];
+    nonTr.forEach(c => { if (suitCnt(c.s) < suitCnt(b.s) || (suitCnt(c.s) === suitCnt(b.s) && c.v < b.v)) b = c; });
+    return b;
+  }
+  return L[0];
+};
+
+
+
+/* ---- human-looking avatars for bot players (stable per name) ---- */
+const KB_FACES=['p0','prince','wizard','ninja','rocker','king'];
+{
+  const _av=avHTML;
+  avHTML=function(id){
+    if(typeof id==='string'&&id.indexOf('bot:')===0){
+      let h=0;for(let i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))|0;
+      return AVS(KB_FACES[Math.abs(h)%KB_FACES.length]);
+    }
+    return _av(id);
+  };
+}
+
+/* ===== STRONG BOT v2: card counting + void inference + Monte-Carlo search =====
+   Fair play: bots only use information a human could see (own hand, played cards,
+   who failed to follow suit). They never read other players' hands. */
+var kb2Budget = 500, kb2MaxS = 400, kb2MinS = 60;
+
+function kb2Suit(c) { return (c / 20) | 0; }
+function kb2Val(c) { return c % 20; }
+function kb2I(c) { return c.s * 20 + c.v; }
+function kb2O(i) { return { s: (i / 20) | 0, v: i % 20 }; }
+function kb2Legal(h, trick) {
+  if (!trick.length) return h;
+  const ls = kb2Suit(trick[0].c), f = h.filter(c => kb2Suit(c) === ls);
+  return f.length ? f : h;
+}
+function kb2Best(trick, tr) {
+  let b = trick[0];
+  for (let i = 1; i < trick.length; i++) {
+    const x = trick[i], sx = kb2Suit(x.c), sb = kb2Suit(b.c);
+    if (sx === sb ? x.c > b.c : sx === tr) b = x;
+  }
+  return b;
+}
+function kb2Beats(a, b, tr) { const sa = kb2Suit(a), sb = kb2Suit(b); return sa === sb ? a > b : sa === tr; }
+function kb2Master(played, h, c) {
+  const s = kb2Suit(c);
+  for (let v = kb2Val(c) + 1; v <= 14; v++) { const k = s * 20 + v; if (!played[k] && h.indexOf(k) < 0) return false; }
+  return true;
+}
+function kb2TrumpLeft(played, h, tr) {
+  let n = 0;
+  for (let v = 2; v <= 14; v++) { const k = tr * 20 + v; if (!played[k] && h.indexOf(k) < 0) n++; }
+  return n;
+}
+function kb2Dump(list, h) {
+  let b = list[0], bc = h.filter(c => kb2Suit(c) === kb2Suit(b)).length;
+  for (const c of list) {
+    const cc = h.filter(x => kb2Suit(x) === kb2Suit(c)).length;
+    if (cc < bc || (cc === bc && kb2Val(c) < kb2Val(b))) { b = c; bc = cc; }
+  }
+  return b;
+}
+/* fast rollout policy (works on card ints) */
+function kb2Pol(st, seat) {
+  const h = st.hands[seat], tr = st.trump, trick = st.trick, n = st.n, played = st.played;
+  const L = kb2Legal(h, trick);
+  if (L.length === 1) return L[0];
+  const asc = L.slice().sort((a, b) => kb2Val(a) - kb2Val(b) || a - b);
+  const nonTr = asc.filter(c => kb2Suit(c) !== tr), trs = asc.filter(c => kb2Suit(c) === tr);
+  if (!trick.length) {
+    for (let i = nonTr.length - 1; i >= 0; i--) if (kb2Master(played, h, nonTr[i])) return nonTr[i];
+    if (trs.length) { const top = trs[trs.length - 1]; if (kb2Master(played, h, top) && kb2TrumpLeft(played, h, tr) > 0) return top; }
+    if (nonTr.length) {
+      let b = nonTr[0], bc = h.filter(c => kb2Suit(c) === kb2Suit(b)).length;
+      for (const c of nonTr) {
+        const cc = h.filter(x => kb2Suit(x) === kb2Suit(c)).length;
+        if (cc > bc || (cc === bc && kb2Val(c) < kb2Val(b))) { b = c; bc = cc; }
+      }
+      return b;
+    }
+    return trs[0];
+  }
+  const best = kb2Best(trick, tr), partner = n === 4 ? (seat + 2) % 4 : -1, last = trick.length === n - 1;
+  if (best.seat === partner) {
+    const strong = kb2Suit(best.c) === tr || kb2Master(played, h, best.c) || kb2Val(best.c) >= 13 || last;
+    if (strong) return nonTr.length ? kb2Dump(nonTr, h) : asc[0];
+  }
+  const win = asc.filter(c => kb2Beats(c, best.c, tr));
+  if (win.length) {
+    if (last) return win[0];
+    const wn = win.filter(c => kb2Suit(c) !== tr);
+    return wn.length ? wn[wn.length - 1] : win[0];
+  }
+  return nonTr.length ? kb2Dump(nonTr, h) : asc[0];
+}
+function kb2Roll(b, first, me) {
+  const n = b.n, hands = b.hands.map(h => h.slice()), played = b.played.slice();
+  const st = { hands, played, trump: b.trump, n, trick: b.trick.slice(), tricks: b.tricks.slice() };
+  const idx = n === 2 ? (s => s) : (s => s % 2), mi = idx(me);
+  let seat = b.turn, c = first;
+  for (let g = 0; g < 80; g++) {
+    if (c === null) c = kb2Pol(st, seat);
+    const h = hands[seat], k = h.indexOf(c);
+    if (k < 0) break;
+    h.splice(k, 1);
+    st.trick.push({ seat, c }); played[c] = 1; c = null;
+    if (st.trick.length < n) { seat = (seat + 1) % n; continue; }
+    const w = kb2Best(st.trick, st.trump).seat;
+    st.tricks[idx(w)]++; st.trick = []; seat = w;
+    if (st.tricks[0] >= 7 || st.tricks[1] >= 7) break;
+    if (!hands[seat].length) break;
+  }
+  const a = st.tricks[mi], o = st.tricks[1 - mi];
+  return (a > o ? 1 : (a < o ? 0 : .5)) + (a - o) * 0.002;
+}
+function kb2Sample(me, n, pool, sizes, voids) {
+  const seats = [];
+  for (let s = 0; s < n; s++) if (s !== me) seats.push(s);
+  const vc = s => voids && voids[s] ? Object.keys(voids[s]).length : 0;
+  seats.sort((a, b) => vc(b) - vc(a));
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const useVoid = attempt < 6, p = pool.slice();
+    for (let i = p.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; const t = p[i]; p[i] = p[j]; p[j] = t; }
+    const used = new Uint8Array(p.length), out = [];
+    let ok = true;
+    for (const s of seats) {
+      const got = [];
+      for (let i = 0; i < p.length && got.length < sizes[s]; i++) {
+        if (used[i]) continue;
+        if (useVoid && voids && voids[s] && voids[s][kb2Suit(p[i])]) continue;
+        got.push(p[i]); used[i] = 1;
+      }
+      if (got.length < sizes[s]) { ok = false; break; }
+      out[s] = got;
+    }
+    if (ok) return out;
+  }
+  return null;
+}
+/* record played cards + inferred voids (called for every accepted move on the host) */
+function kb2Record(m) {
+  try {
+    if (!m || m.kind !== 'card' || !OG || !OG.pub || !OG.hands) return;
+    const p = OG.pub;
+    if (p.phase !== 'play' || m.seat !== p.turn || p.trick.length >= OG.n || !m.payload || !m.payload.card) return;
+    const c = m.payload.card, h = OG.hands[m.seat];
+    if (!h || !ogLegalOf(h, p.trick).some(x => x.s === c.s && x.v === c.v)) return;
+    (OG.seen = OG.seen || new Set()).add(c.s * 20 + c.v);
+    if (p.trick.length) {
+      const ls = p.trick[0].card.s;
+      if (c.s !== ls) { OG.kbVoid = OG.kbVoid || {}; (OG.kbVoid[m.seat] = OG.kbVoid[m.seat] || {})[ls] = true; }
+    }
+  } catch (e) {}
+}
+function kb2Trump(seat) {
+  const h = OG.hands[seat], sc = [0, 0, 0, 0], cnt = [0, 0, 0, 0];
+  const pts = { 14: 3.2, 13: 2.2, 12: 1.4, 11: 1, 10: .6 };
+  h.forEach(x => { cnt[x.s]++; sc[x.s] += 2.2 + (pts[x.v] || .15); });
+  for (let s = 0; s < 4; s++) if (cnt[s] >= 3) sc[s] += (cnt[s] - 2) * 1.5;
+  return sc.indexOf(Math.max(...sc));
+}
+function kb2Choose(seat) {
+  const p = OG.pub, n = OG.n;
+  const hand = OG.hands[seat].map(kb2I);
+  const trick = p.trick.map(t => ({ seat: t.seat, c: kb2I(t.card) }));
+  const L = kb2Legal(hand, trick);
+  if (L.length === 1) return L[0];
+  const played = new Uint8Array(80);
+  (OG.seen || new Set()).forEach(k => { played[k] = 1; });
+  trick.forEach(t => { played[t.c] = 1; });
+  const pool = [];
+  for (let s = 0; s < 4; s++) for (let v = 2; v <= 14; v++) { const k = s * 20 + v; if (!played[k] && hand.indexOf(k) < 0) pool.push(k); }
+  const sizes = [];
+  for (let s = 0; s < n; s++) sizes[s] = OG.hands[s].length;
+  const base = { n, trump: p.trump, hands: [], played, trick, tricks: p.tricks.slice(), turn: seat };
+  const sums = new Float64Array(L.length);
+  let done = 0; const t0 = Date.now();
+  while (done < kb2MaxS) {
+    const w = kb2Sample(seat, n, pool, sizes, OG.kbVoid);
+    if (!w) break;
+    w[seat] = hand; base.hands = w;
+    for (let i = 0; i < L.length; i++) sums[i] += kb2Roll(base, L[i], seat);
+    done++;
+    if (done >= kb2MinS && Date.now() - t0 > kb2Budget) break;
+  }
+  if (!done) { const st = { hands: [], played, trump: p.trump, n, trick }; st.hands[seat] = hand; return kb2Pol(st, seat); }
+  let bi = 0;
+  for (let i = 1; i < L.length; i++) {
+    if (sums[i] > sums[bi] + 1e-9 || (Math.abs(sums[i] - sums[bi]) <= 1e-9 && kb2Val(L[i]) < kb2Val(L[bi]))) bi = i;
+  }
+  return L[bi];
+}
+function kb2BotCard(seat) { return kb2O(kb2Choose(seat)); }
+
+ogBotCard = kb2BotCard;
+{
+  const _hk = ogHandle;
+  ogHandle = async function (m) { kb2Record(m); return _hk.apply(this, arguments); };
+}
 
 </script>
 </body>
