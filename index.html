@@ -2809,6 +2809,13 @@ const AVATARS=[{id:'a0',n:'پیش‌فرض',p:0},{id:'a1',n:'شیر',p:90},{id:'
 const BACKS=[{id:'b0',n:'پیش‌فرض',p:0,css:''},{id:'b1',n:'طلایی',p:40,css:'linear-gradient(135deg,#7a5a00,#ffd45a)'},{id:'b2',n:'نئون',p:60,css:'linear-gradient(135deg,#0a1a40,#22e4ff)'},{id:'b3',n:'یاقوتی',p:80,css:'linear-gradient(135deg,#4a0010,#ff2e5b)'},{id:'b4',n:'زمرد سلطنتی',p:1200,css:'radial-gradient(circle at 30% 25%,#5dffb0,transparent 45%),linear-gradient(135deg,#03361f,#0fa968 55%,#ffd45a)'},{id:'b5',n:'کهکشان',p:2000,css:'radial-gradient(circle at 70% 20%,#ff7ad9,transparent 40%),radial-gradient(circle at 20% 80%,#22e4ff,transparent 45%),linear-gradient(135deg,#120a3a,#4a1d9a)'},{id:'b6',n:'الماس سیاه',p:3500,css:'linear-gradient(135deg,#050509 20%,#1a1a2e 40%,#6ee7ff 50%,#1a1a2e 60%,#050509 80%),#050509'}];
 const TABLES=[{id:'t0',n:'پیش‌فرض',p:0,css:''},{id:'t1',n:'سبز کلاسیک',p:40,css:'radial-gradient(circle,#1d7a46,#0b3d22)'},{id:'t2',n:'آبی شب',p:60,css:'radial-gradient(circle,#1a3a7a,#071433)'},{id:'t3',n:'بنفش شاهی',p:80,css:'radial-gradient(circle,#5b2aa8,#1c0a40)'},{id:'t4',n:'شفق قطبی',p:1200,css:'radial-gradient(circle at 30% 30%,#3dffc0,transparent 50%),radial-gradient(circle at 75% 70%,#7a5cff,transparent 55%),radial-gradient(circle,#0a2a40,#030a18)'},{id:'t5',n:'مخمل سلطنتی',p:2000,css:'radial-gradient(circle,#c0143c 0%,#6e0a22 55%,#2a0310 100%)'},{id:'t6',n:'کیهان',p:3500,css:'radial-gradient(circle at 25% 30%,#ffffff 0 1px,transparent 2px),radial-gradient(circle at 70% 60%,#ffd45a 0 1.500px,transparent 2.500px),radial-gradient(circle at 50% 20%,#ff7ad9,transparent 40%),radial-gradient(circle,#2a0f6a,#02010a)'}];
 const MISSIONS=[
+  {id:'p1',g:'play',t:'۱ بازی انجام بده',key:'played',need:1,r:5,ic:'cards'},
+  {id:'p3',g:'play',t:'۳ بازی انجام بده',key:'played',need:3,r:10,ic:'cards'},
+  {id:'p5',g:'play',t:'۵ بازی انجام بده',key:'played',need:5,r:15,ic:'cards'},
+  {id:'p10',g:'play',t:'۱۰ بازی انجام بده',key:'played',need:10,r:30,ic:'cards'},
+  {id:'w1',g:'play',t:'۱ بازی ببر',key:'wins',need:1,r:15,ic:'trophy'},
+  {id:'w3',g:'play',t:'۳ بازی ببر',key:'wins',need:3,r:30,ic:'trophy'},
+  {id:'w5',g:'play',t:'۵ بازی ببر',key:'wins',need:5,r:45,ic:'trophy'},
   {id:'sp1',g:'bet',t:'۱ بازی شرطی انجام بده',key:'sp',need:1,r:10,ic:'bag'},
   {id:'sp3',g:'bet',t:'۳ بازی شرطی انجام بده',key:'sp',need:3,r:25,ic:'bag'},
   {id:'sw1',g:'bet',t:'۱ بازی شرطی ببر',key:'sw',need:1,r:20,ic:'medal'},
@@ -2937,11 +2944,7 @@ async function hubMis(){
     return `<div class="msn${done?' done':''}"><div class="mi">${done?IC.check:IC[x.ic]}</div><div class="mt"><b>${x.t}</b><div class="bar"><i style="width:${v/x.need*100}%"></i></div><small>${v} / ${x.need} · پاداش ${x.r} ${coin(13)}</small></div>`+
       (done?`<button class="go ok" disabled>دریافت شد</button>`:`<button class="go" ${ok?'':'disabled'} onclick="claimMission('${x.id}')">${ok?'دریافت':'در جریان'}</button>`)+'</div>'};
   let h='';
-  const code=userUid(u),n=u.ref_count||0;
-  h+=`<div class="hbH">${IC.user}<span>دعوت دوستان</span><small>دعوت دوستان</small></div>`+
-    `<div class="invBox"><div class="invCode"><span>کد دعوت</span><b>${code}</b><button type="button" onclick="copy('${code}')">کپی</button></div></div>`+
-    `<div class="stats" style="margin:12px 0;grid-template-columns:repeat(2,1fr)"><div class="stat"><b>${fmt(n)}</b><small>دوست دعوت‌شده</small></div><div class="stat"><b>${fmt(n*REF_REWARD)}</b><small>توکن دریافتی از دعوت</small></div></div>`+
-    `<div class="mgrp" style="text-align:center;margin-bottom:6px">برای هر دوستی که با کد یا نام کاربری تو ثبت‌نام کنه، ${REF_REWARD} توکن می‌گیری</div>`;
+  h+=`<div class="hbH">${IC.target}<span>ماموریت‌های امروز</span><small>فقط بازی آنلاین</small></div>`+MISSIONS.filter(x=>x.g==='play').map(row).join('');
   h+=`<div class="hbH">${IC.bag}<span>ماموریت‌های شرطی</span><small>فقط مود شرطی</small></div>`+MISSIONS.filter(x=>x.g==='bet').map(row).join('');
   h+=`<div class="mgrp" style="text-align:center;margin-top:12px">همه ماموریت‌ها هر روز (نیمه‌شب به وقت ایران) ریست می‌شوند</div>`;
   return h;
