@@ -420,7 +420,7 @@ svg.cn{flex:none;display:inline-block;vertical-align:middle}
 .tpHead small{display:block;color:var(--mut);font-size:11.5px;margin-top:1px;line-height:1.5}
 #hokm-screen .tpSkip{margin-inline-start:auto;padding:7px 12px;font-size:12px;background:linear-gradient(#f6d36d,#b88620);color:#2a1a02;border-color:#7a5410;flex:none}
 .tpTimer{height:5px;border-radius:5px;background:#ffffff1a;margin:11px 0 2px;overflow:hidden}
-.tpTimer i{display:block;height:100%;width:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold2),var(--gold));animation:tpT 5s linear forwards}
+.tpTimer i{display:block;height:100%;width:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold2),var(--gold));animation:tpT 15s linear forwards}
 @keyframes tpT{to{width:0}}
 .tpSuits{display:flex;gap:10px;justify-content:center;margin-top:10px}
 #hokm-screen .tpSuit{width:58px;height:66px;padding:0;border-radius:12px;background:linear-gradient(160deg,#fffdf4,#efe6cd);border:2px solid var(--gold);box-shadow:0 4px 0 #7d6f45,0 8px 12px #000a;display:grid;place-items:center;color:#10162e;transition:transform .15s,opacity .3s,filter .3s}
@@ -428,7 +428,7 @@ svg.cn{flex:none;display:inline-block;vertical-align:middle}
 #hokm-screen .tpSuit svg{width:34px;height:34px;fill:currentColor}
 #hokm-screen .tpBox.wait .tpSuit{opacity:.38;filter:grayscale(.6);pointer-events:none}
 #hokm-screen .tpBox.ready .tpSuit{animation:tpPop .45s ease both}
-#hokm-screen .tpBox.ready .tpTimer,#hokm-screen .tpBox.ready .tpSkip{display:none}
+#hokm-screen .tpBox.ready .tpSkip{display:none}
 #hokm-screen .tpSuit:nth-child(2){animation-delay:.05s!important}#hokm-screen .tpSuit:nth-child(3){animation-delay:.1s!important}#hokm-screen .tpSuit:nth-child(4){animation-delay:.15s!important}
 @keyframes tpPop{0%{transform:translateY(10px) scale(.85)}60%{transform:translateY(-4px) scale(1.06)}100%{transform:none}}
 #hokm-screen #hand{transition:transform .4s ease}
@@ -613,6 +613,7 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
 .dh.turn .dav{transform:scale(1.15)}
 .dn{min-width:0}.dn b{display:block;font-size:11.5px;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dn small{font-size:9.5px;color:#aab3d6}
 .dmid{display:flex;flex-direction:column;gap:5px;align-items:center}
+.dtm{font:900 14px var(--font);color:#ffd45a;min-width:24px;text-align:center;line-height:1}.dtm.low{color:#ff5a5a}
 .pips{display:flex;gap:3px;direction:ltr}.pips i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.16)}
 .pm i.on{background:#22e4ff;box-shadow:0 0 6px #22e4ff}.po i.on{background:#ff2e93;box-shadow:0 0 6px #ff2e93}
 #hokm-screen[data-mode=duel] #table{background:linear-gradient(180deg,#ff2e93,#3a1a70 50%,#22e4ff)!important}
@@ -631,6 +632,33 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
 @keyframes inR{from{transform:translateX(160%);opacity:0}}@keyframes inL{from{transform:translateX(-160%);opacity:0}}
 @keyframes vsPop{from{transform:scale(3);opacity:0}}@keyframes fadeU{from{opacity:0;transform:translateY(10px)}}
 
+
+/* ===== چیدمان جدید: هر ۴ بازیکن داخل کادر ===== */
+#hokm-screen #info{flex-direction:row;flex-wrap:wrap;top:64px;right:76px;left:10px;gap:4px}
+#hokm-screen #info span{font-size:11.5px;padding:2px 9px}
+#hokm-screen #table{top:128px;bottom:112px;left:50%;height:auto;width:min(97vw,440px);transform:translateX(-50%);border-radius:34px;padding:8px}
+#hokm-screen #felt{border-radius:26px}
+#hokm-screen #s2{top:16px;left:50%;right:auto;bottom:auto;transform:translateX(-50%)}
+#hokm-screen #s1{right:6px;left:auto;top:50%;bottom:auto;transform:translateY(-50%)}
+#hokm-screen #s3{left:6px;right:auto;top:50%;bottom:auto;transform:translateY(-50%)}
+#hokm-screen #s0{bottom:6px;top:auto;left:50%;right:auto;transform:translateX(-50%)}
+#hokm-screen .seat .av{width:42px;height:42px;font-size:19px}
+#hokm-screen .seat .nm{min-width:54px;padding:10px 6px 2px;font-size:10.5px}
+#hokm-screen .seat .crown{top:-13px;font-size:14px}
+#hokm-screen .fan{height:22px;margin-top:3px}
+#hokm-screen .fan .back{width:13px;height:22px;margin-left:-8px}
+#hokm-screen .fan .back:first-child{margin-left:0}
+#hokm-screen #trick .hokm-card{--w:40px}
+#hokm-screen .p0{left:calc(50% - 20px);top:calc(50% + 2px)}
+#hokm-screen .p2{left:calc(50% - 20px);top:calc(50% - 62px)}
+#hokm-screen .p1{left:calc(50% + 14px);top:calc(50% - 30px)}
+#hokm-screen .p3{left:calc(50% - 54px);top:calc(50% - 30px)}
+#hokm-screen #offTmr{font-weight:800;color:var(--gold)}
+@media (max-height:660px){
+  #hokm-screen #table{top:118px;bottom:104px}
+  #hokm-screen .seat .av{width:36px;height:36px;font-size:17px}
+  #hokm-screen #hand{bottom:12px}
+}
 </style>
 </head>
 <body>
@@ -777,7 +805,7 @@ html.lite *,html.lite *::before,html.lite *::after{animation:none!important;tran
         <div class="coins"><span id="hokmBal">0</span><span class="coin"></span></div>
       </div>
     </header>
-    <div id="info"><span id="rnd"></span><span id="score">دست‌ها: شما ۰ — حریف ۰</span><span id="mw" style="display:none"></span></div>
+    <div id="info"><span id="rnd"></span><span id="score">دست‌ها: شما ۰ — حریف ۰</span><span id="mw" style="display:none"></span><span id="offTmr" style="display:none"></span></div>
     <div id="trumpB"><small>حکم</small><b id="trumpS">—</b></div>
     <div id="table"><div id="felt">
       <div id="mark"><b id="mk">♠</b>حکم</div>
@@ -1335,6 +1363,7 @@ async function refreshBalH(){
 }
 
 function showModeSelect(){
+  offStop();
   $h('hokm-modeOv').classList.remove('h');
   $h('lobbyOff').classList.add('h');
   $h('lobbyOnline').classList.add('h');
@@ -1350,6 +1379,8 @@ function showModeSelect(){
   refreshBalH();
 }
 function backToModeSelect(){
+  if(!offLeaveOk())return;
+  offStop();
   if(isOnlineMode){ db.removeAllChannels(); isOnlineMode=false; }
   currentRoomId = null;
   clearMatchTimer();
@@ -1451,170 +1482,177 @@ $h('pvpFreeBtn').onclick=()=>{pvpMode='free';$h('pvpFreeBtn').className='on';$h(
 $h('pvpBetBtn').onclick=()=>{pvpMode='bet';$h('pvpBetBtn').className='on';$h('pvpFreeBtn').className='';$h('pvpBetBox').style.display='block';buildPvpAmts()};
 
 /* ======================= OFFLINE GAME ======================= */
-function deck(rounds){
+let OFFG=0,OFFACT=false,offTimer=null;
+function offStop(){
+  OFFG++;OFFACT=false;
+  if(offTimer){clearInterval(offTimer);offTimer=null}
+  pickRes=null;S.playing=false;
+  try{trumpStop()}catch(e){}
+  const t=$h('offTmr');if(t)t.style.display='none';
+}
+function offLeaveOk(){
+  if(!OFFACT||isOnlineMode)return true;
+  return confirm(modeOff==='bet'?'اگر الان خارج شوید توکن شرط از دست می‌رود. خارج می‌شوید؟':'بازی نیمه‌کاره رها می‌شود. خارج می‌شوید؟');
+}
+function deck(){
   const d=[];for(let s=0;s<4;s++)for(let v=2;v<=14;v++)d.push({s,v});
-  if(rounds > 1 && Math.random() < 0.15) { d.sort((a,b)=> a.v - b.v); }
   for(let i=d.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[d[i],d[j]]=[d[j],d[i]]}return d
 }
 const sortH=h=>h.sort((a,b)=>a.s-b.s||b.v-a.v);
 function toastH(t,ms=1100){const e=$h('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),ms)}
 
 async function dealOne(p,card){
+  const g=OFFG;
   const f=$h('felt'),fr=f.getBoundingClientRect(),sr=$h('s'+p).querySelector('.av').getBoundingClientRect();
   const e=document.createElement('div');e.className='fly back';f.appendChild(e);
   const x0=fr.width/2-15,y0=fr.height/2-21,x1=sr.left-fr.left+sr.width/2-15,y1=sr.top-fr.top+sr.height/2-21;
   e.style.left=x0+'px';e.style.top=y0+'px';
-  await e.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${x1-x0}px,${y1-y0}px) rotate(200deg)`}],{duration:230,easing:'ease-out'}).finished;
-  e.remove();S.hands[p].push(card);
+  try{await e.animate([{transform:'translate(0,0) rotate(0)'},{transform:`translate(${x1-x0}px,${y1-y0}px) rotate(200deg)`}],{duration:230,easing:'ease-out'}).finished}catch(_){await sleep(230)}
+  e.remove();if(g!==OFFG)return;
+  S.hands[p].push(card);
   if(p===0){sortH(S.hands[0]);renderHand()}else renderFan(p);
 }
 
 function startMatchOffline(rounds){
+  offStop();OFFACT=true;
   const m=MODES[rounds];
   M={...m,w:[0,0],r:1,need:Math.floor(m.n/2)+1,hk:Math.random()*4|0};
-  S.forceWorstHand = Math.random() < 0.15; // ← شانس دست خوب ۱۵٪ افزایش یافت
   playRoundOffline();
 }
 
-function pickWorstFrom(pool){
-  let worst = pool[0], worstScore = Infinity;
-  const suitCount = [0,0,0,0];
-  pool.forEach(c => suitCount[c.s]++);
-  pool.forEach(c => {
-    let score = c.v * 2 + (suitCount[c.s] > 1 ? 6 : 0);
-    if(score < worstScore){ worstScore = score; worst = c; }
-  });
-  return worst;
-}
-
 async function playRoundOffline(){
-  const d=deck(M.n),hk=M.hk;
-  const forceWorst = !!S.forceWorstHand;
-  S={hands:[[],[],[],[]],trick:[],tricks:[0,0],trump:null,hakem:hk,turn:0,seen:new Set(),playing:false,forceWorstHand:forceWorst};
+  const g=OFFG,d=deck(),hk=M.hk;
+  S={hands:[[],[],[],[]],trick:[],tricks:[0,0],trump:null,hakem:hk,turn:-1,seen:new Set(),playing:false};
   setTrump(null);renderScore();$h('trick').innerHTML='';$h('hand').innerHTML='';
-  [1,2,3].forEach(renderFan);
+  [1,2,3].forEach(renderFan);mark(-1);
   document.querySelectorAll('#hokm-screen .seat').forEach(e=>e.classList.toggle('hk',+e.id[1]===hk));
   $h('deck').style.display='block';
   let ix=0;
-  toastH((M.n>1?`دور ${M.r} از ${M.n} — `:'')+(hk===0?'شما حاکم هستید':'حاکم: بازیکن '+['شما','۲','۳','۴'][hk]),1500);await sleep(1700);
-
-  function drawFor(p){
-    if(p === 0 && forceWorst){
-      const take = Math.min(6, d.length - ix);
-      if(take > 1){
-        const pool = d.slice(ix, ix + take);
-        const worst = pickWorstFrom(pool);
-        const idx = d.indexOf(worst, ix);
-        if(idx >= 0){ d.splice(idx, 1); return worst; }
-      }
-    }
-    return d[ix++];
-  }
-
-  for(let i=0;i<5;i++){ const card = drawFor(hk); await dealOne(hk, card); await sleep(60); }
-  if(hk===0)await chooseTrumpUI();else{await sleep(900);S.trump=bestSuit(S.hands[hk])}
+  toastH((M.n>1?`دور ${M.r} از ${M.n} — `:'')+(hk===0?'شما حاکم هستید':'حاکم: بازیکن '+['شما','۲','۳','۴'][hk]),1500);
+  await sleep(1700);if(g!==OFFG)return;
+  for(let i=0;i<5;i++){await dealOne(hk,d[ix++]);if(g!==OFFG)return;await sleep(60)}
+  if(hk===0){await chooseTrumpUI()}else{await sleep(900);S.trump=bestSuit(S.hands[hk])}
+  if(g!==OFFG)return;
   setTrump(S.trump);
-  toastH('حکم: '+SU[S.trump]);await sleep(700);
+  toastH('حکم: '+SU[S.trump]);await sleep(700);if(g!==OFFG)return;
   while(S.hands.some(h=>h.length<13)){
     for(let k=0;k<4;k++){
       const p=(hk+k)%4;
-      if(S.hands[p].length<13){ const card = drawFor(p); await dealOne(p, card); }
+      if(S.hands[p].length<13){await dealOne(p,d[ix++]);if(g!==OFFG)return}
     }
   }
   $h('deck').style.display='none';S.turn=hk;S.playing=true;
-  sortH(S.hands[0]);renderHand();loopOffline();
+  sortH(S.hands[0]);renderHand();loopOffline(g);
 }
 
-
 async function collectAnim(rel,mine){
-  const tr=$h('trick'),tg=$h('s'+rel).querySelector('.av').getBoundingClientRect();
-  [...tr.children].forEach(e=>{const r=e.getBoundingClientRect();e.animate([{transform:getComputedStyle(e).transform,opacity:1},{transform:`translate(${tg.left+tg.width/2-r.left-r.width/2}px,${tg.top+tg.height/2-r.top-r.height/2}px) scale(.3)`,opacity:0}],{duration:600,easing:'ease-in',fill:'forwards'})});
-  toastH(mine?'+۱ امتیاز برای تیم شما 👏':'+۱ امتیاز برای حریف',1000);
+  const tr=$h('trick'),seat=$h('s'+rel),target=seat&&(seat.querySelector('.av')||seat);
+  if(tr&&target){
+    const tg=target.getBoundingClientRect();
+    [...tr.children].forEach(e=>{
+      const r=e.getBoundingClientRect();
+      try{e.animate([{transform:getComputedStyle(e).transform,opacity:1},{transform:`translate(${tg.left+tg.width/2-r.left-r.width/2}px,${tg.top+tg.height/2-r.top-r.height/2}px) scale(.3)`,opacity:0}],{duration:650,easing:'ease-in',fill:'forwards'})}catch(_){e.style.opacity='0'}
+    });
+  }
+  toastH(mine?(rel===0?'دست را بردید! +۱ امتیاز برای تیم شما 👏':'هم‌تیمی دست را برد! +۱ امتیاز برای تیم شما 👏'):'+۱ امتیاز برای تیم حریف',1000);
   await sleep(650);
 }
 function setTrump(t){const b=$h('trumpS');b.textContent=t==null?'—':SU[t];b.className=t!=null&&isRed(t)?'red':'';
   if(t!=null){const e=$h('trumpB');e.classList.remove('set');void e.offsetWidth;e.classList.add('set')}}
 function bestSuit(h){const c=[0,0,0,0];h.forEach(x=>c[x.s]+=1+x.v/20);return c.indexOf(Math.max(...c))}
 function chooseTrumpUI(){
-  return new Promise(res=>trumpFlow(s=>{S.trump=s;res()}));
+  return new Promise(res=>trumpFlow(s=>{S.trump=s;res()},()=>S.hands[0]));
 }
 
 function isMaster(p,c){
   for(let v=c.v+1;v<=14;v++){
-    const cardId = c.s*20+v;
-    if(!S.seen.has(cardId) && !S.hands[p].some(x=>x.s===c.s&&x.v===v)) return false;
+    if(!S.seen.has(c.s*20+v)&&!S.hands[p].some(x=>x.s===c.s&&x.v===v))return false;
   }
   return true;
 }
-
 function legal(p){const h=S.hands[p];if(!S.trick.length)return h;const ls=S.trick[0].c.s;const f=h.filter(c=>c.s===ls);return f.length?f:h}
 function beats(a,b){if(a.s===b.s)return a.v>b.v;return a.s===S.trump}
 function winnerOf(){return S.trick.reduce((w,t)=>beats(t.c,w.c)?t:w).p}
 
 function bot(p){
-  const tr = S.trump;
-  const legalCards = legal(p);
-  let lv = 1;
-  if (p === 2 || p === 4) lv = 4;
-  else if (p === 3) lv = 2;
-  else lv = 3;
-  const makeMistake = (lv === 4) ? false : (Math.random() < 0.01); 
-  const asc = [...legalCards].sort((a,b)=>a.v-b.v);
-  const nonTrump = asc.filter(c=>c.s!==tr);
-  const trumps = asc.filter(c=>c.s===tr);
-  const bestDump = nonTrump.length ? nonTrump[0] : asc[0];
-
+  const tr=S.trump,asc=[...legal(p)].sort((a,b)=>a.v-b.v);
+  const nonTrump=asc.filter(c=>c.s!==tr),trumps=asc.filter(c=>c.s===tr);
+  const lowDump=nonTrump.length?nonTrump[0]:asc[0];
   if(!S.trick.length){
-    if(lv===1) return asc[asc.length-1];
-    if(makeMistake) return asc[asc.length-1];
-    const masters = nonTrump.filter(c=>isMaster(p,c));
-    if(masters.length) return masters[masters.length-1];
-    if(nonTrump.length) return nonTrump[nonTrump.length-1];
-    return trumps[trumps.length-1];
+    const masters=nonTrump.filter(c=>isMaster(p,c));
+    if(masters.length)return masters[masters.length-1];
+    if(nonTrump.length){
+      const cnt=[0,0,0,0];S.hands[p].forEach(c=>cnt[c.s]++);
+      let b=nonTrump[0];
+      nonTrump.forEach(c=>{if(cnt[c.s]>cnt[b.s]||(cnt[c.s]===cnt[b.s]&&c.v<b.v))b=c});
+      return b;
+    }
+    const m=trumps.filter(c=>isMaster(p,c));
+    return m.length?m[m.length-1]:trumps[0];
   }
-  const best = S.trick.reduce((w,t)=>beats(t.c,w.c)?t:w);
-  if(team(best.p) === team(p)){
-    if(lv===1) return bestDump;
-    if(makeMistake) return trumps.length ? trumps[0] : bestDump;
-    return bestDump;
+  const ls=S.trick[0].c.s,best=S.trick.reduce((w,t)=>beats(t.c,w.c)?t:w);
+  if(team(best.p)===team(p))return lowDump;
+  const win=asc.filter(c=>beats(c,best.c));
+  if(win.length){
+    if(S.trick.length===3)return win[0];
+    return win[0].s===ls&&ls!==tr?win[win.length-1]:win[0];
   }
-  const winCandidates = asc.filter(c=>beats(c,best.c));
-  if(winCandidates.length){
-    if(makeMistake) return winCandidates[winCandidates.length-1];
-    return winCandidates[0];
-  }
-  if(makeMistake) return trumps.length ? trumps[trumps.length-1] : bestDump;
-  return bestDump;
+  return lowDump;
 }
 
-async function loopOffline(){
-  while(true){
+function humanPick(g){
+  return new Promise(res=>{
+    let left=15;const t=$h('offTmr');
+    const paint=()=>{t.textContent='⏱ '+pfa(left)+' ثانیه';t.style.color=left<=5?'#ff8a8a':''};
+    const done=c=>{if(offTimer){clearInterval(offTimer);offTimer=null}pickRes=null;t.style.display='none';res(c)};
+    pickRes=done;t.style.display='';paint();
+    if(offTimer)clearInterval(offTimer);
+    offTimer=setInterval(()=>{
+      if(g!==OFFG){clearInterval(offTimer);offTimer=null;return}
+      left--;paint();
+      if(left<=0)done(bot(0));
+    },1000);
+  });
+}
+
+async function loopOffline(g){
+  while(g===OFFG){
     const p=S.turn;mark(p);let c;
-    if(p===0){renderHand();c=await new Promise(r=>pickRes=r)}else{await sleep(650);c=bot(p)}
-    S.hands[p]=S.hands[p].filter(x=>x!==c);S.trick.push({p,c});S.seen.add(c.s*20+c.v);drawTrick();
-    p===0?renderHand():renderFan(p);
-    if(S.trick.length<4){S.turn=(p+1)%4;continue}
-    await sleep(900);
-    const w=winnerOf();S.tricks[team(w)]++;renderScore();await collectAnim(w,team(w)===0);S.trick=[];$h('trick').innerHTML='';S.turn=w;
+    if(p===0){renderHand();c=await humanPick(g)}else{await sleep(650);if(g!==OFFG)return;c=bot(p)}
+    if(g!==OFFG)return;
+    S.hands[p]=S.hands[p].filter(x=>x!==c);S.trick.push({p,c});S.seen.add(c.s*20+c.v);
+    S.turn=S.trick.length<4?(p+1)%4:-1;
+    drawTrick();p===0?renderHand():renderFan(p);
+    if(S.trick.length<4)continue;
+    mark(-1);await sleep(900);if(g!==OFFG)return;
+    const w=winnerOf();S.tricks[team(w)]++;renderScore();
+    await collectAnim(w,team(w)===0);if(g!==OFFG)return;
+    S.trick=[];$h('trick').innerHTML='';S.turn=w;
     if(S.tricks[0]>=HokmCFG.tricksToWin||S.tricks[1]>=HokmCFG.tricksToWin)return roundEndOffline(S.tricks[0]>S.tricks[1]);
   }
 }
 async function roundEndOffline(won){
+  const g=OFFG;
   S.playing=false;mark(-1);$h('hand').innerHTML='';
   M.w[won?0:1]++;
   if(team(S.hakem)!==(won?0:1))M.hk=(S.hakem+1)%4;else M.hk=S.hakem;
   renderScore();
   if(M.w[0]>=M.need||M.w[1]>=M.need||M.n===1)return finishOffline(M.w[0]>M.w[1]);
   $h('rT').textContent=won?`✅ دور ${M.r} را بردید`:`❌ دور ${M.r} را باختید`;
-  $h('rP').innerHTML=`دست‌ها: <b>شما ${S.tricks[0]}</b> — <b>حریف ${S.tricks[1]}</b><br>وضعیت دورها: <b>شما ${M.w[0]}</b> — <b>حریف ${M.w[1]}</b><br>برای برد کل بازی ${M.need} دور لازم است`;
-  $h('rov').classList.remove('h');await sleep(3200);$h('rov').classList.add('h');M.r++;playRoundOffline();
+  $h('rP').innerHTML=`دست‌ها: <b>تیم شما ${S.tricks[0]}</b> — <b>تیم حریف ${S.tricks[1]}</b><br>وضعیت دورها: <b>شما ${M.w[0]}</b> — <b>حریف ${M.w[1]}</b><br>برای برد کل بازی ${M.need} دور لازم است`;
+  $h('rov').classList.remove('h');await sleep(3200);$h('rov').classList.add('h');
+  if(g!==OFFG)return;
+  M.r++;playRoundOffline();
 }
 async function finishOffline(won){
-  let detail=M.n>1?`دورها: <b>شما ${M.w[0]}</b> — <b>حریف ${M.w[1]}</b><br>آخرین دست: شما ${S.tricks[0]} — حریف ${S.tricks[1]}`:`دست‌ها: <b>شما ${S.tricks[0]}</b> — <b>حریف ${S.tricks[1]}</b>`;
+  if(!OFFACT)return;OFFACT=false;
+  let detail=M.n>1?`دورها: <b>شما ${M.w[0]}</b> — <b>حریف ${M.w[1]}</b><br>آخرین دور: تیم شما ${S.tricks[0]} — تیم حریف ${S.tricks[1]}`:`دست‌ها: <b>تیم شما ${S.tricks[0]}</b> — <b>تیم حریف ${S.tricks[1]}</b>`;
   if(modeOff==='bet'){
     const prize=Math.round(stakeOff*M.mult);
-    if(won){await Wallet.payout(prize);detail+=`<br>${fmtH(prize)} توکن به حساب شما اضافه شد`}
-    else detail+=`<br>${fmtH(stakeOff)} توکن ورودی از دست رفت`;
+    if(won){
+      try{await Wallet.payout(prize);detail+=`<br>${fmtH(prize)} توکن به حساب شما اضافه شد`}
+      catch(e){detail+='<br>⚠️ خطا در واریز جایزه؛ لطفاً با پشتیبانی تماس بگیرید'}
+    }else detail+=`<br>${fmtH(stakeOff)} توکن ورودی از دست رفت`;
   }
   $h('endT').textContent=won?'🎉 تیم شما برنده شد':'تیم شما باخت';$h('endP').innerHTML=detail;
   $h('end').classList.remove('h');refreshBalH();
@@ -1749,10 +1787,10 @@ function cardEl(c,cls=''){const e=document.createElement('div');e.className='hok
 function renderHand(){
   const h=$h('hand');h.innerHTML='';const cards=S.hands?S.hands[0]||[]:[];if(!cards.length)return;
   const ok=(S.turn===0&&S.trick&&S.trick.length<4&&S.playing)?legal(0):[];
-  const cw=46,avail=h.clientWidth-16,n=cards.length;
+  const cw=46,avail=h.clientWidth-36,n=cards.length;
   const step=n>1?Math.min(cw-4,(avail-cw)/(n-1)):0,total=step*(n-1)+cw,x0=(h.clientWidth-total)/2;
   cards.forEach((c,i)=>{const e=cardEl(c,ok.includes(c)?'ok':(ok.length?'no':''));e.style.left=(x0+i*step)+'px';
-    e.style.transform=`rotate(${((i-(n-1)/2)*1.6).toFixed(1)}deg)`;
+    e.style.transform=`rotate(${((i-(n-1)/2)*1.1).toFixed(1)}deg)`;
     if(ok.includes(c))e.onclick=()=>{if(pickRes){const r=pickRes;pickRes=null;r(c)}};h.appendChild(e)});
 }
 function renderFan(p){const f=$h('s'+p).querySelector('.fan');f.innerHTML='';
@@ -1760,7 +1798,7 @@ function renderFan(p){const f=$h('s'+p).querySelector('.fan');f.innerHTML='';
 function drawTrick(){const t=$h('trick');t.innerHTML='';S.trick.forEach(x=>t.appendChild(cardEl(x.c,'p'+x.p)))}
 function renderScore(){
   $h('rnd').textContent=`دور ${M.r} از ${M.n}`;
-  $h('score').textContent=`دست‌ها: شما ${S.tricks[0]} — حریف ${S.tricks[1]}`;
+  $h('score').textContent=`دست‌ها: تیم شما ${S.tricks[0]} — تیم حریف ${S.tricks[1]}`;
   $h('mw').style.display=M.n>1?'':'none';$h('mw').textContent=`دورها: شما ${M.w[0]} — حریف ${M.w[1]}`;
 }
 function mark(p){document.querySelectorAll('#hokm-screen .seat').forEach(e=>e.classList.toggle('turn',+e.id[1]===p))}
@@ -1771,6 +1809,8 @@ function openHokmScreen() {
   showModeSelect();
 }
 function closeHokmScreen() {
+  if(!offLeaveOk())return;
+  offStop();
   SFX.nav(); $h("hokm-screen").style.display = "none"; $("app").style.display = "flex"; S.playing = false;
   if(isOnlineMode) { db.removeAllChannels(); isOnlineMode = false; }
   currentRoomId = null;
@@ -2093,7 +2133,7 @@ function partyWatch(){
     db.channel('party_rm_'+r).on('postgres_changes',{event:'UPDATE',schema:'public',table:'game_rooms',filter:'id=eq.'+r},p=>{
       if(!party)return;
       if(p.new.status==='playing'){const id=r;const st=party.stake;partyClose();isOnlineMode=true;joinOnlineRoom(id)}
-      else if(p.new.status==='cancelled'){const st=party.stake;partyClose();toast('بازی توسط میزبان لغو شد',true);if(st>0)Wallet.payout(st)}
+      else if(p.new.status==='cancelled'){const old=party;toast('بازی توسط میزبان لغو شد',true);partyRefundOnce(old).finally(()=>partyClose())}
     }).subscribe()
   ];
 }
@@ -2102,16 +2142,67 @@ function partyOpen(title,sub){
   $h('partyT').textContent=title; $h('partySec').textContent=sub||''; $h('partyBotBtn').style.display='none';
   $h('partyCancel').onclick=partyCancel;
 }
+async function partyRefundOnce(p){
+  if(!p||p.refunded||p.stake<=0)return;
+  p.refunded=true;
+  await Wallet.payout(p.stake);
+}
 async function partyCancel(){
   if(!party)return; const p=party;
   try{
-    if(p.host) await db.from('game_rooms').update({status:'cancelled'}).eq('id',p.roomId);
-    else await db.from('game_players').delete().eq('room_id',p.roomId).eq('profile_id',currentUser.id);
-    if(p.stake>0)await Wallet.payout(p.stake);
-  }catch(e){}
+    const {data:room}=await db.from('game_rooms').select('status').eq('id',p.roomId).maybeSingle();
+    // فقط در صف انتظار پول برمی‌گردد؛ خروج بعد از شروع بازی شامل بازپرداخت نیست.
+    if(room&&room.status==='waiting'){
+      let mayRefund=false;
+      if(p.host){
+        const {data:cancelled}=await db.from('game_rooms').update({status:'cancelled'})
+          .eq('id',p.roomId).eq('status','waiting').select('id');
+        mayRefund=!!(cancelled&&cancelled.length);
+      }else{
+        await db.from('game_players').delete().eq('room_id',p.roomId).eq('profile_id',currentUser.id);
+        const {data:after}=await db.from('game_rooms').select('status').eq('id',p.roomId).maybeSingle();
+        mayRefund=!!after&&after.status==='waiting';
+      }
+      if(mayRefund)await partyRefundOnce(p);
+    }
+  }catch(e){console.warn('party cancel',e)}
   partyClose();
 }
 /* ---- random 2v2 queue ---- */
+async function partyTryJoinWaitingRoom(){
+  if(!party||party.joining||!party.host)return;
+  party.joining=true;
+  try{
+    const {data:rooms}=await db.from('game_rooms').select('id,creator_id')
+      .eq('mode','2v2').eq('status','waiting').eq('is_private',false)
+      .eq('stake',party.stake).neq('creator_id',currentUser.id)
+      .lt('created_at',party.createdAt||new Date().toISOString())
+      .order('created_at',{ascending:true}).limit(20);
+    for(const rm of (rooms||[])){
+      if(!party)return;
+      const {data:still}=await db.from('game_rooms').select('status').eq('id',rm.id).maybeSingle();
+      if(!still||still.status!=='waiting')continue;
+      const {data:ps}=await db.from('game_players').select('seat,profile_id').eq('room_id',rm.id);
+      if((ps||[]).some(x=>x.profile_id===currentUser.id))continue;
+      const used=new Set((ps||[]).map(x=>x.seat)); let seat=-1;
+      for(let i=0;i<PSIZE;i++)if(!used.has(i)){seat=i;break}
+      if(seat<0)continue;
+      const {error}=await db.from('game_players').insert({room_id:rm.id,profile_id:currentUser.id,seat,team:seat%2,is_bot:false});
+      if(error)continue;
+      const oldRoomId=party.roomId,wasHost=party.host;
+      (party.chs||[]).forEach(c=>{try{db.removeChannel(c)}catch(e){}});
+      party.chs=[];
+      if(wasHost){
+        await db.from('game_players').delete().eq('room_id',oldRoomId).eq('profile_id',currentUser.id);
+        await db.from('game_rooms').update({status:'cancelled'}).eq('id',oldRoomId).eq('status','waiting');
+      }
+      party.roomId=rm.id; party.host=false; party.joinedAt=Date.now(); party.createdAt=null;
+      partyWatch(); partyRender();
+      return;
+    }
+  }catch(e){console.warn('match retry',e)}
+  finally{if(party)party.joining=false}
+}
 async function startRandom2v2(){
   const stake=modeOn==='bet'?stakeOn:0;
   let sec=30;
@@ -2134,10 +2225,12 @@ async function startRandom2v2(){
       const {data:room}=await db.from('game_rooms').insert({status:'waiting',mode:'2v2',stake,current_turn:0,creator_id:currentUser.id,is_private:false}).select().single();
       if(!room)throw new Error('ساخت اتاق ناموفق بود');
       await db.from('game_players').insert({room_id:room.id,profile_id:currentUser.id,seat:0,team:0,is_bot:false});
-      party={roomId:room.id,host:true,friendly:false,stake};
+      party={roomId:room.id,host:true,friendly:false,stake,createdAt:room.created_at};
     }
     partyOpen('🎲 جستجوی بازی ۲ به ۲','اگر بازیکن کافی نشد، بعد از تایمر جاهای خالی با بات پر می‌شود.');
     partyWatch(); partyRender();
+    // تکرار جستجو تا وقتی وارد اتاق شویم؛ این بخش مشکل ساخته‌شدن هم‌زمان دو اتاق را پوشش می‌دهد.
+    party.matchTimer=setInterval(()=>partyTryJoinWaitingRoom(),1500);
     party.timer=setInterval(async()=>{
       sec--; if(!party)return; $h('partySec').textContent='⏳ '+pfa(Math.max(0,sec))+' ثانیه تا پر شدن با بات';
       if(sec<=0){const ps=await partyPlayers();if(!party)return;if(ps.length<2){sec=30;$h('partySec').textContent='⏳ منتظر حداقل یک بازیکن دیگر... (با یک نفر بازی شروع نمی‌شود)';return}clearInterval(party.timer);party.timer=null;await partyFillBots()}
@@ -2154,7 +2247,8 @@ async function startRandom2v2(){
 let OG=null;
 const ogRel=seat=>((seat-OG.mySeat+OG.n)%OG.n)*(4/OG.n);
 const ogTeam=seat=>OG.n===4?seat%2:seat;
-function ogClear(){if(OG)OG.chs.forEach(c=>{try{db.removeChannel(c)}catch(e){}})}
+function ogClear(){if(OG){if(OG.turnTimer)clearTimeout(OG.turnTimer);if(OG.turnClock)clearInterval(OG.turnClock);if(OG.displayClock)clearInterval(OG.displayClock);OG.chs.forEach(c=>{try{db.removeChannel(c)}catch(e){}})}}
+function ogWaitSubscribed(ch,ms=8000){return new Promise(resolve=>{let done=false;const t=setTimeout(()=>{if(!done){done=true;resolve(false)}},ms);try{ch.subscribe(status=>{if(status==='SUBSCRIBED'&&!done){done=true;clearTimeout(t);resolve(true)}else if((status==='CHANNEL_ERROR'||status==='TIMED_OUT'||status==='CLOSED')&&!done){done=true;clearTimeout(t);resolve(false)}})}catch(e){clearTimeout(t);resolve(false)}})}
 
 async function joinOnlineRoom(roomId){
   ogClear(); currentRoomId=roomId; isOnlineMode=true;
@@ -2176,9 +2270,15 @@ async function joinOnlineRoom(roomId){
     await db.from('game_rooms').update({status:'playing'}).eq('id',roomId);
   }
   await ogNames(); ogChatInit();
-  OG.chs.push(db.channel('og_st_'+roomId).on('postgres_changes',{event:'*',schema:'public',table:'hokm_state',filter:'room_id=eq.'+roomId},p=>p.new&&ogApply(p.new)).subscribe());
+  const stateCh=db.channel('og_st_'+roomId).on('postgres_changes',{event:'*',schema:'public',table:'hokm_state',filter:'room_id=eq.'+roomId},p=>p.new&&ogApply(p.new));
+  OG.chs.push(stateCh);
+  const stateReady=await ogWaitSubscribed(stateCh);
+  if(!stateReady)console.warn('hokm_state realtime not ready; polling initial state');
   if(OG.host){
-    OG.chs.push(db.channel('og_mv_'+roomId).on('postgres_changes',{event:'INSERT',schema:'public',table:'hokm_moves',filter:'room_id=eq.'+roomId},p=>{OG.queue.push(p.new);ogPump()}).subscribe());
+    const moveCh=db.channel('og_mv_'+roomId).on('postgres_changes',{event:'INSERT',schema:'public',table:'hokm_moves',filter:'room_id=eq.'+roomId},p=>{if(OG&&OG.room.id===roomId){OG.queue.push(p.new);ogPump()}});
+    OG.chs.push(moveCh);
+    const moveReady=await ogWaitSubscribed(moveCh);
+    if(!moveReady)toast('اتصال حرکت‌ها در حال بازیابی است...',true);
     await ogHostStart();
   } else {
     for(let i=0;i<20&&!OG.pub;i++){const {data}=await db.from('hokm_state').select('*').eq('room_id',roomId).maybeSingle(); if(data){ogApply(data);break} await sleep(500)}
@@ -2205,9 +2305,30 @@ function ogBotCard(seat){
   const win=L.filter(c=>ogBeats(c,best.card));return win.length?win[0]:L[0];
 }
 function ogTick(){
-  if(!OG||!OG.host||OG.over)return; const p=OG.pub;
-  if(p.phase==='trump'&&ogBot(p.hakem)){setTimeout(()=>{const c=[0,0,0,0];OG.hands[p.hakem].forEach(x=>c[x.s]+=1+x.v/20);OG.queue.push({kind:'trump',seat:p.hakem,payload:{s:c.indexOf(Math.max(...c))}});ogPump()},900)}
-  else if(p.phase==='play'&&p.trick.length<OG.n&&p.turn>=0&&ogBot(p.turn)){const seat=p.turn;setTimeout(()=>{if(OG&&!OG.over&&OG.pub.turn===seat&&OG.pub.trick.length<OG.n){OG.queue.push({kind:'card',seat,payload:{card:ogBotCard(seat)}});ogPump()}},750)}
+  if(!OG||!OG.host||OG.over)return;
+  const p=OG.pub;
+  if(OG.turnTimer){clearTimeout(OG.turnTimer);OG.turnTimer=null}
+  if(OG.turnClock){clearInterval(OG.turnClock);OG.turnClock=null}
+  if(p.phase==='trump'&&ogBot(p.hakem)){
+    const hk=p.hakem;
+    setTimeout(()=>{if(!OG||OG.over||OG.pub.phase!=='trump'||OG.pub.hakem!==hk)return;const c=[0,0,0,0];OG.hands[hk].forEach(x=>c[x.s]+=1+x.v/20);OG.queue.push({kind:'trump',seat:hk,payload:{s:c.indexOf(Math.max(...c))}});ogPump()},900);
+  } else if(p.phase==='play'&&p.trick.length<OG.n&&p.turn>=0){
+    const seat=p.turn,turnKey=OG.room.id+':'+p.turn+':'+p.trick.length+':'+p.tricks.join('-');
+    OG.turnKey=turnKey;
+    if(!p.turnStartedAt){p.turnStartedAt=Date.now();ogSave()}
+    let left=Math.max(0,15-Math.floor((Date.now()-p.turnStartedAt)/1000));
+    const paint=()=>{const score=$h('score');if(score&&OG&&OG.turnKey===turnKey)score.textContent='⏱ '+pfa(left)+' ثانیه | '+(ogBot(seat)?'نوبت بات':'نوبت بازیکن')};
+    paint();
+    OG.turnClock=setInterval(()=>{if(!OG||OG.turnKey!==turnKey){clearInterval(OG.turnClock);return}left=Math.max(0,15-Math.floor((Date.now()-p.turnStartedAt)/1000));paint()},250);
+    OG.turnTimer=setTimeout(()=>{
+      if(!OG||OG.over||OG.turnKey!==turnKey||OG.pub.turn!==seat||OG.pub.trick.length>=OG.n)return;
+      const hand=OG.hands[seat]||[],legal=ogLegalOf(hand,OG.pub.trick);
+      if(!legal.length)return;
+      const card=(OG.n===2&&!ogBot(seat))?legal[Math.random()*legal.length|0]:ogBotCard(seat);
+      OG.queue.push({kind:'card',seat,payload:{card}});
+      ogPump();
+    },ogBot(seat)?900:Math.max(0,15000-(Date.now()-p.turnStartedAt)));
+  }
 }
 async function ogPump(){
   if(OG.busy)return; OG.busy=true;
@@ -2218,22 +2339,48 @@ async function ogHandle(m){
   if(m.kind==='trump'&&p.phase==='trump'&&m.seat===p.hakem){
     p.trump=m.payload.s; OG.hands[p.hakem]=OG.hands[p.hakem].concat(OG.deck.splice(0,8));
     for(let k=0;k<OG.n;k++)if(k!==p.hakem)OG.hands[k]=OG.deck.splice(0,13);
-    p.phase='play'; p.turn=p.hakem; await ogSave(); return ogTick();
+    p.phase='play'; p.turn=p.hakem; p.turnStartedAt=Date.now(); await ogSave(); return ogTick();
   }
   if(m.kind!=='card'||p.phase!=='play'||m.seat!==p.turn||p.trick.length>=OG.n)return;
   const c=m.payload.card,h=OG.hands[m.seat],i=h.findIndex(x=>x.s===c.s&&x.v===c.v);
   if(i<0||!ogLegalOf(h,p.trick).some(x=>x.s===c.s&&x.v===c.v))return;
   h.splice(i,1); p.trick.push({seat:m.seat,card:c});
-  if(p.trick.length<OG.n){p.turn=(m.seat+1)%OG.n; await ogSave(); return ogTick()}
-  p.turn=-1; await ogSave(); await sleep(1000);
-  const w=ogTrickWinner(); p.tricks[ogTeam(w)]++; p.collect=w; await ogSave(); await sleep(750);
-  p.collect=null; p.trick=[]; p.turn=w;
-  if(p.tricks[0]>=7||p.tricks[1]>=7){
-    p.phase='over'; p.winner=p.tricks[0]>=7?0:1; OG.over=true; await ogSave();
-    const {data:room}=await db.from('game_rooms').update({status:'finished',winning_team:p.winner}).eq('id',OG.room.id).select().single();
-    if(room)await handleOnlinePayout(room); return;
+  if(p.trick.length<OG.n){p.turn=(m.seat+1)%OG.n; p.turnStartedAt=Date.now(); await ogSave(); return ogTick()}
+  // Resolve the completed trick exactly once. In 1v1, the winning seat
+  // is also the scoring side; the higher legal card wins (trump beats non-trump).
+  p.turn=-1;
+  await ogSave();
+  await sleep(OG.n===2?450:1000);
+  let w;
+  if(OG.n===2){
+    const first=p.trick[0],second=p.trick[1];
+    w=ogBeats(second.card,first.card)?second.seat:first.seat;
+  }else{
+    w=ogTrickWinner();
   }
-  await ogSave(); ogTick();
+  const winningSide=OG.n===2?w:ogTeam(w);
+  if(!Number.isInteger(winningSide)||winningSide<0||winningSide>1)return;
+  p.tricks[winningSide]=Math.max(0,Number(p.tricks[winningSide])||0)+1;
+  p.collect=w;
+  p.lastTrickWinner=w;
+  p.collectSeq=(Number(p.collectSeq)||0)+1;
+  await ogSave();
+  await sleep(OG.n===2?900:750);
+  p.collect=null;
+  p.trick=[];
+  p.turn=w;
+  p.turnStartedAt=Date.now();
+  if(p.tricks[0]>=7||p.tricks[1]>=7){
+    p.phase='over';
+    p.winner=p.tricks[0]>=7?0:1;
+    OG.over=true;
+    await ogSave();
+    const {data:room}=await db.from('game_rooms').update({status:'finished',winning_team:p.winner}).eq('id',OG.room.id).select().single();
+    if(room)await handleOnlinePayout(room);
+    return;
+  }
+  await ogSave();
+  ogTick();
 }
 /* ---- client side (everyone) ---- */
 function ogRenderHand(cards,p){
@@ -2249,12 +2396,22 @@ function ogRenderHand(cards,p){
   });
 }
 function ogApply(row){
-  if(!OG||!row)return; const p=row.pub; const prev=OG.pub; OG.pub=p; OG.hands=row.hands;
+  if(!OG||!row)return; const p=row.pub; const prev=OG.viewPub||OG.pub; OG.viewPub=p; if(!OG.host){OG.pub=p; OG.hands=row.hands;} OG.cardSending=false;
   document.querySelectorAll('#hokm-screen .seat').forEach(e=>{e.classList.remove('turn');e.classList.toggle('hk',+e.id[1]===ogRel(p.hakem))});
   const ts=$h('s'+ogRel(p.turn)); if(p.turn>=0&&ts)ts.classList.add('turn');
   setTrump(p.trump);
   const myT=ogTeam(OG.mySeat);
-  $h('score').textContent=`امتیاز دست: شما ${p.tricks[myT]} — حریف ${p.tricks[1-myT]} (تا ۷)`;
+  $h('score').textContent=OG.n===2
+    ? `امتیاز: شما ${p.tricks[myT]} — حریف ${p.tricks[1-myT]} (تا ۷)`
+    : `امتیاز دست: شما ${p.tricks[myT]} — حریف ${p.tricks[1-myT]} (تا ۷)`;
+  if(OG.displayClock){clearInterval(OG.displayClock);OG.displayClock=null}
+  {const dt=$h('duelTmr');if(dt&&!(p.phase==='play'&&p.turn>=0&&p.trick.length<OG.n)){dt.textContent='–';dt.classList.remove('low')}}
+  if(p.phase==='play'&&p.turn>=0&&p.trick.length<OG.n){
+    const key=OG.room.id+':'+p.turn+':'+p.trick.length+':'+p.tricks.join('-');
+    const started=Number(p.turnStartedAt)||Date.now();
+    const drawClock=()=>{if(!OG||OG.over)return;const left=Math.max(0,15-Math.floor((Date.now()-started)/1000));const dt=$h('duelTmr');if(dt){dt.textContent=pfa(left);dt.classList.toggle('low',left<=3)}const sc=$h('score');if(sc)sc.textContent=`⏱ ${pfa(left)} ثانیه | ${p.turn===OG.mySeat?'نوبت شما':'نوبت حریف'} | ${p.tricks[myT]} - ${p.tricks[1-myT]}`};
+    drawClock();OG.displayClock=setInterval(drawClock,250);OG.displayTurnKey=key;
+  }
   const tr=$h('trick');tr.innerHTML='';
   p.trick.forEach(t=>{const e=cardEl(t.card);e.className+=' p'+ogRel(t.seat);tr.appendChild(e)});
   if(p.collect!=null && !(prev&&prev.collect===p.collect&&prev.tricks[0]===p.tricks[0]&&prev.tricks[1]===p.tricks[1]&&prev.trick.length===0)){
@@ -2262,7 +2419,7 @@ function ogApply(row){
   }
   if(p.phase==='trump'){
     ogRenderHand(row.hands[OG.mySeat]||[],p);
-    if(p.hakem===OG.mySeat){ if(!OG.trumpSent)trumpFlow(k=>{OG.trumpSent=true;ogSend('trump',{s:k})}); }
+    if(p.hakem===OG.mySeat){ if(!OG.trumpSent)trumpFlow(k=>{OG.trumpSent=true;ogSend('trump',{s:k})},()=>OG.hands&&OG.hands[OG.mySeat]); }
     else toastH('حاکم در حال انتخاب حکم است...',1500);
     return;
   }
@@ -2281,11 +2438,21 @@ function ogApply(row){
 async function ogSend(kind,payload){await db.from('hokm_moves').insert({room_id:OG.room.id,seat:OG.mySeat,kind,payload})}
 async function playOnlineCard(card){
   if(!OG||!OG.pub||OG.pub.phase!=='play'||OG.pub.turn!==OG.mySeat)return toast('نوبت شما نیست',true);
+  if(OG.cardSending)return;
   const h=(OG.hands&&OG.hands[OG.mySeat])||[];
   if(!ogLegalOf(h,OG.pub.trick).some(c=>c.s===card.s&&c.v===card.v))return toast('باید خال زمین را بازی کنی',true);
+  OG.cardSending=true;
   $h('hand').querySelectorAll('.hokm-card').forEach(e=>e.style.pointerEvents='none');
-  await ogSend('card',{card});
+  try{
+    const {error}=await db.from('hokm_moves').insert({room_id:OG.room.id,seat:OG.mySeat,kind:'card',payload:{card}});
+    if(error)throw error;
+  }catch(e){
+    OG.cardSending=false;
+    $h('hand').querySelectorAll('.hokm-card').forEach(e=>e.style.pointerEvents='auto');
+    toast('کارت ارسال نشد؛ دوباره امتحان کن',true);console.warn('play card error',e);
+  }
 }
+
 
 
 /* ======================= HUB: ranking / missions / shop (graphic UI) ======================= */
@@ -2583,11 +2750,11 @@ async function shopEquip(slot,id){
 /* ---------- انتخاب حکم: اول ۵ کارت را ببین، بعد حکم را انتخاب کن ---------- */
 let TP=null;
 function trumpStop(){
-  if(TP){TP.active=false;clearTimeout(TP.t)}
+  if(TP){TP.active=false;clearTimeout(TP.t);clearTimeout(TP.t2)}
   const ov=$h('trumpOv'); if(ov)ov.classList.add('h');
   const h=$h('hand'); if(h)h.classList.remove('peek');
 }
-function trumpFlow(cb){
+function trumpFlow(cb,hand){
   if(TP&&TP.active)return;
   const ov=$h('trumpOv'),bx=ov.querySelector('.tpBox'),su=$h('suits'),T=TP={active:true,ready:false,t:null};
   su.innerHTML='';
@@ -2600,6 +2767,7 @@ function trumpFlow(cb){
   $h('hand').classList.add('peek');
   const ready=()=>{if(!T.active||T.ready)return;T.ready=true;clearTimeout(T.t);bx.classList.remove('wait');bx.classList.add('ready');$h('tpS').textContent='حکم را انتخاب کن'};
   T.t=setTimeout(ready,5000);
+  T.t2=setTimeout(()=>{if(!T.active)return;T.active=false;trumpStop();let h=[];try{h=(typeof hand==='function'?hand():hand)||[]}catch(e){}cb(h.length?bestSuit(h):(Math.random()*4|0))},15000);
   $h('tpSkip').onclick=ready;
   ov.classList.remove('h');
 }
@@ -2609,7 +2777,7 @@ async function handleOnlinePayout(room){
     const wt=room.winning_team,stake=room.stake||0; if(wt==null)return;
     const {data:players}=await db.from('game_players').select('*').eq('room_id',room.id);
     const humans=(players||[]).filter(p=>!p.is_bot&&p.profile_id),winners=humans.filter(p=>p.team===wt);
-    const pot=stake*humans.length,after=Math.floor(pot*(1-TAX_RATE)),per=winners.length?Math.floor(after/winners.length):0;
+    const pot=stake*humans.length,feeRate=TAX_RATE,after=Math.floor(pot*(1-feeRate)),per=winners.length?Math.floor(after/winners.length):0;
     const day=todayStr(),wk=weekId();
     await settleWeekly();
     for(const p of humans){
@@ -2694,7 +2862,7 @@ const AVMAP={a0:'p0',a1:'lion',a2:'eagle',a3:'dragon',a4:'robot',a5:'fire',a6:'p
 avHTML=function(id){return AVS(AVMAP[id]||'p0')};
 
 /* ===== DUEL (1v1) ===== */
-function duelPrize(){const e=$h('dlPrize');if(!e)return;e.textContent=pvpMode==='bet'?fmt(Math.floor(pvpStake*2*0.8)):'—';const f=$h('dlFree');if(f)f.style.display=pvpMode==='bet'?'none':'block';const p=$h('dlPrizeBox');if(p)p.style.display=pvpMode==='bet'?'flex':'none'}
+function duelPrize(){const e=$h('dlPrize');if(!e)return;e.textContent=pvpMode==='bet'?fmt(Math.floor(pvpStake*2*(1-TAX_RATE))):'—';const f=$h('dlFree');if(f)f.style.display=pvpMode==='bet'?'none':'block';const p=$h('dlPrizeBox');if(p)p.style.display=pvpMode==='bet'?'flex':'none'}
 {const _b=buildPvpAmts;buildPvpAmts=function(){_b();duelPrize()}}
 function duelLobbyInit(){const b=$h('lobby1v1').firstElementChild;b.classList.remove('searching');try{$h('dlMeAv').innerHTML=avHTML(eqAv(currentUser));$h('dlMeName').textContent=currentUser.username;const g=currentUser.games||0,w=currentUser.wins||0;$h('dlMeLv').textContent='سطح '+lvlOf(currentUser.xp)+' · '+(g?Math.round(w/g*100):0)+'٪ برد'}catch(e){}duelPrize()}
 {const _o=$h('btnMode1v1').onclick;$h('btnMode1v1').onclick=async function(){await _o.apply(this,arguments);duelLobbyInit()}}
@@ -2709,14 +2877,14 @@ function duelSetup(ps,um){
   if(!h){h=document.createElement('div');h.id='duelHud';hs.appendChild(h)}
   const pips=c=>'<div class="pips '+c+'">'+'<i></i>'.repeat(7)+'</div>';
   const side=(c,x)=>'<div class="dh '+c+'"><div class="dav">'+avHTML(x.a)+'</div><div class="dn"><b>'+esc(x.n)+'</b><small>سطح '+x.l+'</small></div></div>';
-  h.innerHTML=side('me',D.me)+'<div class="dmid">'+pips('pm')+pips('po')+'</div>'+side('op',D.op);
+  h.innerHTML=side('me',D.me)+'<div class="dmid">'+pips('pm')+'<b class="dtm" id="duelTmr">–</b>'+pips('po')+'</div>'+side('op',D.op);
   duelHud();if(!OG.vs){OG.vs=1;duelIntro(D)}
 }
 function duelHud(){const h=$h('duelHud');if(!h||!OG||!OG.pub)return;const t=OG.pub.tricks||[0,0],k=ogTeam(OG.mySeat),m=t[k]||0,o=t[1-k]||0;
   h.querySelectorAll('.pm i').forEach((e,i)=>e.classList.toggle('on',i<m));h.querySelectorAll('.po i').forEach((e,i)=>e.classList.toggle('on',i<o));
   h.querySelector('.dh.me').classList.toggle('turn',OG.pub.turn===OG.mySeat);h.querySelector('.dh.op').classList.toggle('turn',OG.pub.turn>=0&&OG.pub.turn!==OG.mySeat)}
 function duelIntro(D){const e=document.createElement('div');e.id='vsIntro';
-  const pr=D.stake?'<div class="vsPrize">جایزه برنده <b>'+fmt(Math.floor(D.stake*2*0.8))+'</b> T</div>':'<div class="vsPrize">بازی غیرشرطی</div>';
+  const pr=D.stake?'<div class="vsPrize">جایزه برنده <b>'+fmt(Math.floor(D.stake*2*(1-TAX_RATE)))+'</b> T</div>':'<div class="vsPrize">بازی غیرشرطی</div>';
   e.innerHTML='<div class="vsC l"><div class="vsAv2">'+avHTML(D.me.a)+'</div><b>'+esc(D.me.n)+'</b><small>سطح '+D.me.l+'</small></div><div class="vsX">VS</div><div class="vsC r"><div class="vsAv2">'+avHTML(D.op.a)+'</div><b>'+esc(D.op.n)+'</b><small>سطح '+D.op.l+'</small></div>'+pr;
   $h('hokm-screen').appendChild(e);setTimeout(()=>e.classList.add('out'),2300);setTimeout(()=>e.remove(),2800)}
 {const _a=ogApply;ogApply=function(){const x=_a.apply(this,arguments);try{duelHud()}catch(e){}return x}}
